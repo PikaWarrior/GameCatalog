@@ -16,13 +16,15 @@ import rawGamesData from './data/games_data_ENRICHED_PRO.json';
 
 const GameGrid = lazy(() => import('@components/GameGrid'));
 
-// Расширяем интерфейс состояния, чтобы добавить исключенные теги
+// Расширяем интерфейс состояния: добавляем массивы для жанров и исключений
 interface ExtendedFilterState extends FilterState {
   excludedTags: string[];
+  selectedGenres: string[]; // Новое: массив вместо одной строки
+  excludedGenres: string[]; // Новое: массив исключенных жанров
 }
 
 function App() {
-  // 1. Загрузка и первичная обработка данных
+  // 1. Загрузка данных
   const games: Game[] = useMemo(() => {
     return (rawGamesData as any[]).map(game => sanitizeGameData(game));
   }, []);
@@ -30,19 +32,20 @@ function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
-  // 2. Состояние фильтров с новым полем excludedTags
-  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters', {
+  // 2. Инициализация состояния фильтров
+  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v3', {
     searchQuery: '',
     selectedTags: [],
-    excludedTags: [], 
-    selectedGenre: 'All',
+    excludedTags: [],
+    selectedGenres: [], // Теперь это массив
+    excludedGenres: [], // Исключенные жанры
     selectedCoop: 'All',
     sortBy: 'name',
   });
 
   const debouncedSearch = useDebounce(filterState.searchQuery, 300);
 
-  // 3. Подготовка данных для поиска
+  // 3. Обработка игр (добавление ID и нормализация)
   const processedGames = useMemo(() => {
     return games.map((game, index): ProcessedGame => ({
       ...game,
@@ -54,7 +57,7 @@ function App() {
     }));
   }, [games]);
 
-  // 4. Генерация списков для фильтров
+  // 4. Генерация списков (Жанры, Поджанры, Теги)
   const allSubgenres = useMemo(() => {
     const subSet = new Set<string>();
     games.forEach(game => game.subgenres.forEach(sub => subSet.add(sub)));
@@ -68,60 +71,67 @@ function App() {
   }, [games]);
 
   const allGenres = useMemo(() => {
-    const genres = new Set(['All']);
+    const genres = new Set<string>();
     games.forEach(game => genres.add(game.genre));
     return Array.from(genres).sort();
   }, [games]);
 
-  // Список режимов БЕЗ "Co-op" (как вы просили)
   const allCoopModes = [
     'All', 'Single', 'Multiplayer', 'Split Screen', 'Co-op & Multiplayer'
   ];
 
-  // 5. Логика фильтрации
+  // 5. ГЛАВНАЯ ЛОГИКА ФИЛЬТРАЦИИ
   const filteredGames = useMemo(() => {
-    const { selectedTags, excludedTags, selectedGenre, selectedCoop, sortBy } = filterState;
+    const { 
+      selectedTags, excludedTags, 
+      selectedGenres, excludedGenres, 
+      selectedCoop, sortBy 
+    } = filterState;
+    
     const searchLower = debouncedSearch.toLowerCase();
 
     return processedGames
       .filter(game => {
-        // --- Поиск по тексту ---
+        // --- Поиск ---
         if (searchLower && !game.searchableText.includes(searchLower)) return false;
 
         const gameTags = new Set([...game.tags, ...game.subgenres]);
 
-        // --- Включенные теги (Логика AND: игра должна содержать ВСЕ выбранные) ---
+        // --- Теги и Поджанры (AND: должен иметь все выбранные) ---
         if (selectedTags.length > 0) {
           if (!selectedTags.every(tag => gameTags.has(tag))) return false;
         }
-
-        // --- Исключенные теги (Логика NOT: игра НЕ должна содержать ни одного) ---
+        // --- Исключение тегов (NOT: не должен иметь ни одного) ---
         if (excludedTags && excludedTags.length > 0) {
            if (excludedTags.some(tag => gameTags.has(tag))) return false;
         }
 
-        // --- Жанр ---
-        if (selectedGenre !== 'All' && game.genre !== selectedGenre) return false;
+        // --- ЖАНРЫ (OR: должен иметь хотя бы один, если выбраны) ---
+        // Сначала проверяем исключение
+        if (excludedGenres && excludedGenres.length > 0) {
+          if (excludedGenres.includes(game.genre)) return false;
+        }
+        // Затем проверяем включение (Action ИЛИ RPG)
+        if (selectedGenres && selectedGenres.length > 0) {
+          if (!selectedGenres.includes(game.genre)) return false;
+        }
 
         // --- Режим игры ---
         if (selectedCoop !== 'All') {
           const gameModes = game.coop.toLowerCase();
           const targetMode = selectedCoop.toLowerCase();
 
-          // СПЕЦИАЛЬНАЯ ЛОГИКА ДЛЯ SINGLE:
-          // Если выбран Single, скрываем игры, где есть хоть намек на мультиплеер
           if (targetMode === 'single') {
-             const hasMultiplayerFeatures = 
+             // Строгая проверка для сингла: никаких намеков на онлайн
+             const hasMultiplayer = 
                 gameModes.includes('multiplayer') || 
                 gameModes.includes('co-op') || 
                 gameModes.includes('online') || 
                 gameModes.includes('lan') ||
                 gameModes.includes('split') ||
                 gameModes.includes('shared');
-             
-             if (hasMultiplayerFeatures) return false;
+             if (hasMultiplayer) return false;
           }
-          // Остальные режимы
           else if (targetMode === 'split screen') {
              if (!gameModes.includes('split screen') && !gameModes.includes('splitscreen')) return false;
           }
@@ -132,7 +142,6 @@ function App() {
              if (!hasCoop && !hasMulti && !hasSplit) return false;
           }
           else {
-             // Стандартная проверка на вхождение подстроки
              if (!gameModes.includes(targetMode)) return false;
           }
         }
@@ -148,67 +157,62 @@ function App() {
       });
   }, [processedGames, filterState, debouncedSearch]);
 
-  // 6. Обработчики событий (Handlers)
+  // 6. Хендлеры
 
-  const handleOpenModal = useCallback((game: ProcessedGame) => {
-    setSelectedGame(game);
-  }, []);
+  const handleOpenModal = useCallback((game: ProcessedGame) => setSelectedGame(game), []);
+  const handleCloseModal = useCallback(() => setSelectedGame(null), []);
+  const handleSearchChange = useCallback((value: string) => setFilterState(p => ({ ...p, searchQuery: value })), [setFilterState]);
 
-  const handleCloseModal = useCallback(() => {
-    setSelectedGame(null);
-  }, []);
-
-  const handleSearchChange = useCallback((value: string) => {
-    setFilterState(prev => ({ ...prev, searchQuery: value }));
-  }, [setFilterState]);
-
-  // Главная логика переключения тегов: Include -> Exclude -> Reset
-  const handleTagToggle = useCallback((tag: string) => {
+  // Универсальная функция переключения (Вкл -> Искл -> Сброс)
+  const toggleFilterItem = (
+    item: string, 
+    selectedList: string[], 
+    excludedList: string[], 
+    keySelected: keyof ExtendedFilterState, 
+    keyExcluded: keyof ExtendedFilterState
+  ) => {
     setFilterState(prev => {
-      const isSelected = prev.selectedTags.includes(tag);
-      const isExcluded = prev.excludedTags?.includes(tag);
+      const isSelected = selectedList.includes(item);
+      const isExcluded = excludedList.includes(item);
 
-      let newSelected = [...prev.selectedTags];
-      let newExcluded = [...(prev.excludedTags || [])];
+      let newSelected = [...selectedList];
+      let newExcluded = [...excludedList];
 
       if (isSelected) {
-        // Если тег был "Включен", переводим его в "Исключен"
-        newSelected = newSelected.filter(t => t !== tag);
-        newExcluded.push(tag);
+        newSelected = newSelected.filter(t => t !== item);
+        newExcluded.push(item);
       } else if (isExcluded) {
-        // Если тег был "Исключен", сбрасываем его (удаляем отовсюду)
-        newExcluded = newExcluded.filter(t => t !== tag);
+        newExcluded = newExcluded.filter(t => t !== item);
       } else {
-        // Если тег был нейтрален, делаем его "Включенным"
-        newSelected.push(tag);
+        newSelected.push(item);
       }
 
       return {
         ...prev,
-        selectedTags: newSelected,
-        excludedTags: newExcluded
+        [keySelected]: newSelected,
+        [keyExcluded]: newExcluded
       };
     });
-  }, [setFilterState]);
+  };
 
-  const handleGenreChange = useCallback((genre: string) => {
-    setFilterState(prev => ({ ...prev, selectedGenre: genre }));
-  }, [setFilterState]);
+  const handleTagToggle = useCallback((tag: string) => {
+    toggleFilterItem(tag, filterState.selectedTags, filterState.excludedTags || [], 'selectedTags', 'excludedTags');
+  }, [filterState]);
 
-  const handleCoopChange = useCallback((coop: string) => {
-    setFilterState(prev => ({ ...prev, selectedCoop: coop }));
-  }, [setFilterState]);
+  const handleGenreToggle = useCallback((genre: string) => {
+    toggleFilterItem(genre, filterState.selectedGenres || [], filterState.excludedGenres || [], 'selectedGenres', 'excludedGenres');
+  }, [filterState]);
 
-  const handleSortChange = useCallback((sortBy: 'name' | 'genre' | 'coop') => {
-    setFilterState(prev => ({ ...prev, sortBy }));
-  }, [setFilterState]);
-
+  const handleCoopChange = useCallback((coop: string) => setFilterState(p => ({ ...p, selectedCoop: coop })), [setFilterState]);
+  const handleSortChange = useCallback((sortBy: any) => setFilterState(p => ({ ...p, sortBy })), [setFilterState]);
+  
   const handleResetFilters = useCallback(() => {
     setFilterState({
       searchQuery: '',
       selectedTags: [],
       excludedTags: [],
-      selectedGenre: 'All',
+      selectedGenres: [],
+      excludedGenres: [],
       selectedCoop: 'All',
       sortBy: 'name',
     });
@@ -233,19 +237,7 @@ function App() {
       <main className="main-content">
         <aside className={`filters-sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
           <div className="filters-sticky">
-            <div className="filter-group">
-              <label>Genre:</label>
-              <select
-                value={filterState.selectedGenre}
-                onChange={(e) => handleGenreChange(e.target.value)}
-                className="filter-select"
-              >
-                {allGenres.map(genre => (
-                  <option key={genre} value={genre}>{genre}</option>
-                ))}
-              </select>
-            </div>
-
+            
             <div className="filter-group">
               <label>Game Mode:</label>
               <select
@@ -272,7 +264,13 @@ function App() {
               </select>
             </div>
 
+            {/* Единый компонент фильтров */}
             <TagFilter
+              allGenres={allGenres}
+              selectedGenres={filterState.selectedGenres || []}
+              excludedGenres={filterState.excludedGenres || []}
+              onGenreToggle={handleGenreToggle}
+
               allTags={allTags}
               allSubgenres={allSubgenres}
               selectedTags={filterState.selectedTags}
@@ -289,10 +287,7 @@ function App() {
         <section className="games-grid-section">
           <Suspense fallback={<LoadingSkeleton />}>
             {filteredGames.length > 0 ? (
-              <GameGrid 
-                 games={filteredGames} 
-                 onOpenModal={handleOpenModal}
-              />
+              <GameGrid games={filteredGames} onOpenModal={handleOpenModal} />
             ) : (
               <div className="no-results">
                 <h3>No games found</h3>
@@ -303,12 +298,7 @@ function App() {
         </section>
       </main>
 
-      {selectedGame && (
-        <GameModal 
-          game={selectedGame} 
-          onClose={handleCloseModal} 
-        />
-      )}
+      {selectedGame && <GameModal game={selectedGame} onClose={handleCloseModal} />}
     </div>
   );
 }
