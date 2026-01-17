@@ -1,31 +1,23 @@
 import React from 'react';
+import SearchBar from './SearchBar';
 import '../styles/Header.css';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  totalGames: number;
+  visibleGames: number;
+  onSearch: (value: string) => void;
+  searchTerm: string;
+}
+
+const Header: React.FC<HeaderProps> = ({ totalGames, visibleGames, onSearch, searchTerm }) => {
   return (
     <header className="header">
       <div className="header-content">
-        <div className="logo-section">
-          <h1 className="logo">🎮 Game Catalog</h1>
-          <p className="subtitle">A collection of 169 unique games</p>
-        </div>
-        <div className="header-stats">
-          <div className="stat-item">
-            <span className="stat-number">12+</span>
-            <span className="stat-label">Genres</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-number">200+</span>
-            <span className="stat-label">Tags</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-number">5</span>
-            <span className="stat-label">Modes</span>
-          </div>
-        </div>
+        <h1>Game Catalog</h1>
+        <p>Total: {totalGames} | Visible: {visibleGames}</p>
+        <SearchBar value={searchTerm} onChange={onSearch} />
       </div>
     </header>
   );
 };
-
 export default Header;
