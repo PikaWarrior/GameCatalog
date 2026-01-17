@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { Gamepad2, Monitor, Globe, Users } from 'lucide-react';
+import { Gamepad2, Monitor, Globe, Users, ArrowUpRight } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameCard.css';
 
@@ -12,38 +12,62 @@ interface GameCardProps {
 const GameCard: React.FC<GameCardProps> = memo(({ game, style, onClick }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  // 1. Конфиг цветов бейджей (Кооп) с мягкими фонами
+  // Логика иконок и цветов для режимов (адаптирована под новые стили)
   const getCoopBadgeStyle = (coop: string) => {
     const lower = coop.toLowerCase();
-    if (lower.includes('online')) return { color: '#10b981', bg: 'rgba(16, 185, 129, 0.15)', icon: <Globe size={11} />, label: 'Online' };
-    if (lower.includes('local') || lower.includes('shared')) return { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.15)', icon: <Users size={11} />, label: 'Local' };
-    if (lower.includes('single')) return { color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.15)', icon: <Monitor size={11} />, label: 'Single' };
-    return { color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.15)', icon: <Gamepad2 size={11} />, label: coop.split(' ')[0] };
+    if (lower.includes('online')) return { 
+      color: '#10b981', 
+      rgb: '16, 185, 129', 
+      icon: <Globe size={11} />, 
+      label: 'Online' 
+    };
+    if (lower.includes('local') || lower.includes('shared') || lower.includes('split')) return { 
+      color: '#f59e0b', 
+      rgb: '245, 158, 11', 
+      icon: <Users size={11} />, 
+      label: 'Local' 
+    };
+    if (lower.includes('single')) return { 
+      color: '#94a3b8', 
+      rgb: '148, 163, 184', 
+      icon: <Monitor size={11} />, 
+      label: 'Single' 
+    };
+    return { 
+      color: '#3b82f6', 
+      rgb: '59, 130, 246', 
+      icon: <Gamepad2 size={11} />, 
+      label: coop.split(' ')[0] 
+    };
   };
 
   const badgeConfig = getCoopBadgeStyle(game.normalizedCoop);
-
-  // 2. Логика тегов (Максимум 3)
-  const MAX_TAGS = 3;
-  const visibleSubgenres = game.subgenres.slice(0, MAX_TAGS);
-  const hiddenCount = game.subgenres.length - MAX_TAGS;
+  
+  // Ограничиваем теги до 3 штук
+  const visibleSubgenres = game.subgenres.slice(0, 3);
+  const hiddenCount = game.subgenres.length - 3;
 
   return (
     <article 
-      className="game-card group" 
-      style={style}
+      className={`game-card ${imageLoaded ? 'is-visible' : ''}`}
+      style={{ 
+        ...style, 
+        '--badge-color-rgb': badgeConfig.rgb 
+      } as React.CSSProperties}
       onClick={() => onClick && onClick(game)}
       onKeyDown={(e) => e.key === 'Enter' && onClick && onClick(game)}
       tabIndex={0}
       role="button"
       aria-label={`View details for ${game.name}`}
     >
-      {/* Световой блик (Shine Effect) при ховере */}
+      {/* Световой блик (Shine Effect) - сохранили из предыдущих улучшений */}
       <div className="shine-effect" />
 
       {/* --- ИЗОБРАЖЕНИЕ --- */}
       <div className="game-card__image-wrap">
-        <div className={`skeleton-loader ${imageLoaded ? 'hidden' : ''}`} />
+        <div className={`game-card__image-blur ${imageLoaded ? 'hidden' : ''}`}>
+           {/* Блюр-заглушка или скелетон */}
+        </div>
         
         <img 
           src={game.image} 
@@ -58,58 +82,38 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onClick }) => {
         />
         
         <div className="game-card__overlay" />
-        
-        {/* Верхний стеклянный бейдж (Жанр) */}
-        <div className="game-card__top-badges">
-           <span className="badge-glass">{game.genre}</span>
+
+        {/* Бейджи */}
+        <div className="game-card__badges">
+          <span className="badge badge--genre">{game.genre}</span>
+          <span className="badge badge--coop">
+            {badgeConfig.icon}
+            <span>{badgeConfig.label}</span>
+          </span>
         </div>
       </div>
 
       {/* --- КОНТЕНТ --- */}
       <div className="game-card__content">
-        
-        {/* Заголовок */}
         <div className="game-card__header">
-            {!imageLoaded ? <div className="skeleton-title" /> : (
-                <h3 className="game-card__title" title={game.name}>{game.name}</h3>
-            )}
+          <h3 className="game-card__title" title={game.name}>
+            {game.name}
+          </h3>
         </div>
-        
-        {/* Описание */}
+
         <div className="game-card__description-wrap">
-           {!imageLoaded ? (
-               <>
-                 <div className="skeleton-text" />
-                 <div className="skeleton-text" style={{ width: '80%' }} />
-               </>
-           ) : (
-               <p className="game-card__description">
-                 {game.description || "Описание недоступно."}
-               </p>
-           )}
+           <p className="game-card__description">
+             {game.description || "Описание недоступно."}
+           </p>
         </div>
 
-        <div className="divider" />
-
-        {/* Футер: Кооп + Теги + Steam */}
+        {/* Футер */}
         <div className="game-card__footer">
-          <div className="footer-left">
-            {/* Умный бейдж Кооператива */}
-            <div 
-                className="coop-indicator" 
-                style={{ color: badgeConfig.color, background: badgeConfig.bg }}
-            >
-                {badgeConfig.icon}
-                <span>{badgeConfig.label}</span>
-            </div>
-
-            {/* Теги в стиле "мини-список" */}
-            <div className="mini-tags">
-                {visibleSubgenres.map((sub, i) => (
-                    <span key={i} className="mini-tag">{sub}</span>
-                ))}
-                {hiddenCount > 0 && <span className="mini-tag more">+{hiddenCount}</span>}
-            </div>
+          <div className="game-card__tags">
+            {visibleSubgenres.map((sub, i) => (
+              <span key={i} className="tag">{sub}</span>
+            ))}
+            {hiddenCount > 0 && <span className="tag tag--more">+{hiddenCount}</span>}
           </div>
 
           <a 
@@ -120,7 +124,9 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onClick }) => {
             onClick={(e) => e.stopPropagation()}
             title="Открыть в Steam"
           >
-            <Gamepad2 size={18} />
+            <Gamepad2 size={16} />
+            <span>Steam</span>
+            <ArrowUpRight size={12} style={{ opacity: 0.5 }} />
           </a>
         </div>
       </div>
