@@ -16,7 +16,6 @@ import rawGamesData from './data/games_data_ENRICHED_PRO.json';
 
 const GameGrid = lazy(() => import('@components/GameGrid'));
 
-// Расширяем интерфейс состояния: удаляем старое поле selectedGenre и добавляем массивы
 interface ExtendedFilterState extends Omit<FilterState, 'selectedGenre'> {
   excludedTags: string[];
   selectedGenres: string[];
@@ -31,7 +30,7 @@ function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
-  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v5', {
+  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v7', {
     searchQuery: '',
     selectedTags: [],
     excludedTags: [],
@@ -43,13 +42,11 @@ function App() {
 
   const debouncedSearch = useDebounce(filterState.searchQuery, 300);
 
-  // ГЛАВНОЕ ИЗМЕНЕНИЕ: Умная нормализация режима игры для отображения
   const processedGames = useMemo(() => {
     return games.map((game, index): ProcessedGame => {
       const coopLower = game.coop.toLowerCase();
-      let displayCoop = game.coop.split(' / ')[0]; // По умолчанию берем первое (например "Single")
+      let displayCoop = game.coop.split(' / ')[0];
 
-      // Если игра помечена как Single, но в ней есть мультиплеерные режимы -> меняем отображение
       if (displayCoop === 'Single' && (
           coopLower.includes('multiplayer') || 
           coopLower.includes('co-op') || 
@@ -57,7 +54,6 @@ function App() {
           coopLower.includes('shared') || 
           coopLower.includes('split')
       )) {
-          // Выбираем более приоритетный режим для бейджика
           if (coopLower.includes('multiplayer')) displayCoop = 'Multiplayer';
           else if (coopLower.includes('co-op')) displayCoop = 'Co-op';
           else if (coopLower.includes('split')) displayCoop = 'Split Screen';
@@ -68,7 +64,7 @@ function App() {
         ...game,
         id: `game-${index}-${game.name.toLowerCase().replace(/\s+/g, '-')}`,
         searchableText: `${game.name} ${game.description} ${game.tags.join(' ')} ${game.subgenres.join(' ')}`.toLowerCase(),
-        normalizedCoop: displayCoop, // Используем исправленное значение
+        normalizedCoop: displayCoop,
         normalizedGenre: game.genre,
         sanitizedDescription: game.description,
       };
@@ -93,6 +89,7 @@ function App() {
     return Array.from(genres).sort();
   }, [games]);
 
+  // Вернули пункт обратно
   const allCoopModes = [
     'All', 'Single', 'Multiplayer', 'Split Screen', 'Co-op & Multiplayer'
   ];
@@ -108,12 +105,10 @@ function App() {
 
     return processedGames
       .filter(game => {
-        // 1. Поиск
         if (searchLower && !game.searchableText.includes(searchLower)) return false;
 
         const gameTags = new Set([...game.tags, ...game.subgenres]);
 
-        // 2. Теги (AND логика)
         if (selectedTags.length > 0) {
           if (!selectedTags.every(tag => gameTags.has(tag))) return false;
         }
@@ -121,7 +116,6 @@ function App() {
            if (excludedTags.some(tag => gameTags.has(tag))) return false;
         }
 
-        // 3. ЖАНРЫ
         if (excludedGenres && excludedGenres.length > 0) {
           if (excludedGenres.includes(game.genre)) return false;
         }
@@ -129,7 +123,6 @@ function App() {
           if (!selectedGenres.includes(game.genre)) return false;
         }
 
-        // 4. Режим игры
         if (selectedCoop !== 'All') {
           const gameModes = game.coop.toLowerCase();
           const targetMode = selectedCoop.toLowerCase();
@@ -150,8 +143,10 @@ function App() {
           else if (targetMode === 'co-op & multiplayer') {
              const hasCoop = gameModes.includes('co-op');
              const hasMulti = gameModes.includes('multiplayer');
-             const hasSplit = gameModes.includes('split screen') || gameModes.includes('splitscreen');
-             if (!hasCoop && !hasMulti && !hasSplit) return false;
+             
+             // ИСПРАВЛЕНИЕ: Убрали проверку split screen.
+             // Теперь этот фильтр показывает только явный Co-op или Multiplayer
+             if (!hasCoop && !hasMulti) return false;
           }
           else {
              if (!gameModes.includes(targetMode)) return false;
@@ -173,7 +168,6 @@ function App() {
   const handleCloseModal = useCallback(() => setSelectedGame(null), []);
   const handleSearchChange = useCallback((value: string) => setFilterState(p => ({ ...p, searchQuery: value })), [setFilterState]);
 
-  // Универсальная функция переключения
   const toggleFilterItem = (
     item: string, 
     selectedList: string[], 
@@ -182,7 +176,6 @@ function App() {
     keyExcluded: keyof ExtendedFilterState
   ) => {
     setFilterState(prev => {
-      // Принудительное приведение типов, так как TS может путаться
       const prevSelected = (prev[keySelected] as string[]) || [];
       const prevExcluded = (prev[keyExcluded] as string[]) || [];
 
