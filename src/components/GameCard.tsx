@@ -46,26 +46,18 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style }) => {
             {game.description || "Описание отсутствует..."}
           </div>
 
-          {/* ОБНОВЛЕННЫЙ БЛОК ТЕГОВ И ПОДЖАНРОВ */}
+          {/* ТОЛЬКО ПОДЖАНРЫ */}
           <div className="card-tags">
-            {/* Сначала Поджанры (выделенные) */}
-            {game.subgenres.slice(0, 3).map((sub, i) => (
+            {game.subgenres.slice(0, 6).map((sub, i) => (
               <span key={`sub-${i}`} className="tag subgenre-tag">
                 {sub}
               </span>
             ))}
             
-            {/* Потом обычные теги */}
-            {game.tags.slice(0, 4).map((tag, i) => (
-              <span key={`tag-${i}`} className="tag">
-                #{tag}
-              </span>
-            ))}
-
-            {/* Счетчик оставшихся */}
-            {(game.subgenres.length + game.tags.length) > 7 && (
+            {/* Если поджанров больше 6, показываем счетчик */}
+            {game.subgenres.length > 6 && (
                <span className="tag more-tag">
-                 +{(game.subgenres.length + game.tags.length) - 7}
+                 +{game.subgenres.length - 6}
                </span>
             )}
           </div>
