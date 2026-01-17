@@ -199,11 +199,12 @@ function App() {
                   <option value="coop">By game mode</option>
                 </select>
               </div>
-
+              
               <TagFilter 
-                allTags={allTags}
-                selectedTags={filterState.selectedTags}
-                onTagToggle={handleTagToggle}
+             allTags={allTags}
+             allSubgenres={allSubgenres} // <-- Добавили это
+             selectedTags={filterState.selectedTags}
+             onTagToggle={handleTagToggle}
               />
 
               <button className="reset-btn" onClick={handleResetFilters}>
