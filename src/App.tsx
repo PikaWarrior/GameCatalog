@@ -7,7 +7,7 @@ import LoadingSkeleton from '@components/LoadingSkeleton';
 import { useDebounce } from '@hooks/useDebounce';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import { sanitizeGameData } from '@utils/sanitize';
-import { Game, ProcessedGame, FilterState } from './types'; // ИСПРАВЛЕНО
+import { Game, ProcessedGame, FilterState } from './types';
 
 import '@styles/App.css';
 import '@styles/improvements.css';
@@ -22,7 +22,6 @@ function App() {
     return (rawGamesData as any[]).map(game => sanitizeGameData(game));
   }, []);
 
-  // ИСПРАВЛЕНО: добавлена явная типизация <FilterState>
   const [filterState, setFilterState] = useLocalStorage<FilterState>('gameFilters', {
     searchQuery: '',
     selectedTags: [],
@@ -44,7 +43,7 @@ function App() {
     }));
   }, [games]);
 
-   // 1. Собираем уникальные ПОДЖАНРЫ
+  // 1. Собираем уникальные ПОДЖАНРЫ
   const allSubgenres = useMemo(() => {
     const subSet = new Set<string>();
     games.forEach(game => {
@@ -53,7 +52,7 @@ function App() {
     return Array.from(subSet).sort();
   }, [games]);
 
-  // 2. Собираем уникальные ТЕГИ (исключая поджанры, если хотите, или все вместе)
+  // 2. Собираем уникальные ТЕГИ
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
     games.forEach(game => {
@@ -68,11 +67,8 @@ function App() {
     return Array.from(genres).sort();
   }, [games]);
 
-  const allCoopModes = useMemo(() => {
-    const modes = new Set(['All']);
-    games.forEach(game => modes.add(game.coop));
-    return Array.from(modes).sort();
-  }, [games]);
+  // ФИКСИРОВАННЫЙ СПИСОК РЕЖИМОВ (вместо кучи комбинаций)
+  const allCoopModes = ['All', 'Single', 'Co-op', 'Multiplayer', 'Split Screen'];
 
   const filteredGames = useMemo(() => {
     const { selectedTags, selectedGenre, selectedCoop, sortBy } = filterState;
@@ -80,10 +76,12 @@ function App() {
 
     return processedGames
       .filter(game => {
+        // Поиск по тексту
         if (searchLower && !game.searchableText.includes(searchLower)) {
           return false;
         }
 
+        // Фильтр по тегам
         if (selectedTags.length > 0) {
           const gameTags = new Set([...game.tags, ...game.subgenres]);
           if (!selectedTags.every(tag => gameTags.has(tag))) {
@@ -91,8 +89,22 @@ function App() {
           }
         }
 
+        // Фильтр по жанру
         if (selectedGenre !== 'All' && game.genre !== selectedGenre) return false;
-        if (selectedCoop !== 'All' && !game.coop.includes(selectedCoop)) return false;
+
+        // УМНЫЙ ФИЛЬТР ПО РЕЖИМАМ
+        if (selectedCoop !== 'All') {
+          const gameModes = game.coop.toLowerCase(); 
+          const targetMode = selectedCoop.toLowerCase();
+          
+          if (targetMode === 'split screen') {
+             // Ищем "split screen" или "splitscreen"
+             if (!gameModes.includes('split screen') && !gameModes.includes('splitscreen')) return false;
+          } else {
+             // Ищем вхождение (например, "Co-op" найдется в "Single / Co-op")
+             if (!gameModes.includes(targetMode)) return false;
+          }
+        }
 
         return true;
       })
@@ -128,7 +140,7 @@ function App() {
   }, [setFilterState]);
 
   const handleSortChange = useCallback((sortBy: 'name' | 'genre' | 'coop') => {
-    setFilterState(prev => ({ ...prev, sortBy })); // Теперь работает корректно
+    setFilterState(prev => ({ ...prev, sortBy }));
   }, [setFilterState]);
 
   const handleResetFilters = useCallback(() => {
@@ -199,12 +211,12 @@ function App() {
                   <option value="coop">By game mode</option>
                 </select>
               </div>
-              
+
               <TagFilter 
-             allTags={allTags}
-             allSubgenres={allSubgenres} // <-- Добавили это
-             selectedTags={filterState.selectedTags}
-             onTagToggle={handleTagToggle}
+                allTags={allTags}
+                allSubgenres={allSubgenres}
+                selectedTags={filterState.selectedTags}
+                onTagToggle={handleTagToggle}
               />
 
               <button className="reset-btn" onClick={handleResetFilters}>
