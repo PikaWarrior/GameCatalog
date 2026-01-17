@@ -12,6 +12,7 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* --- ЗАГОЛОВОК СЕКЦИИ (АККОРДЕОН) --- */
 .section-header {
   display: flex;
   align-items: center;
@@ -51,12 +52,13 @@
   color: var(--text-secondary, #94a3b8);
 }
 
+/* --- ТЕЛО СЕКЦИИ --- */
 .section-body {
   background: rgba(0, 0, 0, 0.2);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* СТИЛИ ПОИСКА */
+/* --- ПОЛЕ ПОИСКА --- */
 .section-search {
   padding: 8px 12px;
   display: flex;
@@ -80,8 +82,16 @@
   color: #64748b;
 }
 
+/* Важно: сбрасываем стили для иконки поиска, чтобы убрать "фантомную лупу" */
 .section-search .search-icon {
+  min-width: 14px;
+  width: 14px;
+  height: 14px;
   color: #64748b;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: block;
 }
 
 .clear-search {
@@ -94,6 +104,7 @@
   justify-content: center;
   padding: 4px;
   border-radius: 4px;
+  min-width: 20px; /* Чтобы область клика была удобной */
 }
 
 .clear-search:hover {
@@ -101,7 +112,7 @@
   color: #fff;
 }
 
-/* КОНТЕНТ */
+/* --- СПИСОК ТЕГОВ --- */
 .section-content {
   padding: 12px;
   max-height: 250px;
