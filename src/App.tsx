@@ -67,8 +67,15 @@ function App() {
     return Array.from(genres).sort();
   }, [games]);
 
-  // ФИКСИРОВАННЫЙ СПИСОК РЕЖИМОВ (вместо кучи комбинаций)
-  const allCoopModes = ['All', 'Single', 'Co-op', 'Multiplayer', 'Split Screen'];
+  // ФИКСИРОВАННЫЙ СПИСОК РЕЖИМОВ + Комбинированный
+  const allCoopModes = [
+    'All', 
+    'Single', 
+    'Co-op', 
+    'Multiplayer', 
+    'Split Screen',
+    'Co-op & Multiplayer' // <-- Новый пункт для всех сетевых/локальных режимов
+  ];
 
   const filteredGames = useMemo(() => {
     const { selectedTags, selectedGenre, selectedCoop, sortBy } = filterState;
@@ -100,8 +107,18 @@ function App() {
           if (targetMode === 'split screen') {
              // Ищем "split screen" или "splitscreen"
              if (!gameModes.includes('split screen') && !gameModes.includes('splitscreen')) return false;
-          } else {
-             // Ищем вхождение (например, "Co-op" найдется в "Single / Co-op")
+          } 
+          else if (targetMode === 'co-op & multiplayer') {
+             // Логика "ИЛИ": подходит, если есть Кооп, ИЛИ Мультиплеер, ИЛИ Сплитскрин
+             const hasCoop = gameModes.includes('co-op');
+             const hasMulti = gameModes.includes('multiplayer');
+             const hasSplit = gameModes.includes('split screen') || gameModes.includes('splitscreen');
+             
+             if (!hasCoop && !hasMulti && !hasSplit) return false;
+          }
+          else {
+             // Обычный поиск (Single, Co-op, Multiplayer)
+             // Ищем подстроку (например, "Single" найдет "Single / Co-op")
              if (!gameModes.includes(targetMode)) return false;
           }
         }
