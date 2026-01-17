@@ -1,3 +1,4 @@
+/* сброс стилей */
 * {
   margin: 0;
   padding: 0;
@@ -13,66 +14,77 @@
   --text-secondary: #b8b8b8;
   --card-bg: #222831;
   --card-border: #393e46;
-  --sidebar-width: 300px;
 }
 
+/* 
+   ВАЖНО: Убираем прокрутку у body, так как скроллить будем
+   внутри компонентов. Это нужно для виртуализации.
+*/
 body {
   background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
   color: var(--text-color);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; 
 }
 
-.app {
-  min-height: 100vh;
+/* Главный контейнер на весь экран */
+.app-container {
   display: flex;
   flex-direction: column;
-}
-
-.container {
-  display: flex;
-  flex: 1;
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 20px;
-  gap: 30px;
+  height: 100vh; /* Занимаем 100% высоты окна */
   width: 100%;
 }
 
-.sidebar {
-  width: var(--sidebar-width);
-  background: rgba(22, 33, 62, 0.95);
+/* Область под шапкой (Сайдбар + Сетка) */
+.main-content {
+  display: flex;
+  flex: 1; /* Занимает все оставшееся место */
+  overflow: hidden; /* Скрываем вылезающие элементы */
+  width: 100%;
+  max-width: 1920px; /* Ограничение для очень широких экранов */
+  margin: 0 auto;
+}
+
+/* --- САЙДБАР --- */
+.filters-sidebar {
+  width: 300px; /* Фиксированная ширина */
+  background: rgba(22, 33, 62, 0.8); /* Ваша прозрачность */
   backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 25px;
-  height: fit-content;
-  position: sticky;
-  top: 100px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  overflow-y: auto; /* Скролл только внутри сайдбара, если фильтров много */
+  flex-shrink: 0; /* Не сжиматься */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 10;
 }
 
-.filter-section {
-  margin-top: 25px;
+/* Стилизация скроллбара для сайдбара */
+.filters-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.filters-sidebar::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 3px;
 }
 
-.filter-section h3 {
-  color: var(--highlight-color);
-  margin-bottom: 20px;
-  font-size: 1.3rem;
-  border-bottom: 2px solid var(--accent-color);
-  padding-bottom: 10px;
+.filters-sticky {
+  /* В этой структуре sticky не обязателен, но оставим для порядка */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.filter-group {
-  margin-bottom: 20px;
-}
-
+/* --- ВАШИ СТИЛИ КОМПОНЕНТОВ (Сохранены) --- */
 .filter-group label {
   display: block;
   margin-bottom: 8px;
   color: var(--text-secondary);
   font-weight: 500;
+  font-size: 0.9rem;
 }
 
 .filter-select {
@@ -93,18 +105,9 @@ body {
   box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2);
 }
 
-.stats {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 15px;
-  border-radius: 10px;
-  margin-top: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.stats p {
-  margin: 5px 0;
-  color: var(--text-secondary);
-  font-size: 14px;
+.filter-select option {
+  background-color: var(--secondary-color);
+  color: white;
 }
 
 .reset-btn {
@@ -117,7 +120,7 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 15px;
+  margin-top: 10px;
   font-size: 14px;
 }
 
@@ -126,38 +129,58 @@ body {
   box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
 }
 
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.footer {
-  text-align: center;
-  padding: 20px;
+.results-count {
+  padding: 0 20px 10px 20px;
   color: var(--text-secondary);
   font-size: 0.9rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: auto;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 10px;
 }
 
-@media (max-width: 1024px) {
-  .container {
-    flex-direction: column;
-  }
-  
-  .sidebar {
-    width: 100%;
-    position: static;
-  }
+/* --- СЕКЦИЯ СЕТКИ (Критически важно для работы) --- */
+.games-grid-section {
+  flex: 1; /* Растягивается на всю ширину */
+  height: 100%; /* Растягивается на всю высоту */
+  overflow: hidden; /* Важно! Скролл внутри делает react-window */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px; /* Отступ сверху */
 }
 
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.no-results h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: var(--text-color);
+}
+
+/* --- АДАПТИВНОСТЬ --- */
 @media (max-width: 768px) {
-  .container {
-    padding: 10px;
+  .main-content {
+    flex-direction: column; /* Сайдбар уходит наверх */
+    overflow-y: auto; /* Включаем общий скролл для мобилок */
   }
-  
-  .sidebar {
-    padding: 20px;
+
+  .filters-sidebar {
+    width: 100%;
+    max-height: 300px; /* Ограничиваем высоту сайдбара на мобилках */
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* На мобильных виртуализация может работать хуже с общим скроллом,
+     но при такой структуре AutoSizer пересчитает размер */
+  .games-grid-section {
+    min-height: 500px; 
   }
 }
