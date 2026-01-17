@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Gamepad2, Maximize2 } from 'lucide-react';
+import { Gamepad2 } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameCard.css';
 
@@ -11,6 +11,7 @@ interface GameCardProps {
 
 const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) => {
 
+  // Функция выбора иконки для кооператива
   const getCoopIcon = (coop: string) => {
     const lower = coop.toLowerCase();
     if (lower.includes('online')) return '🌐';
@@ -19,9 +20,34 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
     return '👤';
   };
 
+  // Логика выбора цвета для жанра
+  const getGenreColor = (genre: string) => {
+      const g = genre.toLowerCase();
+      if (g.includes('action') || g.includes('shooter') || g.includes('fighting') || g.includes('hack')) return 'var(--genre-red)';
+      if (g.includes('adventure') || g.includes('rpg') || g.includes('role')) return 'var(--genre-green)';
+      if (g.includes('strategy') || g.includes('simulation') || g.includes('management') || g.includes('city')) return 'var(--genre-blue)';
+      if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) return 'var(--genre-purple)';
+      if (g.includes('puzzle') || g.includes('platformer') || g.includes('arcade')) return 'var(--genre-yellow)';
+      if (g.includes('rogue') || g.includes('lite') || g.includes('dungeon')) return 'var(--genre-orange)';
+      return 'var(--genre-default)'; // Цвет по умолчанию
+  };
+
+  // Логика выбора класса для цвета кооператива
+  const getCoopColorClass = (coop: string) => {
+      const lower = coop.toLowerCase();
+      // Если есть хоть какой-то намек на мультиплеер — красим в один цвет
+      if (lower.includes('online') || lower.includes('co-op') || lower.includes('multiplayer') || lower.includes('split') || lower.includes('lan')) {
+          return 'coop-online'; 
+      }
+      // Иначе (Single) — другой цвет
+      return 'coop-single';
+  };
+
+  const genreColor = getGenreColor(game.genre);
+  const coopClass = getCoopColorClass(game.coop);
+
   return (
     <div className="game-card-inner" style={style}>
-      {/* Изображение и Бейджи */}
       <div className="card-image-container">
         <img 
           src={game.image} 
@@ -32,9 +58,18 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             (e.target as HTMLImageElement).src = '/fallback-game.jpg';
           }}
         />
+        
         <div className="card-badges">
-          <span className="badge genre">{game.genre}</span>
-          <span className="badge coop">
+          {/* Бейдж жанра с динамическим цветом */}
+          <span 
+            className="badge genre" 
+            style={{ backgroundColor: genreColor, borderColor: genreColor }}
+          >
+            {game.genre}
+          </span>
+          
+          {/* Бейдж режима с классом цвета */}
+          <span className={`badge coop ${coopClass}`}>
              {getCoopIcon(game.coop)} {game.normalizedCoop}
           </span>
         </div>
@@ -43,31 +78,22 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
       <div className="card-content">
         <h3 className="card-title" title={game.name}>{game.name}</h3>
         
-        {/* Интерактивное описание: клик открывает модалку */}
+        {/* Описание: выглядит как статика, но кликабельно */}
         <div 
-            className="card-description-area"
+            className="card-description-static"
             onClick={() => onOpenModal && onOpenModal(game)}
-            title="Нажмите, чтобы открыть полное описание"
+            title="Нажмите, чтобы открыть подробное описание"
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onOpenModal && onOpenModal(game);
-              }
+                if (e.key === 'Enter' || e.key === ' ') {
+                    onOpenModal && onOpenModal(game);
+                }
             }}
         >
-           <p className="description-text">
-             {game.description || "Описание отсутствует..."}
-           </p>
-           
-           {/* Всплывающая подсказка "Подробнее" */}
-           <div className="expand-hint">
-             <Maximize2 size={14} /> <span>Подробнее</span>
-           </div>
+           {game.description || "Описание отсутствует..."}
         </div>
 
-        {/* Теги (Поджанры) */}
         <div className="card-tags">
           {game.subgenres.slice(0, 6).map((sub, i) => (
             <span key={i} className="tag subgenre-tag">{sub}</span>
@@ -77,13 +103,12 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
           )}
         </div>
 
-        {/* Кнопка Steam */}
         <a 
           href={game.steam_url} 
           target="_blank" 
           rel="noopener noreferrer" 
           className="steam-button"
-          onClick={(e) => e.stopPropagation()} /* Чтобы клик не вызывал модалку */
+          onClick={(e) => e.stopPropagation()} // Клик по Steam не открывает модалку
         >
           <Gamepad2 size={18} className="steam-icon"/>
           <span>В Steam</span>
