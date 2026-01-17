@@ -1,136 +1,79 @@
-import React, { memo, useState } from 'react';
-import { Gamepad2, Monitor, Globe, Users, ArrowUpRight } from 'lucide-react';
+import React, { memo } from 'react';
 import { ProcessedGame } from '../types';
 import '../styles/GameCard.css';
 
 interface GameCardProps {
   game: ProcessedGame;
   style?: React.CSSProperties;
-  onClick?: (game: ProcessedGame) => void;
 }
 
-const GameCard: React.FC<GameCardProps> = memo(({ game, style, onClick }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  // Логика иконок и цветов для режимов (адаптирована под новые стили)
-  const getCoopBadgeStyle = (coop: string) => {
+const GameCard: React.FC<GameCardProps> = memo(({ game, style }) => {
+  const getCoopIcon = (coop: string) => {
     const lower = coop.toLowerCase();
-    if (lower.includes('online')) return { 
-      color: '#10b981', 
-      rgb: '16, 185, 129', 
-      icon: <Globe size={11} />, 
-      label: 'Online' 
-    };
-    if (lower.includes('local') || lower.includes('shared') || lower.includes('split')) return { 
-      color: '#f59e0b', 
-      rgb: '245, 158, 11', 
-      icon: <Users size={11} />, 
-      label: 'Local' 
-    };
-    if (lower.includes('single')) return { 
-      color: '#94a3b8', 
-      rgb: '148, 163, 184', 
-      icon: <Monitor size={11} />, 
-      label: 'Single' 
-    };
-    return { 
-      color: '#3b82f6', 
-      rgb: '59, 130, 246', 
-      icon: <Gamepad2 size={11} />, 
-      label: coop.split(' ')[0] 
-    };
+    if (lower.includes('online')) return '🌐';
+    if (lower.includes('lan')) return '🏠';
+    if (lower.includes('shared') || lower.includes('split')) return '📺';
+    return '👤';
   };
 
-  const badgeConfig = getCoopBadgeStyle(game.normalizedCoop);
-  
-  // Ограничиваем теги до 3 штук
-  const visibleSubgenres = game.subgenres.slice(0, 3);
-  const hiddenCount = game.subgenres.length - 3;
-
   return (
-    <article 
-      className={`game-card ${imageLoaded ? 'is-visible' : ''}`}
-      style={{ 
-        ...style, 
-        '--badge-color-rgb': badgeConfig.rgb 
-      } as React.CSSProperties}
-      onClick={() => onClick && onClick(game)}
-      onKeyDown={(e) => e.key === 'Enter' && onClick && onClick(game)}
-      tabIndex={0}
-      role="button"
-      aria-label={`View details for ${game.name}`}
-    >
-      {/* Световой блик (Shine Effect) - сохранили из предыдущих улучшений */}
-      <div className="shine-effect" />
-
-      {/* --- ИЗОБРАЖЕНИЕ --- */}
-      <div className="game-card__image-wrap">
-        <div className={`game-card__image-blur ${imageLoaded ? 'hidden' : ''}`}>
-           {/* Блюр-заглушка или скелетон */}
+    <div className="game-card" style={style}>
+      <div className="game-card-inner">
+        <div className="card-image-container">
+          <img 
+            src={game.image} 
+            alt={game.name} 
+            loading="lazy"
+            className="card-image"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/fallback-game.jpg';
+            }}
+          />
+          <div className="card-badges">
+            <span className="badge genre">{game.genre}</span>
+            <span className="badge coop" title={game.coop}>
+              {getCoopIcon(game.coop)} {game.normalizedCoop}
+            </span>
+          </div>
         </div>
-        
-        <img 
-          src={game.image} 
-          alt="" 
-          className={`game-card__image ${imageLoaded ? 'loaded' : ''}`}
-          loading="lazy"
-          onLoad={() => setImageLoaded(true)}
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = '/fallback-game.jpg';
-            setImageLoaded(true);
-          }}
-        />
-        
-        <div className="game-card__overlay" />
 
-        {/* Бейджи */}
-        <div className="game-card__badges">
-          <span className="badge badge--genre">{game.genre}</span>
-          <span className="badge badge--coop">
-            {badgeConfig.icon}
-            <span>{badgeConfig.label}</span>
-          </span>
-        </div>
-      </div>
-
-      {/* --- КОНТЕНТ --- */}
-      <div className="game-card__content">
-        <div className="game-card__header">
-          <h3 className="game-card__title" title={game.name}>
+        <div className="card-content">
+          <h3 className="card-title" title={game.name}>
             {game.name}
           </h3>
-        </div>
 
-        <div className="game-card__description-wrap">
-           <p className="game-card__description">
-             {game.description || "Описание недоступно."}
-           </p>
-        </div>
+          <div className="card-description-scroll custom-scrollbar">
+            {game.description || "Описание отсутствует..."}
+          </div>
 
-        {/* Футер */}
-        <div className="game-card__footer">
-          <div className="game-card__tags">
-            {visibleSubgenres.map((sub, i) => (
-              <span key={i} className="tag">{sub}</span>
+          {/* ТОЛЬКО ПОДЖАНРЫ */}
+          <div className="card-tags">
+            {game.subgenres.slice(0, 6).map((sub, i) => (
+              <span key={`sub-${i}`} className="tag subgenre-tag">
+                {sub}
+              </span>
             ))}
-            {hiddenCount > 0 && <span className="tag tag--more">+{hiddenCount}</span>}
+            
+            {/* Если поджанров больше 6, показываем счетчик */}
+            {game.subgenres.length > 6 && (
+               <span className="tag more-tag">
+                 +{game.subgenres.length - 6}
+               </span>
+            )}
           </div>
 
           <a 
-            href={game.steam_url} 
+            href={game.steam_url}
             target="_blank" 
-            rel="noopener noreferrer" 
-            className="steam-icon-btn"
-            onClick={(e) => e.stopPropagation()}
-            title="Открыть в Steam"
+            rel="noopener noreferrer"
+            className="steam-button"
           >
-            <Gamepad2 size={16} />
-            <span>Steam</span>
-            <ArrowUpRight size={12} style={{ opacity: 0.5 }} />
+            <span className="steam-icon">🎮</span>
+            В Steam
           </a>
         </div>
       </div>
-    </article>
+    </div>
   );
 });
 
