@@ -2,12 +2,10 @@
 .game-card {
   position: relative;
   background: #1e293b; /* Slate-800 */
-  border-radius: 12px;
+  border-radius: 16px; /* Современное скругление */
   overflow: hidden;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
@@ -16,63 +14,38 @@
   user-select: none;
 }
 
-/* Эффекты наведения (Hover) */
+/* Ховер эффект: подъем и тень */
 .game-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.4);
-  border-color: rgba(59, 130, 246, 0.4); /* Подсветка границ */
-  z-index: 5; /* Чтобы карточка была поверх соседей */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+  border-color: rgba(99, 102, 241, 0.3); /* Легкий Indigo */
+  z-index: 5;
 }
 
 /* Доступность (Focus) */
 .game-card:focus-visible {
-  outline: 2px solid #3b82f6;
-  outline-offset: 4px;
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
 }
 
-/* --- ИЗОБРАЖЕНИЕ И СКЕЛЕТОН --- */
+/* --- ИЗОБРАЖЕНИЕ --- */
 .game-card__image-wrap {
   position: relative;
-  height: 180px; /* Фиксированная высота обложки */
+  height: 170px; /* Сбалансированная высота */
   width: 100%;
   overflow: hidden;
-  background: #0f172a; /* Slate-900 (фон под картинкой) */
+  background: #0f172a;
 }
 
-/* Скелетон-лоадер (мерцание) */
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .5; }
-}
-
-.skeleton-loader {
-  position: absolute;
-  inset: 0;
-  background: #334155; /* Цвет "костей" */
-  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  z-index: 2;
-}
-.skeleton-loader.hidden {
-  display: none;
-}
-
-/* Картинка */
 .game-card__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0; /* Скрыта пока грузится */
-  transition: opacity 0.4s ease, transform 0.5s ease;
-  will-change: transform;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.6s ease;
 }
-.game-card__image.loaded {
-  opacity: 1;
-}
-
-/* Зум картинки при ховере на всю карточку */
-.game-card:hover .game-card__image {
-  transform: scale(1.05);
-}
+.game-card__image.loaded { opacity: 1; }
+.game-card:hover .game-card__image { transform: scale(1.08); }
 
 /* Градиент снизу картинки */
 .game-card__overlay {
@@ -80,148 +53,92 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 80px;
-  background: linear-gradient(to top, #1e293b 10%, transparent 100%);
+  height: 100%;
+  background: linear-gradient(to top, rgba(30, 41, 59, 0.95) 0%, transparent 60%);
   pointer-events: none;
-  z-index: 1;
 }
 
-/* --- БЕЙДЖИ (GENRE / COOP) --- */
+/* --- БЕЙДЖИ --- */
 .game-card__badges {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
+  top: 12px;
+  left: 12px;
+  right: 12px;
   display: flex;
   justify-content: space-between;
   pointer-events: none;
-  z-index: 3;
+  z-index: 2;
 }
 
 .badge {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 20px; /* Pill shape */
   backdrop-filter: blur(8px);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: inline-flex;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
 }
 
 .badge--genre {
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(15, 23, 42, 0.85);
   color: #e2e8f0;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .badge--coop {
-  color: #ffffff;
-  /* Цвет фона задается инлайном в JS */
+  color: white;
+  /* Фон задается инлайном */
 }
 
-/* --- КНОПКА ИЗБРАННОГО --- */
-.favorite-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: #cbd5e1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  
-  /* Анимация появления */
-  opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Показываем кнопку при ховере ИЛИ если она активна */
-.game-card:hover .favorite-btn,
-.favorite-btn.active {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.favorite-btn:hover {
-  background: white;
-  color: #ef4444; /* Red-500 */
-}
-
-.favorite-btn.active {
-  color: #ef4444;
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-/* --- КОНТЕНТ КАРТОЧКИ --- */
+/* --- КОНТЕНТ --- */
 .game-card__content {
   padding: 16px;
   display: flex;
   flex-direction: column;
   flex: 1;
-  position: relative;
   z-index: 2;
 }
 
-/* Скелетоны для текста */
-.skeleton-title {
-  height: 24px;
-  width: 80%;
-  background: #334155;
-  border-radius: 4px;
-  margin-bottom: 12px;
-  animation: pulse 1.5s infinite;
-}
-.skeleton-text {
-  height: 14px;
-  width: 100%;
-  background: #334155;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  animation: pulse 1.5s infinite;
-}
-
 .game-card__title {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #f8fafc;
-  margin: 0 0 8px 0;
-  line-height: 1.25;
+  color: #f1f5f9;
+  margin: 0 0 10px 0;
+  line-height: 1.3;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+/* --- ОПИСАНИЕ (с маской) --- */
+.game-card__description-wrap {
+  position: relative;
+  min-height: 4.5em; /* Место под 3 строки */
+  margin-bottom: 16px;
+}
+
 .game-card__description {
-  font-size: 0.875rem;
-  color: #94a3b8; /* Slate-400 */
+  font-size: 0.85rem;
+  color: #cbd5e1; /* Светло-серый, читаемый */
   line-height: 1.5;
   margin: 0;
   
-  /* Обрезка до 3 строк */
+  /* Обрезка строк */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  
+  /* Маска для мягкого исчезновения */
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
 }
 
-.game-card__description-wrap {
-    min-height: 4.5em; /* Резервируем место под 3 строки, чтобы карточки не прыгали */
-    margin-bottom: 16px;
-}
-
-/* --- ФУТЕР (ТЕГИ + STEAM) --- */
+/* --- ТЕГИ (Glassmorphism) --- */
 .game-card__footer {
   margin-top: auto;
   display: flex;
@@ -234,48 +151,95 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  align-content: flex-start;
 }
 
 .tag {
   font-size: 0.7rem;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  color: #cbd5e1;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 12px;
+  
+  /* Стекло */
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  
+  transition: all 0.2s ease;
   white-space: nowrap;
-  transition: opacity 0.2s;
+  cursor: default;
 }
 
+/* Подсветка тегов при ховере на карточку */
 .game-card:hover .tag {
-    opacity: 0.7; /* Чуть приглушаем теги при ховере, фокус на кнопке */
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #e2e8f0;
 }
 
 .tag--more {
-  background: transparent;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
-  color: #64748b;
+  border-style: dashed;
+  cursor: help;
+}
+.tag--more:hover {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #818cf8;
 }
 
-/* Кнопка Steam */
+/* --- КНОПКА STEAM --- */
 .steam-icon-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  flex-shrink: 0; /* Чтобы не сжималась */
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.05);
   color: #64748b;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
   border: 1px solid transparent;
 }
 
 .steam-icon-btn:hover {
-  background: #171a21; /* Фирменный темный Steam */
-  color: #66c0f4; /* Фирменный голубой Steam */
-  border-color: rgba(102, 192, 244, 0.3);
-  box-shadow: 0 0 15px rgba(102, 192, 244, 0.15);
-  transform: scale(1.05);
+  background: #0f172a;
+  color: #38bdf8; /* Steam Blue */
+  border-color: #38bdf8;
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+/* --- СКЕЛЕТОН (Анимация загрузки) --- */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-loader {
+  position: absolute;
+  inset: 0;
+  background: #1e293b;
+  background-image: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
+  z-index: 2;
+}
+.skeleton-loader.hidden { display: none; }
+
+.skeleton-title {
+  height: 20px;
+  width: 70%;
+  background: #334155;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+.skeleton-text {
+  height: 12px;
+  width: 100%;
+  background: #334155;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  opacity: 0.4;
 }
