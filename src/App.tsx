@@ -16,8 +16,7 @@ import rawGamesData from './data/games_data_ENRICHED_PRO.json';
 
 const GameGrid = lazy(() => import('@components/GameGrid'));
 
-// ИСПРАВЛЕНИЕ: Используем Omit, чтобы удалить старое поле 'selectedGenre' из типа
-// и заменить его на массивы selectedGenres/excludedGenres
+// Расширяем интерфейс состояния: удаляем старое поле selectedGenre и добавляем массивы
 interface ExtendedFilterState extends Omit<FilterState, 'selectedGenre'> {
   excludedTags: string[];
   selectedGenres: string[];
@@ -32,8 +31,7 @@ function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
-  // Теперь TypeScript не будет ругаться на отсутствие selectedGenre
-  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v4', {
+  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v5', {
     searchQuery: '',
     selectedTags: [],
     excludedTags: [],
@@ -45,15 +43,36 @@ function App() {
 
   const debouncedSearch = useDebounce(filterState.searchQuery, 300);
 
+  // ГЛАВНОЕ ИЗМЕНЕНИЕ: Умная нормализация режима игры для отображения
   const processedGames = useMemo(() => {
-    return games.map((game, index): ProcessedGame => ({
-      ...game,
-      id: `game-${index}-${game.name.toLowerCase().replace(/\s+/g, '-')}`,
-      searchableText: `${game.name} ${game.description} ${game.tags.join(' ')} ${game.subgenres.join(' ')}`.toLowerCase(),
-      normalizedCoop: game.coop.split(' / ')[0],
-      normalizedGenre: game.genre,
-      sanitizedDescription: game.description,
-    }));
+    return games.map((game, index): ProcessedGame => {
+      const coopLower = game.coop.toLowerCase();
+      let displayCoop = game.coop.split(' / ')[0]; // По умолчанию берем первое (например "Single")
+
+      // Если игра помечена как Single, но в ней есть мультиплеерные режимы -> меняем отображение
+      if (displayCoop === 'Single' && (
+          coopLower.includes('multiplayer') || 
+          coopLower.includes('co-op') || 
+          coopLower.includes('online') || 
+          coopLower.includes('shared') || 
+          coopLower.includes('split')
+      )) {
+          // Выбираем более приоритетный режим для бейджика
+          if (coopLower.includes('multiplayer')) displayCoop = 'Multiplayer';
+          else if (coopLower.includes('co-op')) displayCoop = 'Co-op';
+          else if (coopLower.includes('split')) displayCoop = 'Split Screen';
+          else if (coopLower.includes('online')) displayCoop = 'Online';
+      }
+
+      return {
+        ...game,
+        id: `game-${index}-${game.name.toLowerCase().replace(/\s+/g, '-')}`,
+        searchableText: `${game.name} ${game.description} ${game.tags.join(' ')} ${game.subgenres.join(' ')}`.toLowerCase(),
+        normalizedCoop: displayCoop, // Используем исправленное значение
+        normalizedGenre: game.genre,
+        sanitizedDescription: game.description,
+      };
+    });
   }, [games]);
 
   const allSubgenres = useMemo(() => {
@@ -102,7 +121,7 @@ function App() {
            if (excludedTags.some(tag => gameTags.has(tag))) return false;
         }
 
-        // 3. ЖАНРЫ (OR логика для включения, NOT для исключения)
+        // 3. ЖАНРЫ
         if (excludedGenres && excludedGenres.length > 0) {
           if (excludedGenres.includes(game.genre)) return false;
         }
@@ -163,7 +182,7 @@ function App() {
     keyExcluded: keyof ExtendedFilterState
   ) => {
     setFilterState(prev => {
-      // Принудительное приведение типов, так как TS может путаться в ключах
+      // Принудительное приведение типов, так как TS может путаться
       const prevSelected = (prev[keySelected] as string[]) || [];
       const prevExcluded = (prev[keyExcluded] as string[]) || [];
 
