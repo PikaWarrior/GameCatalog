@@ -1,78 +1,89 @@
-/* --- ОСНОВНОЙ КОНТЕЙНЕР --- */
+/* --- ПЕРЕМЕННЫЕ И ОСНОВА --- */
 .game-card {
+  --card-bg: #1e293b;
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent-color: #3b82f6;
+  --hover-lift: -6px;
+
   position: relative;
-  background: #1e293b; /* Slate-800 */
+  background: var(--card-bg);
   border-radius: 16px;
-  overflow: hidden; /* Важно для обрезки блика */
-  
-  /* Тень: мягкая, многослойная */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 
-              0 2px 4px -1px rgba(0, 0, 0, 0.15);
-              
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Плавная Apple-like анимация */
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 
+              0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid var(--card-border);
   display: flex;
   flex-direction: column;
   height: 100%;
   cursor: pointer;
   user-select: none;
   
-  /* Включаем аппаратное ускорение для плавности */
-  transform: translateZ(0); 
+  /* Анимация появления */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cardEntrance 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-/* Ховер: Подъем, эффект глубины и подсветка */
+/* Флаг видимости для анимации */
+.game-card.is-visible {
+    /* Можно добавить задержку через JS, если нужно */
+}
+
+@keyframes cardEntrance {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- HOVER ЭФФЕКТЫ --- */
 .game-card:hover {
-  transform: translateY(-8px) scale(1.01);
-  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5),
-              0 0 0 1px rgba(99, 102, 241, 0.4); /* Симуляция border-glow */
+  transform: translateY(var(--hover-lift));
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3),
+              0 4px 12px rgba(0, 0, 0, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
   z-index: 10;
 }
 
-/* Фокус клавиатуры */
 .game-card:focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid var(--accent-color);
   outline-offset: 4px;
 }
 
-/* --- ЭФФЕКТ "БЛИК" (SHINE) --- */
+/* --- ЭФФЕКТ БЛИКА (SHINE) --- */
 .shine-effect {
   position: absolute;
   top: 0;
-  left: -150%;
+  left: -100%;
   width: 50%;
   height: 100%;
   background: linear-gradient(
     to right,
     transparent,
-    rgba(255, 255, 255, 0.05) 40%,
-    rgba(255, 255, 255, 0.15) 50%, /* Ядро блика чуть ярче */
-    rgba(255, 255, 255, 0.05) 60%,
+    rgba(255, 255, 255, 0.03) 40%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 60%,
     transparent
   );
   transform: skewX(-25deg);
   pointer-events: none;
   z-index: 20;
 }
-
 .game-card:hover .shine-effect {
-  /* Анимация пролета блика */
   animation: shine-anim 0.75s forwards;
 }
-
 @keyframes shine-anim {
   0% { left: -100%; }
-  100% { left: 250%; }
+  100% { left: 200%; }
 }
 
 /* --- ИЗОБРАЖЕНИЕ --- */
 .game-card__image-wrap {
   position: relative;
-  height: 160px;
+  height: 170px;
   width: 100%;
   overflow: hidden;
   background: #0f172a;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
 .game-card__image {
@@ -80,96 +91,103 @@
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 0.5s ease, transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: opacity 0.5s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
 }
 .game-card__image.loaded { opacity: 1; }
 
-/* Параллакс/Зум эффект для картинки */
 .game-card:hover .game-card__image {
-  transform: scale(1.1) translateY(-2px);
+  transform: scale(1.08);
 }
 
 .game-card__overlay {
   position: absolute;
-  inset: 0;
-  /* Градиент снизу для лучшей читаемости */
-  background: linear-gradient(to top, rgba(15, 23, 42, 0.6) 0%, transparent 50%);
+  bottom: 0; left: 0; right: 0;
+  height: 100px;
+  background: linear-gradient(to top, var(--card-bg) 0%, transparent 100%);
   pointer-events: none;
+  z-index: 3;
 }
 
-/* Стеклянный бейдж (Жанр) */
-.game-card__top-badges {
-    position: absolute;
-    top: 10px; left: 10px;
+/* --- БЕЙДЖИ --- */
+.game-card__badges {
+  position: absolute;
+  top: 12px; left: 12px; right: 12px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 4;
 }
-.badge-glass {
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: #fff;
-    padding: 4px 10px;
-    background: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный */
-    backdrop-filter: blur(6px);      /* Эффект матового стекла */
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+.badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.badge--genre {
+  background: rgba(15, 23, 42, 0.85);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.badge--coop {
+  /* Используем RGB переменную из JS для прозрачности */
+  background: rgba(var(--badge-color-rgb, 59, 130, 246), 0.9);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* --- КОНТЕНТ --- */
 .game-card__content {
-  padding: 14px 16px 12px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   flex: 1;
-  /* Легкий градиент фона карточки */
-  background: linear-gradient(180deg, #1e293b 0%, #1a2436 100%);
+  z-index: 5;
+  background: linear-gradient(to bottom, transparent, #1e293b 20%);
 }
 
-/* Заголовок */
-.game-card__header {
-    margin-bottom: 6px;
-}
 .game-card__title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #f1f5f9;
-  margin: 0;
-  line-height: 1.3;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+  line-height: 1.25;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   transition: color 0.2s;
 }
 .game-card:hover .game-card__title {
-    color: #60a5fa; /* Голубой акцент при наведении */
+  color: var(--accent-color);
 }
 
-/* Описание */
 .game-card__description-wrap {
-  height: 4.2em; /* Высота под 3 строки */
-  margin-bottom: 12px;
-  position: relative;
+  margin-bottom: 16px;
+  min-height: 4.2em;
 }
+
 .game-card__description {
   font-size: 0.85rem;
-  color: #cbd5e1; /* Светлый серый текст */
+  color: var(--text-secondary);
   line-height: 1.5;
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  /* Мягкая маска исчезновения */
-  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-}
-
-/* Тонкий разделитель */
-.divider {
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
-    margin-bottom: 12px;
+  /* Мягкая маска для текста */
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
 }
 
 /* --- ФУТЕР --- */
@@ -178,103 +196,56 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.footer-left {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    max-width: 80%;
+.game-card__tags {
+  display: flex;
+  gap: 6px;
 }
 
-/* Индикатор Кооператива (цветная пилюля) */
-.coop-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 6px;
-    align-self: flex-start;
+.tag {
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  transition: all 0.2s;
+}
+.game-card:hover .tag {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+.tag--more {
+  border-style: dashed;
+  background: transparent;
+  color: #64748b;
 }
 
-/* Список тегов (inline) */
-.mini-tags {
-    display: flex;
-    gap: 4px;
-    overflow: hidden;
-    white-space: nowrap;
-}
-.mini-tag {
-    font-size: 0.7rem;
-    color: #64748b; /* Slate-500 */
-}
-.mini-tag:not(:last-child)::after {
-    content: ",";
-    color: #475569;
-}
-.mini-tag.more {
-    color: #6366f1; /* Indigo-500 */
-    font-weight: 500;
-}
-.mini-tag.more::after { content: ""; }
-
-/* Кнопка Steam (Минимализм) */
+/* Кнопка Steam в новом стиле */
 .steam-icon-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
+  gap: 6px;
   height: 32px;
+  padding: 0 10px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  color: #475569;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.2s;
-  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid transparent;
 }
 
 .steam-icon-btn:hover {
-  background: #1e293b;
-  color: #38bdf8; /* Sky-400 */
-  border-color: #38bdf8;
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+  background: #171a21;
+  color: #66c0f4;
+  border-color: rgba(102, 192, 244, 0.4);
+  box-shadow: 0 4px 12px rgba(102, 192, 244, 0.15);
   transform: translateY(-2px);
-}
-
-/* --- СКЕЛЕТОН (Загрузка) --- */
-@keyframes shimmer-loading {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-.skeleton-loader {
-  position: absolute;
-  inset: 0;
-  background: #1e293b;
-  z-index: 5;
-  overflow: hidden;
-}
-.skeleton-loader::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-    animation: shimmer-loading 1.5s infinite;
-}
-
-.skeleton-title { 
-    height: 18px; width: 60%; 
-    background: #334155; 
-    border-radius: 4px; 
-    margin-bottom: 8px; 
-    opacity: 0.3; 
-}
-.skeleton-text { 
-    height: 10px; width: 100%; 
-    background: #334155; 
-    border-radius: 4px; 
-    margin-bottom: 6px; 
-    opacity: 0.2; 
 }
