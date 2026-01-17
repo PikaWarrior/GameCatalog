@@ -1,5 +1,4 @@
 .game-card {
-  /* Стили контейнера react-window (позиционирование) наследуются через style prop */
   box-sizing: border-box;
 }
 
@@ -88,7 +87,7 @@
 }
 
 .card-description-scroll {
-  height: 80px; /* Фиксированная высота для корректной работы Grid */
+  height: 80px; 
   overflow-y: auto;
   font-size: 0.875rem;
   color: #94a3b8;
@@ -97,30 +96,19 @@
   padding-right: 4px;
 }
 
-/* Стилизация скроллбара */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 2px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #475569;
-  border-radius: 2px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
-}
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 2px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 2px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
-/* ОБНОВЛЕННЫЕ СТИЛИ ТЕГОВ */
+/* СТИЛИ ДЛЯ СПИСКА ПОДЖАНРОВ */
 .card-tags {
   display: flex;
-  flex-wrap: wrap; /* Ключевое: разрешает перенос на новую строку */
+  flex-wrap: wrap; /* Разрешаем перенос */
   gap: 6px;
   margin-bottom: 16px;
-  max-height: 58px; /* Ограничиваем высоту (примерно 2 строки) */
-  overflow: hidden; /* Скрываем лишнее */
+  max-height: 58px; /* Примерно 2 строки */
+  overflow: hidden; 
   align-content: flex-start;
 }
 
@@ -129,22 +117,18 @@
   padding: 3px 8px;
   border-radius: 12px;
   white-space: nowrap;
-  background: #334155;
-  color: #cbd5e1;
-  border: 1px solid rgba(255,255,255,0.05);
   display: inline-flex;
   align-items: center;
 }
 
-/* Стиль для ПОДЖАНРОВ (ярче) */
+/* Яркий стиль для поджанров */
 .subgenre-tag {
-  background: rgba(59, 130, 246, 0.15); /* Синий оттенок */
-  color: #93c5fd;
-  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.15); /* Синий фон */
+  color: #93c5fd; /* Светло-голубой текст */
+  border: 1px solid rgba(59, 130, 246, 0.3);
   font-weight: 500;
 }
 
-/* Стиль для индикатора "+ еще" */
 .more-tag {
   background: transparent;
   border: 1px dashed #475569;
