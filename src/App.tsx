@@ -16,15 +16,15 @@ import rawGamesData from './data/games_data_ENRICHED_PRO.json';
 
 const GameGrid = lazy(() => import('@components/GameGrid'));
 
-// Расширяем интерфейс состояния: добавляем массивы для жанров и исключений
-interface ExtendedFilterState extends FilterState {
+// ИСПРАВЛЕНИЕ: Используем Omit, чтобы удалить старое поле 'selectedGenre' из типа
+// и заменить его на массивы selectedGenres/excludedGenres
+interface ExtendedFilterState extends Omit<FilterState, 'selectedGenre'> {
   excludedTags: string[];
-  selectedGenres: string[]; // Новое: массив вместо одной строки
-  excludedGenres: string[]; // Новое: массив исключенных жанров
+  selectedGenres: string[];
+  excludedGenres: string[];
 }
 
 function App() {
-  // 1. Загрузка данных
   const games: Game[] = useMemo(() => {
     return (rawGamesData as any[]).map(game => sanitizeGameData(game));
   }, []);
@@ -32,20 +32,19 @@ function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
-  // 2. Инициализация состояния фильтров
-  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v3', {
+  // Теперь TypeScript не будет ругаться на отсутствие selectedGenre
+  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v4', {
     searchQuery: '',
     selectedTags: [],
     excludedTags: [],
-    selectedGenres: [], // Теперь это массив
-    excludedGenres: [], // Исключенные жанры
+    selectedGenres: [],
+    excludedGenres: [],
     selectedCoop: 'All',
     sortBy: 'name',
   });
 
   const debouncedSearch = useDebounce(filterState.searchQuery, 300);
 
-  // 3. Обработка игр (добавление ID и нормализация)
   const processedGames = useMemo(() => {
     return games.map((game, index): ProcessedGame => ({
       ...game,
@@ -57,7 +56,6 @@ function App() {
     }));
   }, [games]);
 
-  // 4. Генерация списков (Жанры, Поджанры, Теги)
   const allSubgenres = useMemo(() => {
     const subSet = new Set<string>();
     games.forEach(game => game.subgenres.forEach(sub => subSet.add(sub)));
@@ -80,7 +78,6 @@ function App() {
     'All', 'Single', 'Multiplayer', 'Split Screen', 'Co-op & Multiplayer'
   ];
 
-  // 5. ГЛАВНАЯ ЛОГИКА ФИЛЬТРАЦИИ
   const filteredGames = useMemo(() => {
     const { 
       selectedTags, excludedTags, 
@@ -92,37 +89,33 @@ function App() {
 
     return processedGames
       .filter(game => {
-        // --- Поиск ---
+        // 1. Поиск
         if (searchLower && !game.searchableText.includes(searchLower)) return false;
 
         const gameTags = new Set([...game.tags, ...game.subgenres]);
 
-        // --- Теги и Поджанры (AND: должен иметь все выбранные) ---
+        // 2. Теги (AND логика)
         if (selectedTags.length > 0) {
           if (!selectedTags.every(tag => gameTags.has(tag))) return false;
         }
-        // --- Исключение тегов (NOT: не должен иметь ни одного) ---
         if (excludedTags && excludedTags.length > 0) {
            if (excludedTags.some(tag => gameTags.has(tag))) return false;
         }
 
-        // --- ЖАНРЫ (OR: должен иметь хотя бы один, если выбраны) ---
-        // Сначала проверяем исключение
+        // 3. ЖАНРЫ (OR логика для включения, NOT для исключения)
         if (excludedGenres && excludedGenres.length > 0) {
           if (excludedGenres.includes(game.genre)) return false;
         }
-        // Затем проверяем включение (Action ИЛИ RPG)
         if (selectedGenres && selectedGenres.length > 0) {
           if (!selectedGenres.includes(game.genre)) return false;
         }
 
-        // --- Режим игры ---
+        // 4. Режим игры
         if (selectedCoop !== 'All') {
           const gameModes = game.coop.toLowerCase();
           const targetMode = selectedCoop.toLowerCase();
 
           if (targetMode === 'single') {
-             // Строгая проверка для сингла: никаких намеков на онлайн
              const hasMultiplayer = 
                 gameModes.includes('multiplayer') || 
                 gameModes.includes('co-op') || 
@@ -157,13 +150,11 @@ function App() {
       });
   }, [processedGames, filterState, debouncedSearch]);
 
-  // 6. Хендлеры
-
   const handleOpenModal = useCallback((game: ProcessedGame) => setSelectedGame(game), []);
   const handleCloseModal = useCallback(() => setSelectedGame(null), []);
   const handleSearchChange = useCallback((value: string) => setFilterState(p => ({ ...p, searchQuery: value })), [setFilterState]);
 
-  // Универсальная функция переключения (Вкл -> Искл -> Сброс)
+  // Универсальная функция переключения
   const toggleFilterItem = (
     item: string, 
     selectedList: string[], 
@@ -172,11 +163,15 @@ function App() {
     keyExcluded: keyof ExtendedFilterState
   ) => {
     setFilterState(prev => {
-      const isSelected = selectedList.includes(item);
-      const isExcluded = excludedList.includes(item);
+      // Принудительное приведение типов, так как TS может путаться в ключах
+      const prevSelected = (prev[keySelected] as string[]) || [];
+      const prevExcluded = (prev[keyExcluded] as string[]) || [];
 
-      let newSelected = [...selectedList];
-      let newExcluded = [...excludedList];
+      const isSelected = prevSelected.includes(item);
+      const isExcluded = prevExcluded.includes(item);
+
+      let newSelected = [...prevSelected];
+      let newExcluded = [...prevExcluded];
 
       if (isSelected) {
         newSelected = newSelected.filter(t => t !== item);
@@ -264,7 +259,6 @@ function App() {
               </select>
             </div>
 
-            {/* Единый компонент фильтров */}
             <TagFilter
               allGenres={allGenres}
               selectedGenres={filterState.selectedGenres || []}
