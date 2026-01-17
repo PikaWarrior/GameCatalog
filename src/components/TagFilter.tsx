@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Filter, Hash, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, Search, Check, Ban, ListFilter, Hash } from 'lucide-react';
 import '../styles/TagFilter.css';
 
 interface TagFilterProps {
   allTags: string[];
   allSubgenres: string[];
   selectedTags: string[];
+  excludedTags: string[];
   onTagToggle: (tag: string) => void;
 }
 
-const TagFilter: React.FC<TagFilterProps> = ({ allTags, allSubgenres, selectedTags, onTagToggle }) => {
-  // Состояния раскрытия списков
+const TagFilter: React.FC<TagFilterProps> = ({ 
+  allTags, 
+  allSubgenres, 
+  selectedTags, 
+  excludedTags = [], 
+  onTagToggle 
+}) => {
   const [isSubgenresOpen, setSubgenresOpen] = useState(true);
   const [isTagsOpen, setTagsOpen] = useState(false);
-  
-  // Состояния поиска для каждого списка
   const [subgenreSearch, setSubgenreSearch] = useState('');
   const [tagSearch, setTagSearch] = useState('');
 
-  // Универсальная функция рендера секции (Поджанры или Теги)
+  // Универсальная функция рендера для секций (Subgenres / Tags)
   const renderSection = (
     title: string,
     items: string[],
@@ -28,72 +32,77 @@ const TagFilter: React.FC<TagFilterProps> = ({ allTags, allSubgenres, selectedTa
     setSearchValue: (val: string) => void,
     icon: React.ReactNode
   ) => {
-    // Фильтруем список на лету
     const filteredItems = items.filter(item => 
       item.toLowerCase().includes(searchValue.toLowerCase())
     );
 
     return (
-      <div className="filter-section-block">
-        <div className="section-header" onClick={toggleOpen}>
-          <div className="header-title">
+      <div className="filter-section">
+        <button className="filter-header" onClick={toggleOpen}>
+          <div className="filter-title-wrapper">
             {icon}
-            <span>{title}</span>
+            <span className="filter-title">{title}</span>
             <span className="count-badge">{items.length}</span>
           </div>
           {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </div>
-        
-        {isOpen && (
-          <div className="section-body">
-            {/* Встроенный поиск */}
-            <div className="section-search">
-              {/* Используем чистый SVG для иконки поиска, чтобы избежать конфликтов */}
-              <svg 
-                width="14" height="14" viewBox="0 0 24 24" 
-                fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                className="search-icon"
-              >
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
+        </button>
 
+        {isOpen && (
+          <div className="filter-content">
+            <div className="search-input-wrapper">
+              <Search size={14} className="search-icon" />
               <input 
                 type="text" 
-                placeholder={`Find ${title}...`}
+                placeholder={`Search ${title.toLowerCase()}...`}
+                className="tag-search-input"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                onClick={(e) => e.stopPropagation()} // Чтобы клик по инпуту не закрывал аккордеон
+                onClick={(e) => e.stopPropagation()}
               />
-              
               {searchValue && (
-                <button className="clear-search" onClick={() => setSearchValue('')}>
-                  <X size={14} />
+                <button 
+                  className="clear-search" 
+                  onClick={(e) => { e.stopPropagation(); setSearchValue(''); }}
+                >
+                  ×
                 </button>
               )}
             </div>
 
-            <div className="section-content custom-scrollbar">
-              <div className="tags-grid">
-                {filteredItems.length > 0 ? (
-                  filteredItems.map(tag => {
-                    const isActive = selectedTags.includes(tag);
-                    return (
-                      <button
-                        key={tag}
-                        className={`tag-chip ${isActive ? 'active' : ''}`}
-                        onClick={() => onTagToggle(tag)}
-                        title={tag}
-                      >
-                        {isActive && <span className="check-icon">✓</span>}
-                        <span className="tag-text">{tag}</span>
-                      </button>
-                    );
-                  })
-                ) : (
-                  <div className="no-tags-found">No matches found</div>
-                )}
-              </div>
+            <div className="tags-cloud">
+              {filteredItems.length > 0 ? (
+                filteredItems.map(tag => {
+                  const isSelected = selectedTags.includes(tag);
+                  const isExcluded = excludedTags.includes(tag);
+                  
+                  // Вычисляем класс кнопки на основе состояния
+                  let btnClass = "filter-tag";
+                  if (isSelected) btnClass += " active";
+                  else if (isExcluded) btnClass += " excluded";
+
+                  // Текст подсказки при наведении
+                  let titleText = "Click to include";
+                  if (isSelected) titleText = "Click to exclude";
+                  if (isExcluded) titleText = "Click to reset";
+
+                  return (
+                    <button
+                      key={tag}
+                      className={btnClass}
+                      onClick={() => onTagToggle(tag)}
+                      title={titleText}
+                    >
+                      {/* Условный рендеринг иконок */}
+                      {isSelected && <Check size={12} className="tag-icon check" />}
+                      {isExcluded && <Ban size={12} className="tag-icon ban" />}
+                      
+                      <span>{tag}</span>
+                    </button>
+                  );
+                })
+              ) : (
+                <div className="no-tags">No matches found</div>
+              )}
             </div>
           </div>
         )}
@@ -104,23 +113,23 @@ const TagFilter: React.FC<TagFilterProps> = ({ allTags, allSubgenres, selectedTa
   return (
     <div className="tag-filter-container">
       {renderSection(
-        "Subgenres", 
-        allSubgenres, 
-        isSubgenresOpen, 
+        "Subgenres",
+        allSubgenres,
+        isSubgenresOpen,
         () => setSubgenresOpen(!isSubgenresOpen),
         subgenreSearch,
         setSubgenreSearch,
-        <Filter size={16} className="header-icon subgenre-icon" />
+        <ListFilter size={18} className="section-icon" />
       )}
-
+      
       {renderSection(
-        "Tags", 
-        allTags, 
-        isTagsOpen, 
+        "Tags",
+        allTags,
+        isTagsOpen,
         () => setTagsOpen(!isTagsOpen),
         tagSearch,
         setTagSearch,
-        <Hash size={16} className="header-icon tag-icon" />
+        <Hash size={18} className="section-icon" />
       )}
     </div>
   );
