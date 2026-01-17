@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { X, Calendar, Star, Download, Play, Tag, Users } from 'lucide-react';
-import { ProcessedGame } from '../types'; // Импортируем твои типы
+import { X, Star, Download, Play, Tag, Users } from 'lucide-react';
+import { ProcessedGame } from '../types';
 import '../styles/GameModal.css';
 
 interface GameModalProps {
-  // Меняем тип с Game на ProcessedGame или any, чтобы принять твои данные
   game: ProcessedGame | null; 
   onClose: () => void;
 }
@@ -25,16 +24,16 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
-  // --- АДАПТАЦИЯ ДАННЫХ ---
-  // Используем поля из твоего JSON (name, image, genre)
   const title = game.name;
-  const coverUrl = game.image; // В твоих данных это 'image', а не 'coverUrl'
-  // Если есть backdrop, используем его, иначе размытый кавер
+  const coverUrl = game.image; 
   const backdropUrl = coverUrl; 
   
-  // Безопасное получение массивов (если вдруг undefined)
   const tags = game.tags || [];
   const subgenres = game.subgenres || [];
+
+  // Пытаемся безопасно получить рейтинг, если он вдруг появится в типах как optional
+  // @ts-ignore - игнорируем ошибку TS, если поля нет в типе, но оно есть в данных
+  const rating = game.rating;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -55,20 +54,19 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
               <h2 className="game-title">{title}</h2>
               
               <div className="meta-row">
-                {/* Вместо года показываем жанр, если года нет в данных */}
                 <span className="meta-badge">
                   <Tag size={14} /> {game.genre}
                 </span>
                 
-                {/* Кооператив */}
                 <span className="meta-badge">
                    <Users size={14} /> {game.coop}
                 </span>
 
-                {/* Если есть рейтинг */}
-                {game.rating && (
+                {/* БЕЗОПАСНЫЙ РЕНДЕР РЕЙТИНГА */}
+                {/* Рендерим только если rating существует */}
+                {rating && (
                   <span className="meta-badge rating-badge">
-                    <Star size={14} fill="currentColor" /> {game.rating}
+                    <Star size={14} fill="currentColor" /> {rating}
                   </span>
                 )}
               </div>
@@ -89,7 +87,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           
           <div className="modal-section">
             <h3>About</h3>
-            {/* description иногда называется sanitizedDescription в App.tsx */}
             <p className="description-text">
               {game.sanitizedDescription || game.description}
             </p>
