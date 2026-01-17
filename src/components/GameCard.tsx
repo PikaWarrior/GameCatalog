@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { Gamepad2, Heart, Monitor, Globe, Users } from 'lucide-react';
+import { Gamepad2, Monitor, Globe, Users } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameCard.css';
 
@@ -7,44 +7,30 @@ interface GameCardProps {
   game: ProcessedGame;
   style?: React.CSSProperties;
   onClick?: (game: ProcessedGame) => void;
-  isFavorite?: boolean;
-  onToggleFavorite?: (id: string) => void;
 }
 
-const GameCard: React.FC<GameCardProps> = memo(({ 
-  game, 
-  style, 
-  onClick, 
-  isFavorite = false, 
-  onToggleFavorite 
-}) => {
+const GameCard: React.FC<GameCardProps> = memo(({ game, style, onClick }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  // Логика определения цвета и иконки для типа кооператива
+  // Определение стиля бейджа кооператива
   const getCoopBadgeStyle = (coop: string) => {
     const lower = coop.toLowerCase();
-    if (lower.includes('online')) return { color: '#10b981', icon: <Globe size={12} />, label: 'Online' }; // Green
+    if (lower.includes('online')) return { color: '#10b981', icon: <Globe size={12} />, label: 'Online' }; // Emerald Green
     if (lower.includes('local') || lower.includes('shared') || lower.includes('split')) return { color: '#f59e0b', icon: <Users size={12} />, label: 'Local' }; // Amber
     if (lower.includes('single')) return { color: '#64748b', icon: <Monitor size={12} />, label: 'Single' }; // Slate
     return { color: '#3b82f6', icon: <Gamepad2 size={12} />, label: coop.split(' ')[0] }; // Default Blue
   };
 
   const badgeConfig = getCoopBadgeStyle(game.normalizedCoop);
-  const visibleSubgenres = game.subgenres.slice(0, 3);
-  const hiddenCount = game.subgenres.length - visibleSubgenres.length;
 
-  // Обработчик клика по карточке
-  const handleCardClick = () => {
-    if (onClick) onClick(game);
-  };
+  // Логика отображения тегов (максимум 3)
+  const MAX_TAGS = 3;
+  const visibleSubgenres = game.subgenres.slice(0, MAX_TAGS);
+  const hiddenCount = game.subgenres.length - MAX_TAGS;
+  // Собираем скрытые теги для тултипа
+  const hiddenTagsString = hiddenCount > 0 ? game.subgenres.slice(MAX_TAGS).join(', ') : '';
 
-  // Обработчик клика по избранному
-  const handleFavoriteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (onToggleFavorite) onToggleFavorite(game.id);
-  };
-
-  // Обработчик клика по Steam
+  // Обработчик клика по кнопке Steam
   const handleSteamClick = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
@@ -53,14 +39,15 @@ const GameCard: React.FC<GameCardProps> = memo(({
     <article 
       className="game-card group" 
       style={style}
-      onClick={handleCardClick}
-      onKeyDown={(e) => e.key === 'Enter' && handleCardClick()}
+      onClick={() => onClick && onClick(game)}
+      onKeyDown={(e) => e.key === 'Enter' && onClick && onClick(game)}
       tabIndex={0}
       role="button"
       aria-label={`View details for ${game.name}`}
     >
+      {/* --- ИЗОБРАЖЕНИЕ --- */}
       <div className="game-card__image-wrap">
-        {/* Скелетон (показывается, пока imageLoaded === false) */}
+        {/* Скелетон загрузки картинки */}
         <div className={`skeleton-loader ${imageLoaded ? 'hidden' : ''}`} />
         
         <img 
@@ -75,10 +62,8 @@ const GameCard: React.FC<GameCardProps> = memo(({
           }}
         />
         
-        {/* Затемнение снизу картинки */}
+        {/* Затемнение и Бейджи */}
         <div className="game-card__overlay" />
-
-        {/* Бейджи */}
         <div className="game-card__badges">
           <span className="badge badge--genre">{game.genre}</span>
           <span 
@@ -86,49 +71,48 @@ const GameCard: React.FC<GameCardProps> = memo(({
             style={{ backgroundColor: badgeConfig.color }}
           >
             {badgeConfig.icon}
-            <span style={{ marginLeft: 4 }}>{badgeConfig.label}</span>
+            <span style={{ marginLeft: 5 }}>{badgeConfig.label}</span>
           </span>
         </div>
-
-        {/* Кнопка избранного */}
-        <button 
-          className={`favorite-btn ${isFavorite ? 'active' : ''}`}
-          onClick={handleFavoriteClick}
-          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
-        >
-          <Heart size={18} fill={isFavorite ? "currentColor" : "none"} />
-        </button>
       </div>
 
+      {/* --- КОНТЕНТ --- */}
       <div className="game-card__content">
-        {/* Заголовок. Показываем заглушку, если картинка не загрузилась (опционально) */}
+        {/* Заголовок (со скелетоном) */}
         {!imageLoaded ? (
             <div className="skeleton-title" />
         ) : (
             <h3 className="game-card__title" title={game.name}>{game.name}</h3>
         )}
         
+        {/* Описание (со скелетоном и маской) */}
         <div className="game-card__description-wrap">
            {!imageLoaded ? (
                <>
                  <div className="skeleton-text" />
-                 <div className="skeleton-text" style={{ width: '70%' }} />
+                 <div className="skeleton-text" style={{ width: '80%' }} />
+                 <div className="skeleton-text" style={{ width: '60%' }} />
                </>
            ) : (
                <p className="game-card__description">
-                 {game.description || "No description available."}
+                 {game.description || "Описание отсутствует."}
                </p>
            )}
         </div>
 
+        {/* Футер: Теги и Steam */}
         <div className="game-card__footer">
           <div className="game-card__tags">
             {visibleSubgenres.map((sub, i) => (
               <span key={i} className="tag">{sub}</span>
             ))}
             {hiddenCount > 0 && (
-                <span className="tag tag--more">+{hiddenCount}</span>
+                <span 
+                  className="tag tag--more" 
+                  title={`Еще: ${hiddenTagsString}`}
+                >
+                  +{hiddenCount}
+                </span>
             )}
           </div>
 
@@ -138,7 +122,7 @@ const GameCard: React.FC<GameCardProps> = memo(({
             rel="noopener noreferrer" 
             className="steam-icon-btn"
             onClick={handleSteamClick}
-            title="Open in Steam"
+            title="Открыть в Steam"
           >
             <Gamepad2 size={20} />
           </a>
