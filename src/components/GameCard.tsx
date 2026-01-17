@@ -9,9 +9,10 @@ interface GameCardProps {
 
 const GameCard: React.FC<GameCardProps> = memo(({ game, style }) => {
   const getCoopIcon = (coop: string) => {
-    if (coop.includes('Online')) return '🌐';
-    if (coop.includes('LAN')) return '🏠';
-    if (coop.includes('Shared')) return '📺';
+    const lower = coop.toLowerCase();
+    if (lower.includes('online')) return '🌐';
+    if (lower.includes('lan')) return '🏠';
+    if (lower.includes('shared') || lower.includes('split')) return '📺';
     return '👤';
   };
 
@@ -45,10 +46,28 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style }) => {
             {game.description || "Описание отсутствует..."}
           </div>
 
+          {/* ОБНОВЛЕННЫЙ БЛОК ТЕГОВ И ПОДЖАНРОВ */}
           <div className="card-tags">
-            {[...game.tags, ...game.subgenres].slice(0, 4).map((tag, i) => (
-              <span key={i} className="tag">#{tag}</span>
+            {/* Сначала Поджанры (выделенные) */}
+            {game.subgenres.slice(0, 3).map((sub, i) => (
+              <span key={`sub-${i}`} className="tag subgenre-tag">
+                {sub}
+              </span>
             ))}
+            
+            {/* Потом обычные теги */}
+            {game.tags.slice(0, 4).map((tag, i) => (
+              <span key={`tag-${i}`} className="tag">
+                #{tag}
+              </span>
+            ))}
+
+            {/* Счетчик оставшихся */}
+            {(game.subgenres.length + game.tags.length) > 7 && (
+               <span className="tag more-tag">
+                 +{(game.subgenres.length + game.tags.length) - 7}
+               </span>
+            )}
           </div>
 
           <a 
