@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, lazy, Suspense, useEffect } from 'react';
+import React, { useMemo, useCallback, lazy, Suspense, useEffect, useState } from 'react';
 import { ErrorBoundary } from '@components/ErrorBoundary';
 import Header from '@components/Header';
 import TagFilter from '@components/TagFilter';
@@ -22,6 +22,9 @@ function App() {
     return (rawGamesData as any[]).map(game => sanitizeGameData(game));
   }, []);
 
+  // Состояние сайдбара
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
+
   const [filterState, setFilterState] = useLocalStorage<FilterState>('gameFilters', {
     searchQuery: '',
     selectedTags: [],
@@ -43,7 +46,6 @@ function App() {
     }));
   }, [games]);
 
-  // 1. Собираем уникальные ПОДЖАНРЫ
   const allSubgenres = useMemo(() => {
     const subSet = new Set<string>();
     games.forEach(game => {
@@ -52,7 +54,6 @@ function App() {
     return Array.from(subSet).sort();
   }, [games]);
 
-  // 2. Собираем уникальные ТЕГИ
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
     games.forEach(game => {
@@ -67,14 +68,8 @@ function App() {
     return Array.from(genres).sort();
   }, [games]);
 
-  // ФИКСИРОВАННЫЙ СПИСОК РЕЖИМОВ + Комбинированный
   const allCoopModes = [
-    'All', 
-    'Single', 
-    'Co-op', 
-    'Multiplayer', 
-    'Split Screen',
-    'Co-op & Multiplayer' // <-- Новый пункт для всех сетевых/локальных режимов
+    'All', 'Single', 'Co-op', 'Multiplayer', 'Split Screen', 'Co-op & Multiplayer'
   ];
 
   const filteredGames = useMemo(() => {
@@ -83,46 +78,32 @@ function App() {
 
     return processedGames
       .filter(game => {
-        // Поиск по тексту
-        if (searchLower && !game.searchableText.includes(searchLower)) {
-          return false;
-        }
-
-        // Фильтр по тегам
+        if (searchLower && !game.searchableText.includes(searchLower)) return false;
+        
         if (selectedTags.length > 0) {
           const gameTags = new Set([...game.tags, ...game.subgenres]);
-          if (!selectedTags.every(tag => gameTags.has(tag))) {
-            return false;
-          }
+          if (!selectedTags.every(tag => gameTags.has(tag))) return false;
         }
 
-        // Фильтр по жанру
         if (selectedGenre !== 'All' && game.genre !== selectedGenre) return false;
 
-        // УМНЫЙ ФИЛЬТР ПО РЕЖИМАМ
         if (selectedCoop !== 'All') {
           const gameModes = game.coop.toLowerCase(); 
           const targetMode = selectedCoop.toLowerCase();
           
           if (targetMode === 'split screen') {
-             // Ищем "split screen" или "splitscreen"
              if (!gameModes.includes('split screen') && !gameModes.includes('splitscreen')) return false;
           } 
           else if (targetMode === 'co-op & multiplayer') {
-             // Логика "ИЛИ": подходит, если есть Кооп, ИЛИ Мультиплеер, ИЛИ Сплитскрин
              const hasCoop = gameModes.includes('co-op');
              const hasMulti = gameModes.includes('multiplayer');
              const hasSplit = gameModes.includes('split screen') || gameModes.includes('splitscreen');
-             
              if (!hasCoop && !hasMulti && !hasSplit) return false;
           }
           else {
-             // Обычный поиск (Single, Co-op, Multiplayer)
-             // Ищем подстроку (например, "Single" найдет "Single / Co-op")
              if (!gameModes.includes(targetMode)) return false;
           }
         }
-
         return true;
       })
       .sort((a, b) => {
@@ -172,9 +153,7 @@ function App() {
 
   useEffect(() => {
     const controller = new AbortController();
-    return () => {
-      controller.abort();
-    };
+    return () => { controller.abort(); };
   }, []);
 
   return (
@@ -185,10 +164,12 @@ function App() {
           visibleGames={filteredGames.length}
           onSearch={handleSearchChange} 
           searchTerm={filterState.searchQuery}
+          onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
+          isSidebarOpen={isSidebarOpen}
         />
         
         <main className="main-content">
-          <aside className="filters-sidebar">
+          <aside className={`filters-sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
             <div className="filters-sticky">
               <div className="filter-group">
                 <label>Genre:</label>
@@ -243,10 +224,6 @@ function App() {
           </aside>
 
           <section className="games-grid-section">
-            <div className="results-count">
-              Showing: {filteredGames.length} / {games.length}
-            </div>
-            
             <Suspense fallback={<LoadingSkeleton />}>
               {filteredGames.length > 0 ? (
                 <GameGrid games={filteredGames} />
