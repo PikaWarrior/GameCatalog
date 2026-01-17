@@ -33,39 +33,87 @@
   gap: 10px;
   font-weight: 600;
   font-size: 0.95rem;
-  color: var(--text-color);
+  color: var(--text-color, #e2e8f0);
 }
 
 .header-icon {
   opacity: 0.7;
 }
 
-.subgenre-icon { color: #60a5fa; } /* Голубой для поджанров */
-.tag-icon { color: #a78bfa; }      /* Фиолетовый для тегов */
+.subgenre-icon { color: #60a5fa; }
+.tag-icon { color: #a78bfa; }
 
 .count-badge {
   font-size: 0.75rem;
   background: rgba(255, 255, 255, 0.1);
-  padding: 2px 6px;
+  padding: 2px 8px;
   border-radius: 10px;
-  color: var(--text-secondary);
+  color: var(--text-secondary, #94a3b8);
 }
 
+.section-body {
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* СТИЛИ ПОИСКА */
+.section-search {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.section-search input {
+  background: transparent;
+  border: none;
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  width: 100%;
+  outline: none;
+  font-family: inherit;
+}
+
+.section-search input::placeholder {
+  color: #64748b;
+}
+
+.section-search .search-icon {
+  color: #64748b;
+}
+
+.clear-search {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.clear-search:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* КОНТЕНТ */
 .section-content {
   padding: 12px;
-  max-height: 300px; /* Ограничиваем высоту, чтобы не растягивать сайдбар бесконечно */
+  max-height: 250px;
   overflow-y: auto;
-  background: rgba(0, 0, 0, 0.2);
 }
 
-/* Сетка для тегов */
 .tags-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
 
-/* Стиль кнопки-чипа */
 .tag-chip {
   display: flex;
   align-items: center;
@@ -74,7 +122,7 @@
   border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
-  color: var(--text-secondary);
+  color: var(--text-secondary, #cbd5e1);
   font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -89,8 +137,8 @@
 }
 
 .tag-chip.active {
-  background: var(--accent-color); /* Синий фон активного */
-  border-color: var(--highlight-color); /* Красная обводка или акцент */
+  background: var(--accent-color, #3b82f6);
+  border-color: var(--accent-color, #3b82f6);
   color: white;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
@@ -98,4 +146,13 @@
 .check-icon {
   font-size: 0.8rem;
   font-weight: bold;
+}
+
+.no-tags-found {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  color: #64748b;
+  font-size: 0.85rem;
+  font-style: italic;
 }
