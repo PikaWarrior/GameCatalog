@@ -44,11 +44,20 @@ function App() {
     }));
   }, [games]);
 
+   // 1. Собираем уникальные ПОДЖАНРЫ
+  const allSubgenres = useMemo(() => {
+    const subSet = new Set<string>();
+    games.forEach(game => {
+      game.subgenres.forEach(sub => subSet.add(sub));
+    });
+    return Array.from(subSet).sort();
+  }, [games]);
+
+  // 2. Собираем уникальные ТЕГИ (исключая поджанры, если хотите, или все вместе)
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
     games.forEach(game => {
       game.tags.forEach(tag => tagSet.add(tag));
-      game.subgenres.forEach(sub => tagSet.add(sub));
     });
     return Array.from(tagSet).sort();
   }, [games]);
