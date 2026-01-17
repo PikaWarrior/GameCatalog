@@ -87,7 +87,6 @@
   text-overflow: ellipsis;
 }
 
-/* Новый стиль для скроллируемого описания */
 .card-description-scroll {
   height: 80px; /* Фиксированная высота для корректной работы Grid */
   overflow-y: auto;
@@ -95,44 +94,62 @@
   color: #94a3b8;
   margin-bottom: 12px;
   line-height: 1.5;
-  padding-right: 4px; /* Отступ для скроллбара */
+  padding-right: 4px;
 }
 
 /* Стилизация скроллбара */
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 2px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #475569;
   border-radius: 2px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #64748b;
 }
 
+/* ОБНОВЛЕННЫЕ СТИЛИ ТЕГОВ */
 .card-tags {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Ключевое: разрешает перенос на новую строку */
   gap: 6px;
   margin-bottom: 16px;
-  height: 28px; /* Ограничиваем высоту блока тегов */
-  overflow: hidden;
+  max-height: 58px; /* Ограничиваем высоту (примерно 2 строки) */
+  overflow: hidden; /* Скрываем лишнее */
+  align-content: flex-start;
 }
 
 .tag {
-  font-size: 0.75rem;
-  color: #cbd5e1;
-  background: #334155;
-  padding: 2px 8px;
+  font-size: 0.7rem;
+  padding: 3px 8px;
   border-radius: 12px;
   white-space: nowrap;
+  background: #334155;
+  color: #cbd5e1;
+  border: 1px solid rgba(255,255,255,0.05);
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Стиль для ПОДЖАНРОВ (ярче) */
+.subgenre-tag {
+  background: rgba(59, 130, 246, 0.15); /* Синий оттенок */
+  color: #93c5fd;
+  border-color: rgba(59, 130, 246, 0.3);
+  font-weight: 500;
+}
+
+/* Стиль для индикатора "+ еще" */
+.more-tag {
+  background: transparent;
+  border: 1px dashed #475569;
+  color: #64748b;
+  padding: 3px 6px;
 }
 
 .steam-button {
@@ -152,7 +169,7 @@
 }
 
 .steam-button:hover {
-  background: #2a475e; /* Steam Blue */
+  background: #2a475e;
   color: white;
   border-color: #66c0f4;
 }
