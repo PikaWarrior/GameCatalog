@@ -1,35 +1,22 @@
 import React, { useEffect } from 'react';
-import { X, Calendar, Star, Download, Play, Tag } from 'lucide-react';
+import { X, Calendar, Star, Download, Play, Tag, Users } from 'lucide-react';
+import { ProcessedGame } from '../types'; // Импортируем твои типы
 import '../styles/GameModal.css';
 
-// Типизация (подставь свои типы)
-interface Game {
-  id: string;
-  title: string;
-  coverUrl: string;       // Вертикальная обложка
-  backdropUrl?: string;   // Горизонтальный фон (если есть, иначе coverUrl)
-  description: string;
-  rating?: number;
-  releaseYear?: string;
-  tags: string[];
-  subgenres: string[];
-}
-
 interface GameModalProps {
-  game: Game | null;
+  // Меняем тип с Game на ProcessedGame или any, чтобы принять твои данные
+  game: ProcessedGame | null; 
   onClose: () => void;
 }
 
 const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   if (!game) return null;
 
-  // Блокируем скролл страницы при открытом окне
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = 'unset'; };
   }, []);
 
-  // Закрытие по ESC
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -38,35 +25,47 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
-  // Используем фон или обложку размытую
-  const bgImage = game.backdropUrl || game.coverUrl;
+  // --- АДАПТАЦИЯ ДАННЫХ ---
+  // Используем поля из твоего JSON (name, image, genre)
+  const title = game.name;
+  const coverUrl = game.image; // В твоих данных это 'image', а не 'coverUrl'
+  // Если есть backdrop, используем его, иначе размытый кавер
+  const backdropUrl = coverUrl; 
+  
+  // Безопасное получение массивов (если вдруг undefined)
+  const tags = game.tags || [];
+  const subgenres = game.subgenres || [];
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
         
-        {/* Кнопка закрытия (плавающая) */}
         <button className="close-btn" onClick={onClose}>
           <X size={24} />
         </button>
 
-        {/* Хедер с фоном (Backdrop) */}
         <div 
           className="modal-hero" 
-          style={{ backgroundImage: `url(${bgImage})` }}
+          style={{ backgroundImage: `url(${backdropUrl})` }}
         >
           <div className="hero-overlay"></div>
           <div className="hero-content">
-            <img src={game.coverUrl} alt={game.title} className="hero-poster" />
+            <img src={coverUrl} alt={title} className="hero-poster" />
             <div className="hero-info">
-              <h2 className="game-title">{game.title}</h2>
+              <h2 className="game-title">{title}</h2>
               
               <div className="meta-row">
-                {game.releaseYear && (
-                  <span className="meta-badge">
-                    <Calendar size={14} /> {game.releaseYear}
-                  </span>
-                )}
+                {/* Вместо года показываем жанр, если года нет в данных */}
+                <span className="meta-badge">
+                  <Tag size={14} /> {game.genre}
+                </span>
+                
+                {/* Кооператив */}
+                <span className="meta-badge">
+                   <Users size={14} /> {game.coop}
+                </span>
+
+                {/* Если есть рейтинг */}
                 {game.rating && (
                   <span className="meta-badge rating-badge">
                     <Star size={14} fill="currentColor" /> {game.rating}
@@ -86,21 +85,23 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           </div>
         </div>
 
-        {/* Контентная часть (скроллится) */}
         <div className="modal-body custom-scrollbar">
           
           <div className="modal-section">
             <h3>About</h3>
-            <p className="description-text">{game.description}</p>
+            {/* description иногда называется sanitizedDescription в App.tsx */}
+            <p className="description-text">
+              {game.sanitizedDescription || game.description}
+            </p>
           </div>
 
           <div className="modal-section">
             <h3>Tags & Genres</h3>
             <div className="tags-cloud">
-              {game.subgenres.map(sg => (
+              {subgenres.map(sg => (
                 <span key={sg} className="tag-pill subgenre">{sg}</span>
               ))}
-              {game.tags.map(tag => (
+              {tags.map(tag => (
                 <span key={tag} className="tag-pill">
                    <Tag size={12} /> {tag}
                 </span>
