@@ -29,17 +29,15 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
       if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) return 'var(--genre-purple)';
       if (g.includes('puzzle') || g.includes('platformer') || g.includes('arcade')) return 'var(--genre-yellow)';
       if (g.includes('rogue') || g.includes('lite') || g.includes('dungeon')) return 'var(--genre-orange)';
-      return 'var(--genre-default)'; // Цвет по умолчанию
+      return 'var(--genre-default)';
   };
 
-  // Логика выбора класса для цвета кооператива
+  // Логика выбора цвета для режима
   const getCoopColorClass = (coop: string) => {
       const lower = coop.toLowerCase();
-      // Если есть хоть какой-то намек на мультиплеер — красим в один цвет
       if (lower.includes('online') || lower.includes('co-op') || lower.includes('multiplayer') || lower.includes('split') || lower.includes('lan')) {
           return 'coop-online'; 
       }
-      // Иначе (Single) — другой цвет
       return 'coop-single';
   };
 
@@ -60,7 +58,6 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
         />
         
         <div className="card-badges">
-          {/* Бейдж жанра с динамическим цветом */}
           <span 
             className="badge genre" 
             style={{ backgroundColor: genreColor, borderColor: genreColor }}
@@ -68,7 +65,6 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             {game.genre}
           </span>
           
-          {/* Бейдж режима с классом цвета */}
           <span className={`badge coop ${coopClass}`}>
              {getCoopIcon(game.coop)} {game.normalizedCoop}
           </span>
@@ -78,18 +74,13 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
       <div className="card-content">
         <h3 className="card-title" title={game.name}>{game.name}</h3>
         
-        {/* Описание: выглядит как статика, но кликабельно */}
+        {/* УВЕЛИЧЕННОЕ ОПИСАНИЕ */}
         <div 
             className="card-description-static"
             onClick={() => onOpenModal && onOpenModal(game)}
-            title="Нажмите, чтобы открыть подробное описание"
+            title="Нажмите для просмотра полного описания"
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    onOpenModal && onOpenModal(game);
-                }
-            }}
         >
            {game.description || "Описание отсутствует..."}
         </div>
@@ -108,7 +99,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
           target="_blank" 
           rel="noopener noreferrer" 
           className="steam-button"
-          onClick={(e) => e.stopPropagation()} // Клик по Steam не открывает модалку
+          onClick={(e) => e.stopPropagation()}
         >
           <Gamepad2 size={18} className="steam-icon"/>
           <span>В Steam</span>
