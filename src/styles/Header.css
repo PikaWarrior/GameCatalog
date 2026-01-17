@@ -31,9 +31,29 @@
   color: #cbd5e1;
 }
 
+.menu-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  outline: none; /* Убирает синюю обводку при клике */
+  min-width: 40px; /* Фиксируем размер, чтобы не сплющивало */
+  height: 40px;
+}
+
 .menu-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
+}
+
+.menu-btn:focus-visible {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Аккуратный фокус только с клавиатуры */
 }
 
 .header h1 {
