@@ -1,247 +1,183 @@
-/* --- СБРОС И ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ --- */
+/* Сброс и глобальные переменные */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+margin: 0;
+padding: 0;
+box-sizing: border-box;
 }
 
 :root {
-  --primary-bg: #0f172a;      /* Основной фон (под сеткой) */
-  --secondary-bg: #1e293b;    /* Фон хедера */
-  --sidebar-bg: #111827;      /* Фон сайдбара */
-  --accent: #3b82f6;          /* Акцентный синий */
-  --text-primary: #f8fafc;    /* Белый текст */
-  --text-secondary: #94a3b8;  /* Серый текст */
-  --border-color: rgba(255, 255, 255, 0.08);
+--primary-bg: #0f172a;
+--secondary-bg: #1e293b;
+--sidebar-bg: #111827;
+--accent: #3b82f6;
+--text-primary: #f8fafc;
+--text-secondary: #94a3b8;
+--border-color: rgba(255, 255, 255, 0.08);
 }
 
 /* Красивый скроллбар для всего сайта */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+width: 8px;
+height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent; 
+background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+background: rgba(255, 255, 255, 0.1);
+border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+background: rgba(255, 255, 255, 0.2);
 }
 
 body {
-  background-color: var(--primary-bg);
-  color: var(--text-primary);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden; /* Скроллим только внутренние блоки */
+background-color: var(--primary-bg);
+color: var(--text-primary);
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+height: 100vh;
+width: 100vw;
+overflow: hidden;
 }
 
-/* --- ЗАЩИТА ОТ ФАНТОМНЫХ ИКОНОК (Твой код) --- */
+/* --- ЗАЩИТА ОТ ФАНТОМНЫХ ИКОНОК --- */
+/* Если лупа сделана через псевдо-элемент на body или app-container */
 body::before, body::after,
 .app-container::before, .app-container::after {
-  content: none !important;
-  display: none !important;
+content: none !important;
+display: none !important;
 }
+
+/* Жесткий хак: скрываем любые "бродячие" SVG в начале хедера, которые НЕ внутри кнопки */
+/* Это уберет лупу, если она "прибита" прямым SVG в шапке */
 .header > svg {
-  display: none !important;
+display: none !important;
 }
 /* ---------------------------------- */
 
 .app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100%;
+display: flex;
+flex-direction: column;
+height: 100vh;
+width: 100%;
 }
 
-/* --- HEADER (ШАПКА) --- */
-.app-header {
-  height: 70px;
-  background: var(--secondary-bg);
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  padding: 0 24px;
-  flex-shrink: 0; /* Чтобы шапка не сжималась */
-  z-index: 10;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin-right: 40px;
-  background: linear-gradient(45deg, var(--accent), #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: -0.5px;
-}
-
-/* Поиск в шапке */
-.search-bar {
-  position: relative;
-  max-width: 400px;
-  width: 100%;
-}
-
-.search-bar input {
-  width: 100%;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--border-color);
-  padding: 10px 10px 10px 40px;
-  border-radius: 8px;
-  color: var(--text-primary);
-  font-size: 0.95rem;
-  outline: none;
-  transition: all 0.2s;
-}
-
-.search-bar input:focus {
-  border-color: var(--accent);
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.search-icon-main {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-secondary);
-  pointer-events: none;
-}
-
-/* --- ОСНОВНОЙ ЛЕЙАУТ (Sidebar + Content) --- */
 .main-content {
-  display: flex;
-  flex: 1; /* Занимает всё оставшееся место */
-  overflow: hidden; /* Чтобы скролл был внутри зон, а не всей страницы */
-  position: relative;
+display: flex;
+flex: 1;
+overflow: hidden;
+position: relative;
+background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%);
 }
 
-/* --- САЙДБАР --- */
-.sidebar {
-  width: 300px;
-  background: var(--sidebar-bg);
-  border-right: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  overflow-y: auto; /* Скроллится отдельно */
-  flex-shrink: 0;
+/* --- САЙДБАР С АНИМАЦИЕЙ --- */
+.filters-sidebar {
+width: 300px;
+background: var(--sidebar-bg);
+border-right: 1px solid var(--border-color);
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+overflow-x: hidden;
+overflow-y: auto;
+opacity: 1;
+flex-shrink: 0;
+padding: 20px;
+display: flex;
+flex-direction: column;
 }
 
-/* Если захочешь скрывать сайдбар в будущем */
-.sidebar.closed {
-  width: 0;
-  padding: 0;
-  border: none;
-  opacity: 0;
+.filters-sidebar.closed {
+width: 0;
+padding: 0;
+opacity: 0;
+border: none;
+margin-left: -1px; /* Прячем границу */
 }
 
-/* --- ОБЛАСТЬ С ИГРАМИ --- */
-.games-grid-container {
-  flex: 1;
-  background: radial-gradient(circle at top right, #1e293b 0%, var(--primary-bg) 100%);
-  overflow-y: auto; /* Скроллится отдельно */
-  padding: 30px;
-  position: relative;
+.filters-sticky {
+display: flex;
+flex-direction: column;
+gap: 20px;
+min-width: 260px; /* Чтобы контент не сжимался при анимации */
 }
 
-.games-grid {
-  display: grid;
-  /* Адаптивная сетка: минимум 240px ширины на карточку */
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 24px;
-  padding-bottom: 40px;
+/* --- Стили контролов фильтров --- */
+.filter-group label {
+display: block;
+margin-bottom: 8px;
+color: var(--text-secondary);
+font-size: 0.85rem;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.5px;
 }
 
-/* --- КАРТОЧКА ИГРЫ (PLACEHOLDER) --- */
-/* Эти стили нужны, пока у тебя нет отдельного GameCard.css */
-.game-card-placeholder {
-  background: var(--secondary-bg);
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid var(--border-color);
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-  display: flex;
-  flex-direction: column;
+.filter-select {
+width: 100%;
+padding: 10px 12px;
+background: rgba(255, 255, 255, 0.05);
+border: 1px solid var(--border-color);
+border-radius: 8px;
+color: var(--text-primary);
+font-size: 0.95rem;
+cursor: pointer;
+transition: all 0.2s;
+outline: none;
 }
 
-.game-card-placeholder:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 255, 255, 0.2);
+.filter-select:hover {
+background: rgba(255, 255, 255, 0.08);
+border-color: rgba(255, 255, 255, 0.2);
 }
 
-.game-card-placeholder img {
-  width: 100%;
-  aspect-ratio: 2/3; /* Стандартная пропорция постера */
-  object-fit: cover;
+.filter-select:focus {
+border-color: var(--accent);
+box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
-.card-info {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;
+.filter-select option {
+background-color: var(--secondary-bg);
 }
 
-.card-info h3 {
-  font-size: 1rem;
-  color: var(--text-primary);
-  line-height: 1.4;
-  font-weight: 600;
+.reset-btn {
+width: 100%;
+padding: 12px;
+background: rgba(239, 68, 68, 0.1); /* Красный полупрозрачный */
+color: #fca5a5;
+border: 1px solid rgba(239, 68, 68, 0.2);
+border-radius: 8px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s;
+margin-top: 10px;
 }
 
-.card-tags {
-  font-size: 0.8rem;
-  color: var(--accent);
-  background: rgba(59, 130, 246, 0.1);
-  padding: 4px 8px;
-  border-radius: 4px;
-  align-self: flex-start;
-  margin-top: auto; /* Прижимает тег к низу */
+.reset-btn:hover {
+background: rgba(239, 68, 68, 0.2);
+color: #fff;
 }
 
-/* --- СОСТОЯНИЕ "ПУСТО" --- */
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: var(--text-secondary);
-  text-align: center;
+/* --- Секция контента --- */
+.games-grid-section {
+flex: 1;
+height: 100%;
+overflow: hidden;
+position: relative;
+display: flex;
+flex-direction: column;
+padding-top: 20px;
 }
 
-.empty-state h3 {
-  font-size: 1.5rem;
-  color: var(--text-primary);
-  margin-bottom: 8px;
+.no-results {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+height: 100%;
+color: var(--text-secondary);
 }
 
-/* --- АДАПТИВНОСТЬ --- */
-@media (max-width: 768px) {
-  .main-content {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    height: auto;
-    max-height: 200px; /* Ограничиваем высоту фильтров на мобилке */
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  .logo {
-    margin-right: 20px;
-    font-size: 1.2rem;
-  }
+.no-results h3 {
+font-size: 1.5rem;
+margin-bottom: 8px;
+color: var(--text-primary);
 }
