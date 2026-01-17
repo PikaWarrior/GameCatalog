@@ -1,34 +1,38 @@
-import React from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Search } from 'lucide-react'; // Убедитесь, что lucide-react установлен, иначе удалите иконку
+import { useDebounce } from '../hooks/useDebounce';
 import '../styles/SearchBar.css';
 
 interface SearchBarProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
+  value: string;                  // Добавили обязательное поле value
+  onChange: (value: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ searchQuery, setSearchQuery }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
+  // Локальное состояние для мгновенного отклика инпута
+  const [localValue, setLocalValue] = useState(value);
+
+  // Синхронизация при изменении пропса извне (например, при сбросе фильтров)
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setLocalValue(newValue);
+    onChange(newValue);
+  };
+
   return (
-    <div className="search-container">
-      <div className="search-icon">
-        🔍
-      </div>
+    <div className="search-bar">
+      <Search className="search-icon" size={20} />
       <input
         type="text"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        placeholder="Search games by name or description..."
         className="search-input"
-        aria-label="Search games"
+        placeholder="Search games..."
+        value={localValue}
+        onChange={handleChange}
       />
-      {searchQuery && (
-        <button 
-          onClick={() => setSearchQuery('')}
-          className="clear-search"
-          aria-label="Clear search"
-        >
-          ×
-        </button>
-      )}
     </div>
   );
 };
