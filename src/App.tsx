@@ -7,35 +7,32 @@ import LoadingSkeleton from '@components/LoadingSkeleton';
 import { useDebounce } from '@hooks/useDebounce';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import { sanitizeGameData } from '@utils/sanitize';
-import { Game, ProcessedGame } from '@types/index';
+import { Game, ProcessedGame, FilterState } from './types'; // ИСПРАВЛЕНО
 
 import '@styles/App.css';
 import '@styles/improvements.css';
 
-// Импортируем данные
 // @ts-ignore
 import rawGamesData from './data/games_data_ENRICHED_PRO.json';
 
 const GameGrid = lazy(() => import('@components/GameGrid'));
 
 function App() {
-  // Санитизация данных
   const games: Game[] = useMemo(() => {
     return (rawGamesData as any[]).map(game => sanitizeGameData(game));
   }, []);
 
-  // Состояние фильтров
-  const [filterState, setFilterState] = useLocalStorage('gameFilters', {
+  // ИСПРАВЛЕНО: добавлена явная типизация <FilterState>
+  const [filterState, setFilterState] = useLocalStorage<FilterState>('gameFilters', {
     searchQuery: '',
-    selectedTags: [] as string[],
+    selectedTags: [],
     selectedGenre: 'All',
     selectedCoop: 'All',
-    sortBy: 'name' as const,
+    sortBy: 'name',
   });
 
   const debouncedSearch = useDebounce(filterState.searchQuery, 300);
 
-  // Подготовка данных для поиска
   const processedGames = useMemo(() => {
     return games.map((game, index): ProcessedGame => ({
       ...game,
@@ -47,7 +44,6 @@ function App() {
     }));
   }, [games]);
 
-  // Сбор уникальных значений для фильтров
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
     games.forEach(game => {
@@ -69,19 +65,16 @@ function App() {
     return Array.from(modes).sort();
   }, [games]);
 
-  // Логика фильтрации
   const filteredGames = useMemo(() => {
     const { selectedTags, selectedGenre, selectedCoop, sortBy } = filterState;
     const searchLower = debouncedSearch.toLowerCase();
 
     return processedGames
       .filter(game => {
-        // Поиск по тексту
         if (searchLower && !game.searchableText.includes(searchLower)) {
           return false;
         }
 
-        // Фильтр по тегам
         if (selectedTags.length > 0) {
           const gameTags = new Set([...game.tags, ...game.subgenres]);
           if (!selectedTags.every(tag => gameTags.has(tag))) {
@@ -89,7 +82,6 @@ function App() {
           }
         }
 
-        // Фильтры по жанру и режиму
         if (selectedGenre !== 'All' && game.genre !== selectedGenre) return false;
         if (selectedCoop !== 'All' && !game.coop.includes(selectedCoop)) return false;
 
@@ -105,7 +97,6 @@ function App() {
       });
   }, [processedGames, filterState, debouncedSearch]);
 
-  // Обработчики событий
   const handleSearchChange = useCallback((value: string) => {
     setFilterState(prev => ({ ...prev, searchQuery: value }));
   }, [setFilterState]);
@@ -128,7 +119,7 @@ function App() {
   }, [setFilterState]);
 
   const handleSortChange = useCallback((sortBy: 'name' | 'genre' | 'coop') => {
-    setFilterState(prev => ({ ...prev, sortBy }));
+    setFilterState(prev => ({ ...prev, sortBy })); // Теперь работает корректно
   }, [setFilterState]);
 
   const handleResetFilters = useCallback(() => {
@@ -141,7 +132,6 @@ function App() {
     });
   }, [setFilterState]);
 
-  // Очистка
   useEffect(() => {
     const controller = new AbortController();
     return () => {
@@ -192,7 +182,7 @@ function App() {
                 <label>Sort by:</label>
                 <select 
                   value={filterState.sortBy} 
-                  onChange={(e) => handleSortChange(e.target.value as 'name' | 'genre' | 'coop')}
+                  onChange={(e) => handleSortChange(e.target.value as any)}
                   className="filter-select"
                 >
                   <option value="name">By name</option>
