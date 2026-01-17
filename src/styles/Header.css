@@ -9,52 +9,62 @@
   padding: 0 24px;
   z-index: 50;
   box-shadow: 0 4px 24px -8px rgba(0,0,0,0.3);
+  position: sticky;
+  top: 0;
 }
 
 .header-left {
   display: flex;
   align-items: center;
   gap: 16px;
-  width: 300px; /* Чтобы поиск был по центру */
+  width: 300px; /* Фиксированная ширина для баланса */
 }
 
+/* --- КНОПКА МЕНЮ (ИСПРАВЛЕННАЯ) --- */
 .menu-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 8px;
-  transition: background 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #cbd5e1;
-}
+  /* СБРОС всех внешних стилей, которые могли добавить лупу */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
 
-.menu-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 8px;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #cbd5e1;
-  outline: none; /* Убирает синюю обводку при клике */
-  min-width: 40px; /* Фиксируем размер, чтобы не сплющивало */
+  /* Размеры и центровка */
+  width: 40px;
   height: 40px;
+  padding: 0; /* Убираем отступы, чтобы SVG встал по центру */
+  border-radius: 8px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
+/* УБИВАЕМ любые псевдо-элементы (часто иконки живут здесь) */
+.menu-btn::before,
+.menu-btn::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Эффекты наведения */
 .menu-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1) !important;
   color: #fff;
 }
 
-.menu-btn:focus-visible {
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Аккуратный фокус только с клавиатуры */
+.menu-btn:active {
+  transform: scale(0.95);
 }
+
+/* ---------------------------------- */
 
 .header h1 {
   font-size: 1.25rem;
@@ -62,6 +72,7 @@
   letter-spacing: -0.5px;
   color: #fff;
   margin: 0;
+  white-space: nowrap;
 }
 
 .header-center {
@@ -77,6 +88,7 @@
   padding: 6px 16px;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  white-space: nowrap;
 }
 
 .stats-pill b {
@@ -90,18 +102,27 @@
   justify-content: flex-end;
 }
 
+/* Адаптивность */
 @media (max-width: 768px) {
   .header {
     padding: 0 16px;
     height: 64px;
   }
+  
+  .header-left {
+    width: auto;
+  }
+  
   .header-center {
     display: none; /* Прячем статистику на мобильных */
   }
-  .header-left, .header-right {
+  
+  .header-right {
     width: auto;
+    flex: 1;
   }
+  
   .header h1 {
-    display: none; /* Прячем заголовок на совсем маленьких экранах если надо */
+    display: none; /* Прячем заголовок на маленьких экранах, чтобы влез поиск */
   }
 }
