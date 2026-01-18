@@ -1404,7 +1404,7 @@
     "name": "Archons",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2779570/846652e1790ec1279fb0c5f4fbb85a65de441e15/header.jpg?t=1757279202",
     "steam_url": "https://store.steampowered.com/app/2779570",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Strategy",
     "tags": [
       "Top-Down",
@@ -1821,7 +1821,7 @@
     "name": "Crawl",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/293780/header.jpg?t=1724996137",
     "steam_url": "https://store.steampowered.com/app/293780",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -1887,7 +1887,7 @@
     "name": "Kinduo",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1648100/header.jpg?t=1726963965",
     "steam_url": "https://store.steampowered.com/app/1648100",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -2059,7 +2059,7 @@
     "name": "BADLAND: Game of the Year Edition",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/269670/header.jpg?t=1569395419",
     "steam_url": "https://store.steampowered.com/app/269670",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Platformer",
     "tags": [
       "2D",
@@ -2167,7 +2167,7 @@
     "name": "Monarchy",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2391650/header.jpg?t=1730909330",
     "steam_url": "https://store.steampowered.com/app/2391650",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Strategy",
     "tags": [
       "Top-Down",
@@ -2450,7 +2450,7 @@
     "name": "Caveblazers",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/452060/header.jpg?t=1724766962",
     "steam_url": "https://store.steampowered.com/app/452060",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Roguelike",
     "tags": [
       "2D",
@@ -2623,7 +2623,7 @@
     "name": "Brotato",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1942280/f98281910016f8924be37cce3d4b119f5223a358/header.jpg?t=1766064129",
     "steam_url": "https://store.steampowered.com/app/1942280",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Roguelike",
     "tags": [
       "Top-Down",
@@ -2667,7 +2667,7 @@
     "name": "Relic Hunters Zero: Remix",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/382490/header.jpg?t=1746834120",
     "steam_url": "https://store.steampowered.com/app/382490",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -2689,7 +2689,7 @@
     "name": "Repetendium",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2055500/header.jpg?t=1749190613",
     "steam_url": "https://store.steampowered.com/app/2055500",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Roguelike",
     "tags": [
       "2D",
@@ -2800,7 +2800,7 @@
     "name": "Crimsonland",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/262830/header.jpg?t=1714816019",
     "steam_url": "https://store.steampowered.com/app/262830",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -2843,7 +2843,7 @@
     "name": "Bounty of One",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1968730/ef8941f7eece2a4827c5ae1363b12af36152effa/header.jpg?t=1765422533",
     "steam_url": "https://store.steampowered.com/app/1968730",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -2887,7 +2887,7 @@
     "name": "Ghostlore",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1783280/header.jpg?t=1727678599",
     "steam_url": "https://store.steampowered.com/app/1783280",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Isometric",
@@ -3149,7 +3149,7 @@
     "name": "Colt Canyon",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/940710/header.jpg?t=1764867514",
     "steam_url": "https://store.steampowered.com/app/940710",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -3670,7 +3670,7 @@
     "name": "Voidigo",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1304680/header.jpg?t=1760529121",
     "steam_url": "https://store.steampowered.com/app/1304680",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -3890,7 +3890,7 @@
     "name": "Wizard of Legend",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/445980/header.jpg?t=1729183632",
     "steam_url": "https://store.steampowered.com/app/445980",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -3934,7 +3934,7 @@
     "name": "Astral Ascent",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1280930/eb8e8de59f6bf274924d290ff321c4206cfce875/header.jpg?t=1766051979",
     "steam_url": "https://store.steampowered.com/app/1280930",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -4088,7 +4088,7 @@
     "name": "Spirits Abyss",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1078200/header.jpg?t=1731087019",
     "steam_url": "https://store.steampowered.com/app/1078200",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -4197,7 +4197,7 @@
     "name": "Labyrinth Legend",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1321010/header.jpg?t=1625008279",
     "steam_url": "https://store.steampowered.com/app/1321010",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -4263,7 +4263,7 @@
     "name": "Kitaria Fables",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1356280/header.jpg?t=1763466033",
     "steam_url": "https://store.steampowered.com/app/1356280",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "RPG",
     "tags": [
       "Top-Down",
@@ -4329,7 +4329,7 @@
     "name": "Unsung Warriors",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/980700/90bb51ddf3376f5883a664b05b958ea83b9a45ae/header.jpg?t=1753871606",
     "steam_url": "https://store.steampowered.com/app/980700",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -4505,7 +4505,7 @@
     "name": "Shrine's Legacy",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1435410/3da4ae415f93d9e3fc599ea8e9e790bae7c3616a/header_alt_assets_0.jpg?t=1766001126",
     "steam_url": "https://store.steampowered.com/app/1435410",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -4549,7 +4549,7 @@
     "name": "Sword of the Necromancer",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1243890/header.jpg?t=1737631868",
     "steam_url": "https://store.steampowered.com/app/1243890",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -4637,7 +4637,7 @@
     "name": "Juicy Realm",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/732370/header.jpg?t=1644166479",
     "steam_url": "https://store.steampowered.com/app/732370",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Roguelike",
     "tags": [
       "2D",
@@ -4681,7 +4681,7 @@
     "name": "Cat Quest II",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/914710/header.jpg?t=1760435512",
     "steam_url": "https://store.steampowered.com/app/914710",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -4703,7 +4703,7 @@
     "name": "Cat Quest",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/593280/69324384b1da76cab8a6215c42f5d5f34a0e1290/header.jpg?t=1756984217",
     "steam_url": "https://store.steampowered.com/app/593280",
-    "coop": "CO-OP",
+    "coop": "Single",
     "genre": "Action",
     "tags": [
       "2D",
@@ -5641,7 +5641,7 @@
     "name": "Nuclear Throne",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/242680/header.jpg?t=1764957456",
     "steam_url": "https://store.steampowered.com/app/242680",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -5883,8 +5883,8 @@
     "name": "Noobs Are Coming",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2225960/d5f08a32d686f39a287ea0d5b4aa5635a8627aa4/header_alt_assets_0.jpg?t=1764945460",
     "steam_url": "https://store.steampowered.com/app/2225960",
-    "coop": "CO-OP",
-    "genre": "Strategy",
+    "coop": "Split Screen",
+    "genre": "Roguelike",
     "tags": [
       "Top-Down",
       "2D",
@@ -6300,7 +6300,7 @@
     "name": "Wulverblade",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/587180/header.jpg?t=1572533385",
     "steam_url": "https://store.steampowered.com/app/587180",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -6322,7 +6322,7 @@
     "name": "Big Helmet Heroes",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2397250/header.jpg?t=1744895598",
     "steam_url": "https://store.steampowered.com/app/2397250",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -6333,7 +6333,7 @@
     ],
     "description": "Big Helmet Heroes — это динамичный кооперативный шутер с видом сбоку, где игроки в роли героев в массивных шлемах преодолевают серию красочных и опасных уровней. Повествование здесь минималистично и подается через визуальный стиль, дизайн локаций и эксцентричных противников, создавая атмосферу веселого комикса-экшена. Основной геймплейный цикл — это непрерывное движение вперед, где секундное планирование маршрута сменяется яростной перестрелкой: вы прыгаете по платформам, уворачиваетесь от града пуль и отвечаете врагам точными выстрелами, чтобы добраться до финального босса. Мотивация проста — победить всех и дойти до конца, оттачивая мастерство в скоростном прохождении и координации с напарником в локальном или сетевом коопе. Ключевой вызов заключается в запоминании паттернов атак могущественных боссов, где каждая фаза боя проверяет ваши рефлексы и умение читать поведение противника.",
     "subgenres": [
-      "Shooter",
+      "BMUP",
       "Platformer",
       "Arcade",
       "Boss Rush",
@@ -6344,7 +6344,7 @@
     "name": "Final Knight",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2072980/ae685e030517a75bf19e24295e840e2c42dbcd17/header.jpg?t=1765893039",
     "steam_url": "https://store.steampowered.com/app/2072980",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Third-Person",
@@ -6564,7 +6564,7 @@
     "name": "Enter the Gungeon",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/311690/header.jpg?t=1743602589",
     "steam_url": "https://store.steampowered.com/app/311690",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -6586,7 +6586,7 @@
     "name": "The Binding of Isaac: Rebirth",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/250900/header.jpg?t=1731977365",
     "steam_url": "https://store.steampowered.com/app/250900",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Roguelike",
     "tags": [
       "Top-Down",
@@ -6608,7 +6608,7 @@
     "name": "Toroom",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1684080/header.jpg?t=1745370346",
     "steam_url": "https://store.steampowered.com/app/1684080",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "First-Person",
@@ -6652,8 +6652,8 @@
     "name": "The Last Game",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2563800/header.jpg?t=1761602811",
     "steam_url": "https://store.steampowered.com/app/2563800",
-    "coop": "Multiplayer / CO-OP",
-    "genre": "Action",
+    "coop": "Split Screen",
+    "genre": "Roguelike",
     "tags": [
       "Third-Person",
       "3D",
@@ -6674,7 +6674,7 @@
     "name": "Archvale",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1296360/header.jpg?t=1638464703",
     "steam_url": "https://store.steampowered.com/app/1296360",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -6783,7 +6783,7 @@
     "name": "Nex Machina",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/404540/header.jpg?t=1591699254",
     "steam_url": "https://store.steampowered.com/app/404540",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -6804,7 +6804,7 @@
     "name": "Assault Android Cactus+",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/250110/header.jpg?t=1744898145",
     "steam_url": "https://store.steampowered.com/app/250110",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -7481,7 +7481,7 @@
     "name": "Portal Knights",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/374040/header.jpg?t=1696604379",
     "steam_url": "https://store.steampowered.com/app/374040",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "3D",
@@ -8955,7 +8955,7 @@
     "name": "Salt and Sanctuary",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/283640/header.jpg?t=1729712419",
     "steam_url": "https://store.steampowered.com/app/283640",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Metroidvania",
     "tags": [
       "2D",
@@ -9791,7 +9791,7 @@
     "name": "Insanely Twisted Shadow Planet",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/205730/header.jpg?t=1667838791",
     "steam_url": "https://store.steampowered.com/app/205730",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -10204,7 +10204,7 @@
     "name": "Gal Guardians: Demon Purge",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2081400/header.jpg?t=1727748258",
     "steam_url": "https://store.steampowered.com/app/2081400",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -11344,7 +11344,7 @@
     "name": "Death Trash",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/941460/header.jpg?t=1750947205",
     "steam_url": "https://store.steampowered.com/app/941460",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -11656,7 +11656,7 @@
     "name": "Sea of Stars",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1244090/header.jpg?t=1756414027",
     "steam_url": "https://store.steampowered.com/app/1244090",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "RPG",
     "tags": [
       "2D",
@@ -11875,7 +11875,7 @@
     "name": "Boomerang Fu",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/965680/header.jpg?t=1758309661",
     "steam_url": "https://store.steampowered.com/app/965680",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -12290,7 +12290,7 @@
     "name": "Pizza Possum",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1951230/header.jpg?t=1766068537",
     "steam_url": "https://store.steampowered.com/app/1951230",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -12377,7 +12377,7 @@
     "name": "Death Road to Canada",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/252610/header.jpg?t=1666824491",
     "steam_url": "https://store.steampowered.com/app/252610",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
@@ -13185,7 +13185,7 @@
     "name": "Quest Master",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2094070/header.jpg?t=1765384973",
     "steam_url": "https://store.steampowered.com/app/2094070",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Adventure",
     "tags": [
       "Text-Based",
@@ -13645,7 +13645,7 @@
     "name": "The Adventure Pals",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/396710/header.jpg?t=1726581654",
     "steam_url": "https://store.steampowered.com/app/396710",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Adventure",
     "tags": [
       "2D",
@@ -13667,7 +13667,7 @@
     "name": "Windswept",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1660960/52f67d364d08f5989ea3ec8cb823b7493bf0c474/header.jpg?t=1763134514",
     "steam_url": "https://store.steampowered.com/app/1660960",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Adventure",
     "tags": [
       "First-Person",
@@ -13840,7 +13840,7 @@
     "name": "Shovel Knight: Treasure Trove",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/250760/header.jpg?t=1723577994",
     "steam_url": "https://store.steampowered.com/app/250760",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Platformer",
     "tags": [
       "2D",
@@ -14835,7 +14835,7 @@
     "name": "Spiritfarer®: Farewell Edition",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/972660/header.jpg?t=1752503178",
     "steam_url": "https://store.steampowered.com/app/972660",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Adventure",
     "tags": [
       "Hand-Drawn",
@@ -14945,7 +14945,7 @@
     "name": "Child of Light",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/256290/header.jpg?t=1694554365",
     "steam_url": "https://store.steampowered.com/app/256290",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Adventure",
     "tags": [
       "2D",
@@ -15535,7 +15535,7 @@
     "name": "Inkulinati",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/957960/header.jpg?t=1762362556",
     "steam_url": "https://store.steampowered.com/app/957960",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Strategy",
     "tags": [
       "2D",
@@ -15930,7 +15930,7 @@
     "name": "Tales of Graces f Remastered",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2530980/header.jpg?t=1739758056",
     "steam_url": "https://store.steampowered.com/app/2530980",
-    "coop": "Single",
+    "coop": "CO-OP",
     "genre": "RPG",
     "tags": [
       "Anime",
@@ -15952,7 +15952,7 @@
     "name": "Tales of Symphonia",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/372360/header.jpg?t=1580311676",
     "steam_url": "https://store.steampowered.com/app/372360",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "RPG",
     "tags": [
       "Anime",
@@ -15974,7 +15974,7 @@
     "name": "Tales of Vesperia: Definitive Edition",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/738540/header.jpg?t=1701311642",
     "steam_url": "https://store.steampowered.com/app/738540",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "RPG",
     "tags": [
       "Anime",
@@ -17266,7 +17266,7 @@
     "name": "Sky Force Anniversary",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/355050/header.jpg?t=1667208034",
     "steam_url": "https://store.steampowered.com/app/355050",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "Top-Down",
@@ -19526,7 +19526,7 @@
     "name": "Bleed 2",
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/396350/header.jpg?t=1560632810",
     "steam_url": "https://store.steampowered.com/app/396350",
-    "coop": "CO-OP",
+    "coop": "Split Screen",
     "genre": "Action",
     "tags": [
       "2D",
