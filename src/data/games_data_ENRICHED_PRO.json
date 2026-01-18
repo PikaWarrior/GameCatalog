@@ -7769,7 +7769,8 @@
       "Atmospheric",
       "Meta",
       "Nonlinear",
-      "Abstract"
+      "Abstract",
+      "No Gameplay"
     ]
   },
   {
@@ -13999,7 +14000,8 @@
       "Meta",
       "Atmospheric",
       "Nonlinear",
-      "Interactive Fiction"
+      "Interactive Fiction",
+      "No Gameplay"
     ]
   },
   {
@@ -14245,7 +14247,8 @@
       "Life-Sim",
       "ShopKeeping",
       "Mini-Games",
-      "Narrative"
+      "Narrative",
+      "No Gameplay"
     ]
   },
   {
@@ -14451,7 +14454,8 @@
       "Atmospheric",
       "Meta",
       "Nonlinear",
-      "Lovecraftian"
+      "Lovecraftian",
+      "No Gameplay"
     ]
   },
   {
@@ -14514,7 +14518,8 @@
       "Choose Your Own Adventure",
       "Dating-Sim",
       "Narrative",
-      "Story-Driven"
+      "Story-Driven",
+      "No Gameplay"
     ]
   },
   {
@@ -19769,7 +19774,8 @@
       "Story-Driven",
       "Narrative",
       "Linear Narrative",
-      "Choices Matter"
+      "Choices Matter",
+      "No Gameplay"
     ]
   },
   {
