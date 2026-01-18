@@ -10,7 +10,6 @@ interface GameCardProps {
 }
 
 const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) => {
-
   // Функция выбора иконки для кооператива
   const getCoopIcon = (coop: string) => {
     const lower = coop.toLowerCase();
@@ -20,41 +19,22 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
     return '👤';
   };
 
-  // Логика выбора цвета для жанра (ОБНОВЛЕННАЯ)
+  // Логика выбора цвета для жанра
   const getGenreColor = (genre: string) => {
     const g = genre.toLowerCase();
-    
-    // Экшен, Файтинг, Шутер -> Красный
     if (g.includes('action') || g.includes('shooter') || g.includes('fighting') || g.includes('hack')) return 'var(--genre-red)';
-    
-    // RPG, Adventure, Metroidvania -> Зеленый
-    if (g.includes('adventure') || g.includes('rpg') || g.includes('role') || g.includes('metroidvania')) return 'var(--genre-green)';
-    
-    // Стратегии, Симуляторы -> Синий
-    if (g.includes('strategy') || g.includes('simulation') || g.includes('management') || g.includes('city') || g.includes('sandbox')) return 'var(--genre-blue)';
-    
-    // Хоррор, Выживание -> Фиолетовый
+    if (g.includes('adventure') || g.includes('rpg') || g.includes('role')) return 'var(--genre-green)';
+    if (g.includes('strategy') || g.includes('simulation') || g.includes('management') || g.includes('city')) return 'var(--genre-blue)';
     if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) return 'var(--genre-purple)';
-    
-    // Пазлы, Платформеры -> Желтый
     if (g.includes('puzzle') || g.includes('platformer') || g.includes('arcade')) return 'var(--genre-yellow)';
-    
-    // Рогалики -> Оранжевый (используем существующий или добавляем новый класс в CSS)
     if (g.includes('rogue') || g.includes('lite') || g.includes('dungeon')) return 'var(--genre-orange)';
-    
     return 'var(--genre-default)';
   };
 
   // Логика выбора цвета для режима
   const getCoopColorClass = (coop: string) => {
     const lower = coop.toLowerCase();
-    if (
-      lower.includes('online') || 
-      lower.includes('co-op') || 
-      lower.includes('multiplayer') || 
-      lower.includes('split') || 
-      lower.includes('lan')
-    ) {
+    if (lower.includes('online') || lower.includes('co-op') || lower.includes('multiplayer') || lower.includes('split') || lower.includes('lan')) {
       return 'coop-online';
     }
     return 'coop-single';
@@ -67,67 +47,76 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
     <div 
       className="game-card" 
       style={style}
-      onClick={() => onOpenModal && onOpenModal(game)}
-      title="Нажмите для просмотра полного описания"
       role="button"
       tabIndex={0}
+      onClick={() => onOpenModal && onOpenModal(game)}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           onOpenModal && onOpenModal(game);
         }
       }}
     >
-      <div className="card-image-container">
-        <img 
-          src={game.image} 
-          alt={game.name} 
-          className="game-image" 
-          loading="lazy"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = '/fallback-game.jpg';
-          }}
-        />
-        <div className="card-badges">
-          <span className="genre-badge" style={{ backgroundColor: genreColor }}>
-            {game.genre}
-          </span>
-          <span className={`coop-badge ${coopClass}`}>
-            {getCoopIcon(game.coop)} {game.normalizedCoop}
-          </span>
+      <div className="game-card-inner">
+        
+        {/* Картинка и Бейджи */}
+        <div className="card-image-container">
+          <img 
+            src={game.image} 
+            alt={game.name} 
+            className="card-image" 
+            loading="lazy"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/fallback-game.jpg';
+            }}
+          />
+          <div className="card-badges">
+            <span className="badge genre" style={{ backgroundColor: genreColor }}>
+              {game.genre}
+            </span>
+            <span className={`badge coop ${coopClass}`}>
+              {getCoopIcon(game.coop)} {game.normalizedCoop}
+            </span>
+          </div>
         </div>
-      </div>
 
-      <div className="card-content">
-        <h3 className="game-title">{game.name}</h3>
-        
-        {/* УВЕЛИЧЕННОЕ ОПИСАНИЕ */}
-        <p className="game-description">
-          {game.description || "Описание отсутствует..."}
-        </p>
-        
-        <div className="tags-container">
-          {game.subgenres.slice(0, 6).map((sub, i) => (
-            <span key={i} className="tag-badge">
-              {sub}
-            </span>
-          ))}
-          {game.subgenres.length > 6 && (
-            <span className="tag-badge more-tags">
-              +{game.subgenres.length - 6}
-            </span>
-          )}
+        {/* Контент */}
+        <div className="card-content">
+          <h3 className="card-title" title={game.name}>
+            {game.name}
+          </h3>
+          
+          {/* Статичное описание (как было в CSS) */}
+          <div className="card-description-static">
+            {game.description || "Описание отсутствует..."}
+          </div>
+          
+          {/* Теги */}
+          <div className="card-tags">
+            {game.subgenres.slice(0, 6).map((sub, i) => (
+              <span key={i} className="tag subgenre-tag">
+                {sub}
+              </span>
+            ))}
+            {game.subgenres.length > 6 && (
+              <span className="tag more-tag">
+                +{game.subgenres.length - 6}
+              </span>
+            )}
+          </div>
+          
+          {/* Кнопка Steam */}
+          <a 
+            href={game.steam_url} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="steam-button"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Gamepad2 size={18} />
+            В Steam
+          </a>
         </div>
-        
-        <a 
-          href={game.steam_url} 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="steam-link"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Gamepad2 size={16} style={{ marginRight: '6px' }} />
-          В Steam
-        </a>
+
       </div>
     </div>
   );
