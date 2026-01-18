@@ -266,7 +266,7 @@
       "Beat 'em up",
       "Souls-Like",
       "Roguelite",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -666,7 +666,7 @@
       "Action",
       "Linear",
       "Arcade",
-      "Boss Rush",
+      "Boss-Rush",
       "Co-op Focused"
     ]
   },
@@ -1112,8 +1112,7 @@
       "Action-Roguelike",
       "BulletHell",
       "Horde Survival",
-      "Arcade",
-      "Auto-Shooting"
+      "Arcade"
     ]
   },
   {
@@ -1193,7 +1192,7 @@
       "Fast-Paced",
       "Difficult",
       "Retro",
-      "Pixel-Art"
+      "Pixel Art"
     ],
     "description": "Revita — это динамичный рогалик-платформер, где пули врагов заполняют экран, а повествование раскрывается через лаконичные встречи и загадочные находки в глубинах процедурно генерируемой башни. Игровой цикл строится на стремительных забегах: вы исследуете комнаты, сражаетесь с волнами противников и могущественными боссами, а затем, используя душу как валюту, жертвуете частью своего здоровья для покупки и улучшения оружия и реликвий. Эта рискованная механика обмена создает постоянное напряжение, мотивируя на поиск идеального баланса между силой и выживанием в погоне за восхождением к вершине и раскрытием тайн этого места.",
     "subgenres": [
@@ -1201,7 +1200,7 @@
       "Shooter",
       "Twin-Stick",
       "BulletHell",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -1446,7 +1445,7 @@
       "Action-Roguelike",
       "Platformer",
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Dark"
     ]
   },
@@ -2002,7 +2001,7 @@
       "Shooter",
       "BulletHell",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -2022,7 +2021,7 @@
     "subgenres": [
       "Shooter",
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration",
       "Dark"
     ]
@@ -2289,7 +2288,8 @@
       "Story-Driven",
       "Story-Adventure",
       "Exploration",
-	  "Action",
+      "No Combat",
+      "Linear Narrative",
       "Point-and-Click"
     ]
   },
@@ -2311,7 +2311,7 @@
       "Action",
       "Shooter",
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade"
     ]
   },
@@ -2332,7 +2332,6 @@
     "subgenres": [
       "Action-Roguelike",
       "BulletHell",
-      "Auto-Shooting",
       "Arcade",
       "Horde Survival"
     ]
@@ -2377,7 +2376,6 @@
       "Action-Roguelike",
       "Horde Survival",
       "Arcade",
-      "Auto-Shooting",
       "BulletHell"
     ]
   },
@@ -2400,7 +2398,7 @@
       "DeckBuilder",
       "BulletHell",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -2576,9 +2574,8 @@
     "subgenres": [
       "Action-Roguelike",
       "Horde Survival",
-      "Auto-Shooting",
-      "Arcade",
-      "BulletHell"
+      "BulletHell",
+      "Arcade"
     ]
   },
   {
@@ -2688,7 +2685,7 @@
     ],
     "description": "Furi — это динамичный босс-раш, где геймплей представляет собой череду дуэлей один на один с могущественными противниками. История вашего освобождения и мотивы ваших тюремщиков раскрываются не через линейный сюжет, а через напряженные диалоги перед каждой схваткой и лаконичные катсцены, которые придают смысл каждому столкновению. Игровой цикл — это чистый, сфокусированный танец смерти: вы входите на арену, изучаете уникальные паттерны атак босса, парируете удары мечом в ближнем бою и виртуозно уворачиваетесь от града пуль в лучших традициях bullet hell. Каждая битва разделена на фазы, требующие мгновенного переключения между агрессивным натиском и безупречной защитой. Ваша цель — прорваться сквозь эту цепь стражей, отточив мастерство до совершенства, чтобы обрести свободу и раскрыть правду, скрытую за вашим заточением.",
     "subgenres": [
-      "Boss Rush",
+      "Boss-Rush",
       "BulletHell",
       "Slasher",
       "Arcade"
@@ -2734,7 +2731,7 @@
       "Slasher",
       "Souls-Like",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -2775,7 +2772,7 @@
     ],
     "description": "Deep Rock Galactic: Survivor — это автошутер с видом сверху, где вы управляете одним из неутомимых гномов-шахтеров корпорации Deep Rock Galactic. Ваш персонаж автоматически ведет огонь, а вы сосредотачиваетесь на тактическом перемещении по процедурно генерируемым пещерам, уворачиваясь от орд чужеродных существ и собирая драгоценные минералы. Геймплейный цикл представляет собой интенсивные забеги по выживанию, где каждая волна врагов становится все опаснее, а между миссиями добытые ресурсы вкладываются в перманентные улучшения и выбор новых мощных перков, кардинально меняющих поведение вашего автоматического арсенала. Цель — пройти все сложности враждебной планеты Хокс IV, отточив мастерство уклонения и построения синергичных сборок, чтобы ваш буровой снаряд всегда возвращался на орбиту, полный добычи.",
     "subgenres": [
-      "Auto-Shooting",
+      "BulletHell",
       "Horde Survival",
       "Roguelite",
       "Arcade",
@@ -2822,8 +2819,7 @@
       "Action-Roguelike",
       "BulletHell",
       "Horde Survival",
-      "Arcade",
-      "Auto-Shooting"
+      "Arcade"
     ]
   },
   {
@@ -2911,7 +2907,7 @@
       "Shooter",
       "Arcade",
       "Horde Survival",
-      "Boss Rush",
+      "Boss-Rush",
       "Survival"
     ]
   },
@@ -2955,9 +2951,8 @@
     "subgenres": [
       "Action-Roguelike",
       "Horde Survival",
-      "Auto-Shooting",
-      "Arcade",
-      "BulletHell"
+      "BulletHell",
+      "Arcade"
     ]
   },
   {
@@ -2999,9 +2994,8 @@
     "subgenres": [
       "Action-Roguelike",
       "Horde Survival",
-      "Auto-Shooting",
-      "Arcade",
-      "BulletHell"
+      "BulletHell",
+      "Arcade"
     ]
   },
   {
@@ -3041,9 +3035,8 @@
     "subgenres": [
       "Action-Roguelike",
       "Horde Survival",
-      "Auto-Shooting",
-      "Arcade",
-      "BulletHell"
+      "BulletHell",
+      "Arcade"
     ]
   },
   {
@@ -3085,9 +3078,8 @@
     "subgenres": [
       "Action-Roguelike",
       "Horde Survival",
-      "Auto-Shooting",
-      "Arcade",
-      "BulletHell"
+      "BulletHell",
+      "Arcade"
     ]
   },
   {
@@ -3198,7 +3190,7 @@
       "Shooter",
       "Slasher",
       "Stealth",
-      "Boss Rush",
+      "Boss-Rush",
       "Open-World"
     ]
   },
@@ -3419,7 +3411,7 @@
       "DeckBuilder",
       "BulletHell",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -3441,7 +3433,7 @@
       "BulletHell",
       "Twin-Stick",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -3463,7 +3455,7 @@
       "Dungeon Crawler",
       "ARPG",
       "Souls-Like",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -3510,7 +3502,7 @@
       "Auto-Battler",
       "Horde Survival",
       "DeckBuilder",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -3532,7 +3524,7 @@
       "Dungeon Crawler",
       "Souls-Like",
       "Dark",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -3554,7 +3546,7 @@
       "Slasher",
       "Souls-Like",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -3620,7 +3612,7 @@
       "Action-Roguelike",
       "Co-op Focused",
       "Horde Survival",
-      "Boss Rush",
+      "Boss-Rush",
       "ARPG"
     ]
   },
@@ -3665,7 +3657,7 @@
       "Dungeon Crawler",
       "Arcade",
       "Fast-Paced",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -3723,7 +3715,7 @@
       "Top-Down",
       "2D",
       "Retro",
-      "Pixel-Art",
+      "Pixel Art",
       "Difficult"
     ],
     "description": "UnderMine 2 — это рогалик-платформер с видом сверху, созданный для совместного прохождения на одном экране. Повествование здесь нелинейное и раскрывается через фрагменты лора, которые игрок находит в глубинах шахт, а также через взаимодействие с загадочными обитателями подземного мира. Основной геймплейный цикл — это исследование процедурно генерируемых уровней, добыча золота и редких ресурсов, а также сражения с разнообразными врагами и боссами. Добыча тратится на постоянные улучшения в городе и на временные усиления во время самого забега, что мотивирует на новые, более глубокие спуски. Ключевая механика — это кооперативное взаимодействие, где два игрока могут комбинировать свои способности и предметы, чтобы преодолевать ловушки и побеждать могучих противников, стремясь раскрыть тайны Подземелья и укрепить свое наследие.",
@@ -3819,11 +3811,10 @@
     "description": "Army of Ruin — это динамичный рогалик в стиле «Vampire Survivors», где выживание зависит от вашей мобильности и стратегического выбора. Повествование здесь минималистично и полностью встроено в игровой процесс: прогресс и история вашего персонажа раскрываются через разблокировку новых героев, оружия и реликвий, каждая из которых привносит свой уникальный фрагмент в общую картину мира. Основной цикл заключается в управлении героем, который атакует автоматически, требуя от вас полной концентрации на движении и уклонении от сокрушительных орд монстров. Собранный опыт позволяет между волнами выбирать мощные улучшения и комбинировать способности, создавая смертоносные синергии. Ваша цель — продержаться как можно дольше, покоряя всё более сложные волны врагов, чтобы устанавливать новые рекорды и открывать весь арсенал разрушительных инструментов.",
     "subgenres": [
       "Action",
-      "Auto-Shooting",
+      "BulletHell",
       "Horde Survival",
       "Arcade",
-      "Roguelite",
-      "BulletHell"
+      "Roguelite"
     ]
   },
   {
@@ -3856,7 +3847,7 @@
     "genre": "Metroidvania",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Difficult",
       "Atmospheric",
       "Retro"
@@ -3867,7 +3858,7 @@
       "Action-Roguelike",
       "Exploration",
       "Dark",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -3889,7 +3880,7 @@
       "Roguelite",
       "Twin-Stick",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -3931,7 +3922,7 @@
       "CYOA",
       "Story-Driven",
       "Action-Adventure",
-      "Boss Rush",
+      "Boss-Rush",
       "Narrative",
       "Linear Narrative"
     ]
@@ -4044,7 +4035,7 @@
       "Exploration",
       "Dark",
       "No Dialogue",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -4065,7 +4056,7 @@
       "Shooter",
       "Slasher",
       "Stealth",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -4087,7 +4078,7 @@
       "Slasher",
       "Souls-Like",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -4111,7 +4102,7 @@
       "RPG",
       "Story-Driven",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -4294,7 +4285,7 @@
       "Action-Adventure",
       "Exploration",
       "Platformer Elements",
-      "Boss Rush",
+      "Boss-Rush",
       "Souls-Like"
     ]
   },
@@ -4317,7 +4308,7 @@
       "Roguelite",
       "Platformer",
       "BulletHell",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade"
     ]
   },
@@ -4509,7 +4500,7 @@
     "genre": "Metroidvania",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Co-op",
       "Difficult",
       "Retro"
@@ -4631,7 +4622,7 @@
       "Slasher",
       "Co-op Focused",
       "Exploration",
-      "Boss Rush",
+      "Boss-Rush",
       "Isometric"
     ]
   },
@@ -4698,7 +4689,7 @@
       "Arcade",
       "Co-op Focused",
       "Horde Survival",
-      "BMUP (Beat 'em up)"
+      "Beat 'em up"
     ]
   },
   {
@@ -4875,7 +4866,7 @@
       "Shooter",
       "BulletHell",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -4965,7 +4956,7 @@
       "BulletHell",
       "Arcade",
       "Fast-Paced",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -5076,7 +5067,7 @@
       "Platformer",
       "Slasher",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -5119,7 +5110,7 @@
       "Action",
       "Slasher",
       "Platformer",
-      "Boss Rush",
+      "Boss-Rush",
       "Souls-Like",
       "Exploration"
     ]
@@ -5167,7 +5158,7 @@
       "Dungeon Crawler",
       "BulletHell",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -5255,7 +5246,7 @@
       "Platformer",
       "Slasher",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -5276,7 +5267,7 @@
       "Action-Roguelike",
       "Platformer",
       "Arcade",
-      "Boss Rush",
+      "Boss-Rush",
       "No Combat"
     ]
   },
@@ -5428,7 +5419,7 @@
       "BulletHell",
       "Dungeon Crawler",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -5519,7 +5510,7 @@
       "DeckBuilder",
       "Exploration",
       "Platformer Elements",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -5539,9 +5530,8 @@
     "subgenres": [
       "Action-Roguelike",
       "Horde Survival",
-      "Auto-Shooting",
-      "Arcade",
-      "BulletHell"
+      "BulletHell",
+      "Arcade"
     ]
   },
   {
@@ -5699,7 +5689,7 @@
       "Roguelite",
       "Platformer",
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade"
     ]
   },
@@ -5769,7 +5759,7 @@
       "Looter-Shooter",
       "Co-op Focused",
       "Horde Survival",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -5863,7 +5853,7 @@
       "Souls-Like",
       "Adventure",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -5908,7 +5898,7 @@
       "Shooter",
       "BulletHell",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -5927,7 +5917,7 @@
     "description": "Eldest Souls — это хардкорный boss-rush в духе пиксельного арт-экшена, где выживание зависит от безупречного мастерства. История о древнем проклятии и падших богах раскрывается не через линейный сюжет, а через лаконичные диалоги с немногими персонажами и мрачную, многословную архитектуру арен, которая сама по себе является повествованием. Геймплейный цикл предельно сфокусирован: вы входите в изолированную арену, изучаете смертоносные паттерны атак уникального босса, уворачиваетесь и наносите удары в узкие окна возможностей, используя ограниченный, но глубокий арсенал. Каждая победа — это не просто прохождение, а личное преодоление, вознаграждаемое новыми мощными умениями, которые позволяют адаптировать свой стиль и бросить вызов следующему, ещё более грозному противнику. Ваша цель — пройти это чистое испытание рефлексов и терпения, чтобы разбить оковы древнего мира.",
     "subgenres": [
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Souls-Like",
       "Dark",
       "No Exploration"
@@ -5952,7 +5942,7 @@
       "RPG",
       "Dark",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -6013,7 +6003,7 @@
     ],
     "description": "«Noobs Are Coming» — это динамичная кооперативная защита башен в духе классического Tower Defense, где повествование рождается из самого хаоса битвы: история вашего противостояния ордам врагов пишется в реальном времени через разрушаемые укрепления и отчаянные попытки удержать линию обороны. Геймплейный цикл вращается вокруг молниеносного планирования: вы добываете ресурсы, возводите и модернизируете разнообразные оборонительные башни, а затем наблюдаете, как ваша стратегия проходит проверку на прочность в волнах всё более могущественных противников. Ключевая механика — это управление ограниченными ресурсами и приоритетами под непрекращающимся давлением, где каждая секунда на счету, а цель — не просто выжить, а создать неприступную крепость, способную сдержать нескончаемый натиск. Игра поддерживает как одиночное прохождение, так и совместный сплит-скрин, превращая оборону в напряженное и веселое соревнование на эффективность.",
     "subgenres": [
-      "TD",
+      "Tower Defense",
       "Management",
       "Resource Management",
       "Arcade"
@@ -6037,7 +6027,7 @@
       "Action-Roguelike",
       "Dungeon Crawler",
       "Co-op Focused",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade"
     ]
   },
@@ -6128,7 +6118,7 @@
       "Souls-Like",
       "Dark",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -6266,7 +6256,7 @@
       "Dungeon Crawler",
       "Arcade",
       "Horde Survival",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -6288,7 +6278,7 @@
       "Shooter",
       "Slasher",
       "Stealth",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -6356,7 +6346,7 @@
       "Action",
       "Exploration",
       "Nonlinear",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -6400,7 +6390,7 @@
       "BulletHell",
       "Dungeon Crawler",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -6511,7 +6501,7 @@
       "Co-op Focused",
       "RPG",
       "Story-Driven",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade"
     ]
   },
@@ -6555,7 +6545,7 @@
       "Slasher",
       "Souls-Like",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -6599,7 +6589,7 @@
       "Shooter",
       "Platformer",
       "Arcade",
-      "Boss Rush",
+      "Boss-Rush",
       "Co-op Focused"
     ]
   },
@@ -6798,6 +6788,7 @@
       "Beat 'em up",
       "RPG",
       "Co-op Focused",
+      "Linear Narrative",
       "Platformer Elements"
     ]
   },
@@ -6970,7 +6961,7 @@
     "subgenres": [
       "Slasher",
       "Souls-Like",
-      "Boss Rush",
+      "Boss-Rush",
       "Dark",
       "Exploration"
     ]
@@ -7125,7 +7116,7 @@
       "Action",
       "Shooter",
       "BulletHell",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade",
       "No Narrative"
     ]
@@ -7282,7 +7273,7 @@
       "BulletHell",
       "Horde Survival",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -7336,7 +7327,7 @@
     "genre": "Survival",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Casual",
       "Sci-Fi",
       "Immersive"
@@ -7501,7 +7492,7 @@
       "Twin-Stick",
       "Arcade",
       "Horde Survival",
-      "Boss Rush",
+      "Boss-Rush",
       "BulletHell"
     ]
   },
@@ -7572,7 +7563,7 @@
       "Slasher",
       "Souls-Like",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -7679,7 +7670,7 @@
     ],
     "description": "The Riftbreaker — это динамичный гибрид стратегии в реальном времени и экшена от третьего лица, где вы выступаете в роли пилота мощного боевого экзоскелета на неизведанной планете. Повествование здесь ведется через миссии и радиопереговоры, раскрывая цели экспедиции и постепенно приоткрывая тайны чужого мира. Основной геймплейный цикл представляет собой непрерывный поток: вы исследуете красочные, но смертоносные биомы для добычи ресурсов, проектируете и отстраиваете разветвленную базу с фабриками и энергосетями, чтобы затем героически защищать её от яростных волн местной фауны, лично участвуя в сражениях. Ваша цель — выжить и создать стабильный разрыв между мирами, что достигается через глубокое технологическое древо, позволяющее усовершенствовать как вашу крепость, так и личный арсенал.",
     "subgenres": [
-      "TD (Tower Defense)",
+      "Tower Defense",
       "Colony-Sim",
       "Management",
       "Crafting",
@@ -8524,7 +8515,7 @@
       "Slasher",
       "Souls-Like",
       "Stealth",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -8549,7 +8540,7 @@
       "RPG",
       "Exploration",
       "Dark",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -8594,7 +8585,7 @@
       "Dark",
       "Exploration",
       "Platformer Elements",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -8662,7 +8653,7 @@
       "Lore-Rich",
       "Dark Fantasy",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -8684,7 +8675,7 @@
       "Adventure",
       "Story-Driven",
       "Linear Narrative",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -8704,7 +8695,7 @@
     "subgenres": [
       "Slasher",
       "Souls-Like",
-      "Boss Rush",
+      "Boss-Rush",
       "Dark",
       "Exploration"
     ]
@@ -8728,7 +8719,7 @@
       "Souls-Like",
       "Dark",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -8750,7 +8741,7 @@
       "Dark",
       "Platformer",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -8771,7 +8762,7 @@
       "Action-Adventure",
       "Platformer",
       "Exploration",
-      "Boss Rush",
+      "Boss-Rush",
       "Dark",
       "Souls-Like"
     ]
@@ -8818,7 +8809,7 @@
       "Action-Adventure",
       "Lore-Rich",
       "Dark Fantasy",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -8861,7 +8852,7 @@
       "Slasher",
       "Souls-Like",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -8906,7 +8897,7 @@
     "subgenres": [
       "Slasher",
       "Souls-Like",
-      "Boss Rush",
+      "Boss-Rush",
       "Dark",
       "Nonlinear"
     ]
@@ -8930,7 +8921,7 @@
       "BulletHell",
       "Platformer",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -8952,7 +8943,7 @@
       "Slasher",
       "Dark",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -8963,7 +8954,7 @@
     "genre": "Roguelike",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Difficult",
       "Permadeath",
       "Immersive-Simulator"
@@ -9009,7 +9000,7 @@
     "genre": "Metroidvania",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Atmospheric",
       "Difficult",
       "Retro"
@@ -9042,7 +9033,7 @@
       "Souls-Like",
       "Dark",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -9062,7 +9053,7 @@
     "subgenres": [
       "Action-Roguelike",
       "Platformer",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade",
       "Souls-Like"
     ]
@@ -9120,7 +9111,7 @@
     "tags": [
       "Retro",
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Atmospheric",
       "Casual"
     ],
@@ -9152,7 +9143,7 @@
       "Platformer",
       "Exploration",
       "Story-Driven",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -9172,7 +9163,7 @@
     "subgenres": [
       "Slasher",
       "Platformer",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade",
       "No Narrative"
     ]
@@ -9217,7 +9208,7 @@
       "Shooter",
       "Souls-Like",
       "BulletHell",
-      "Boss Rush",
+      "Boss-Rush",
       "Dark"
     ]
   },
@@ -9240,7 +9231,7 @@
       "Dark",
       "Souls-Like",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -9259,7 +9250,7 @@
     "description": "«Maid of Salvation» — это динамичный шутер с видом сверху, где игрок управляет горничной, вступающей в безумные пульсации пуль. Повествование здесь минималистично и подается через само действие: каждая волна врагов и каждый босс раскрывают фрагменты истории через визуальный хаос и атмосферу, а не через диалоги или сюжетные вставки. Геймплейный цикл представляет собой непрерывный танец смерти: игрок уворачивается от плотных, гипнотических завес снарядов, отвечая точными выстрелами, и учится на своих ошибках, запоминая всё более сложные паттерны атак. Цель — не просто выжить, а овладеть этим хаосом, отточить рефлексы до совершенства и покорить один за другим уровни, стремясь к высшим рекордам и личному мастерству в этом испытании на скорость и реакцию.",
     "subgenres": [
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Souls-Like",
       "Dark",
       "Hardcore"
@@ -9284,7 +9275,7 @@
       "Souls-Like",
       "Exploration",
       "Underwater",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -9371,7 +9362,7 @@
       "Dungeon Crawler",
       "Arcade",
       "Platformer Elements",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -9438,7 +9429,7 @@
       "Dark",
       "Action-Adventure",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -9459,7 +9450,7 @@
       "Action",
       "Platformer",
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -9481,7 +9472,7 @@
       "Platformer",
       "Action-Adventure",
       "Exploration",
-      "Boss Rush",
+      "Boss-Rush",
       "Souls-Like"
     ]
   },
@@ -9525,7 +9516,7 @@
     "subgenres": [
       "Souls-Like",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Action",
       "RPG"
     ]
@@ -9595,7 +9586,7 @@
       "Slasher",
       "Platformer",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -9615,7 +9606,7 @@
     "subgenres": [
       "Slasher",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Platformer Elements",
       "Exploration"
     ]
@@ -9637,7 +9628,7 @@
     "subgenres": [
       "Slasher",
       "Souls-Like",
-      "Boss Rush",
+      "Boss-Rush",
       "Dark",
       "Hardcore"
     ]
@@ -9660,7 +9651,7 @@
       "Action-Roguelike",
       "Platformer",
       "Arcade",
-      "Boss Rush",
+      "Boss-Rush",
       "BulletHell"
     ]
   },
@@ -9696,7 +9687,7 @@
     "tags": [
       "2D",
       "Retro",
-      "Pixel-Art",
+      "Pixel Art",
       "Atmospheric",
       "Difficult"
     ],
@@ -9727,7 +9718,7 @@
       "Souls-Like",
       "Dark",
       "Exploration",
-      "Boss Rush",
+      "Boss-Rush",
       "Surreal",
       "Atmospheric",
       "Abstract"
@@ -9841,7 +9832,7 @@
       "Platformer",
       "Exploration",
       "Action-Adventure",
-      "Boss Rush",
+      "Boss-Rush",
       "Nonlinear"
     ]
   },
@@ -9909,7 +9900,7 @@
       "Platformer",
       "Exploration",
       "Souls-Like",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -9930,7 +9921,7 @@
       "Action",
       "Shooter",
       "Platformer",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade",
       "Souls-Like"
     ]
@@ -9976,7 +9967,7 @@
       "Platformer",
       "Exploration",
       "Dark",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -9998,7 +9989,7 @@
       "Slasher",
       "Exploration",
       "Dark",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -10009,7 +10000,7 @@
     "genre": "Metroidvania",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Atmospheric",
       "Difficult",
       "Retro"
@@ -10040,7 +10031,7 @@
     "subgenres": [
       "BulletHell",
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Action-Roguelike",
       "Exploration"
     ]
@@ -10063,7 +10054,7 @@
       "Metroidvania",
       "Action-Adventure",
       "Exploration",
-      "Boss Rush",
+      "Boss-Rush",
       "Mini-Games"
     ]
   },
@@ -10109,7 +10100,7 @@
       "Platformer",
       "Action",
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -10133,7 +10124,7 @@
       "Platformer",
       "Slasher",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -10200,7 +10191,7 @@
     "subgenres": [
       "Platformer",
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Dark",
       "Exploration"
     ]
@@ -10223,7 +10214,7 @@
       "Slasher",
       "Stealth",
       "Platformer",
-      "Boss Rush",
+      "Boss-Rush",
       "Dark",
       "Linear"
     ]
@@ -10269,7 +10260,7 @@
       "Action",
       "Arcade",
       "Retro",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -10281,7 +10272,7 @@
     "tags": [
       "2D",
       "Retro",
-      "Pixel-Art",
+      "Pixel Art",
       "Fast-Paced",
       "Casual"
     ],
@@ -10312,7 +10303,7 @@
       "Metroidvania",
       "Roguelite",
       "Exploration",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade"
     ]
   },
@@ -10335,7 +10326,7 @@
       "Souls-Like",
       "Crafting",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -10355,7 +10346,7 @@
       "Platformer",
       "Exploration",
       "Action-Adventure",
-      "Boss Rush",
+      "Boss-Rush",
       "Nonlinear"
     ]
   },
@@ -10401,7 +10392,7 @@
       "Slasher",
       "Souls-Like",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -10422,7 +10413,7 @@
     "subgenres": [
       "BulletHell",
       "Platformer",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration",
       "Action-Adventure"
     ]
@@ -10446,7 +10437,7 @@
       "Souls-Like",
       "Dark",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -10468,7 +10459,7 @@
       "Action-Adventure",
       "Story-Driven",
       "Linear",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -10501,7 +10492,7 @@
     "genre": "Metroidvania",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Casual",
       "Top-Down",
       "Anime"
@@ -10534,7 +10525,7 @@
       "Slasher",
       "Steampunk",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -10555,7 +10546,7 @@
       "Action-Adventure",
       "Exploration",
       "Platformer Elements",
-      "Boss Rush",
+      "Boss-Rush",
       "Dark"
     ]
   },
@@ -10577,7 +10568,7 @@
       "Souls-Like",
       "Dark",
       "Exploration",
-      "Boss Rush",
+      "Boss-Rush",
       "Action-Adventure"
     ]
   },
@@ -10601,7 +10592,7 @@
       "Slasher",
       "Roguelite",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -10623,7 +10614,7 @@
       "Souls-Like",
       "Dark",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -10688,7 +10679,7 @@
       "BulletHell",
       "SHMUP",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -10730,7 +10721,7 @@
     "subgenres": [
       "Souls-Like",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration",
       "Action-Adventure"
     ]
@@ -10753,7 +10744,7 @@
       "Shooter",
       "BulletHell",
       "Arcade",
-      "Boss Rush",
+      "Boss-Rush",
       "Fast-Paced"
     ]
   },
@@ -10799,7 +10790,7 @@
       "Atmospheric",
       "Nonlinear",
       "Exploration",
-      "Boss Rush",
+      "Boss-Rush",
       "Platformer Elements"
     ]
   },
@@ -10834,7 +10825,7 @@
     "genre": "Platformer",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Atmospheric",
       "Retro",
       "Hand-Drawn"
@@ -11089,7 +11080,7 @@
       "Action",
       "Slasher",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Story-Driven"
     ]
   },
@@ -11207,7 +11198,7 @@
       "Shooter",
       "Arcade",
       "BulletHell",
-      "Boss Rush",
+      "Boss-Rush",
       "Fast-Paced"
     ]
   },
@@ -11316,7 +11307,7 @@
     "description": "Undead Horde — это стратегическая action-RPG с элементами тактического управления, где вы выступаете в роли некроманта, стремящегося вернуть себе утраченное королевство. Повествование здесь минималистично и подается через короткие диалоги и описания локаций, подчеркивая вашу роль завоевателя, а не героя. Основной геймплейный цикл вращается вокруг исследования открытого мира, где вы собираете ресурсы с павших врагов, чтобы пополнять и усиливать свою растущую армию нежити. Каждое сражение — это тактическая задача по управлению ордой, где нужно правильно позиционировать разные типы воскрешенных существ, от хлипких скелетов до могучих зомби. Ваша цель — методично захватывать новые территории, отстраивать свою цитадель и развивать магические умения, превращаясь из одинокого чернокнижника в повелителя настоящей неживой орды.",
     "subgenres": [
       "Management",
-      "TD (Tower Defense)",
+      "Tower Defense",
       "Sandbox",
       "Survival",
       "Horde Survival"
@@ -11866,7 +11857,7 @@
       "Souls-Like",
       "Dark",
       "Exploration",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -11966,7 +11957,7 @@
     "genre": "RPG",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Retro",
       "Anime",
       "Casual"
@@ -12161,7 +12152,7 @@
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1118200/header.jpg?t=1763123186",
     "steam_url": "https://store.steampowered.com/app/1118200",
     "coop": "CO-OP",
-    "genre": "Action",
+    "genre": "Sandbox",
     "tags": [
       "2D",
       "Top-Down",
@@ -12196,7 +12187,7 @@
       "Exploration",
       "Permadeath",
       "Co-op Focused",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -12352,7 +12343,7 @@
       "Arcade",
       "BulletHell",
       "Twin-Stick",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -12417,7 +12408,6 @@
     "subgenres": [
       "Shooter",
       "Arcade",
-      "Auto-Shooting",
       "BulletHell"
     ]
   },
@@ -12440,7 +12430,7 @@
       "Platformer",
       "Arcade",
       "BulletHell",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -12633,7 +12623,7 @@
     ],
     "description": "«No Heroes Here» — это динамичный кооперативный экшен с элементами защиты башни, где вы и ваши союзники становитесь последней надеждой королевства. Вместо прямого повествования история о вашем подвиге рождается прямо в гуще событий: каждая успешно отбитая волна монстров и каждый спасенный житель — это и есть сюжет, который вы пишете совместными действиями. Минута за минутой игроки погружены в напряженный цикл: нужно одновременно собирать разбросанные ресурсы, строить и чинить оборонительные турели, а затем лично вступать в бой, отбиваясь от полчищ врагов вручную. Ваша цель — выстоять любой ценой, скоординировав усилия и распределив роли, чтобы замок не пал под натиском. Ключевая механика заключается именно в этом безумном балансе между активным строительством, срочным ремонтом и яростным рукопашным боем, где победа зависит от слаженной командной работы, а не от индивидуального героизма.",
     "subgenres": [
-      "TD",
+      "Tower Defense",
       "Co-op Focused",
       "Arcade",
       "Horde Survival",
@@ -12645,7 +12635,7 @@
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/736260/header.jpg?t=1760102539",
     "steam_url": "https://store.steampowered.com/app/736260",
     "coop": "Single",
-    "genre": "Adventure",
+    "genre": "Puzzle",
     "tags": [
       "2D",
       "Retro",
@@ -13341,7 +13331,7 @@
     "tags": [
       "2D",
       "Retro",
-      "Pixel-Art",
+      "Pixel Art",
       "Sci-Fi"
     ],
     "description": "Out There Somewhere — это компактный, но плотный платформер-головоломка, где исследование замкнутых инопланетных миров подчинено одной ключевой механике. Всё вращается вокруг телепортирующей пушки: каждый выстрел одновременно является и оружием, и единственным способом перемещения, заставляя игрока постоянно переосмысливать пространство вокруг себя. Геймплейный цикл представляет собой непрерывный поток решения задач — вы находитесь в комнате, анализируете расположение платформ и стен, и с помощью точных выстрелов прокладываете себе путь дальше, открывая новые зоны. История здесь не рассказывается явно, а проступает через само окружение, молчаливые руины и постепенное освоение ваших необычных возможностей, мотивируя двигаться к центру этой загадочной вселенной. Прогресс ощущается не в сборе предметов, а в моменте озарения, когда сложная головоломка наконец поддается вашей логике и ловкости.",
@@ -13384,7 +13374,7 @@
     "genre": "Adventure",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Atmospheric",
       "Casual",
       "Retro"
@@ -13408,7 +13398,7 @@
       "2D",
       "Atmospheric",
       "Retro",
-      "Pixel-Art",
+      "Pixel Art",
       "Immersive"
     ],
     "description": "ANIMAL WELL — это метроидвания в пиксельной эстетике, где исследование запутанного подземного мира становится главной целью и наградой. Повествование здесь полностью немое и экологичное: история этого загадочного колодца и его обитателей раскрывается через визуальные подсказки, скрытые символы в окружении и атмосферные звуки, оставляя простор для собственных интерпретаций. Игровой цикл строится на неторопливом и методичном изучении взаимосвязанных локаций, где вы используете находки-предметы не для боя, а для решения многослойных пространственных головоломок и получения доступа к новым зонам. Ключевая мотивация — чистое любопытство и желание раскрыть все тайны этого живого, дышащего мира, каждая новая способность открывает не просто путь вперёд, а новые взгляды на уже пройденные места, поощряя дотошный осмотр каждого уголка.",
@@ -13482,7 +13472,7 @@
       "Shooter",
       "Co-op Focused",
       "Arcade",
-      "Boss Rush",
+      "Boss-Rush",
       "RPG"
     ]
   },
@@ -13570,7 +13560,7 @@
     "description": "Super Meat Boy — это культовая платформерная игра, построенная на идеальной физике и безупречном контроле, где каждая секунда требует хирургической точности. Повествование здесь минималистично и служит лишь отправной точкой для действия, а настоящая история разворачивается в твоих собственных попытках: каждая неудача — это мгновенный урок, а каждая победа — доказательство возросшего мастерства. Геймплейный цикл представляет собой стремительную череду попыток, где смерть мгновенна, а перезапуск происходит в долю секунды, заставляя игрока оттачивать каждый прыжок, скольжение по стенам и маневр до автоматизма. Цель — не просто добраться до финиша, а покорить уровень с идеальной скоростью и грацией, превращая сложнейшие трассы в танец из шипов и пил.",
     "subgenres": [
       "Arcade",
-      "Boss Rush",
+      "Boss-Rush",
       "Difficult",
       "Fast-Paced",
       "Linear"
@@ -13618,7 +13608,7 @@
       "Co-op Focused",
       "Arena-Fighter",
       "Puzzle",
-      "Boss Rush",
+      "Boss-Rush",
       "Strategy"
     ]
   },
@@ -13825,7 +13815,7 @@
       "Retro",
       "2D",
       "Linear",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -13927,7 +13917,7 @@
     "genre": "Metroidvania",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Difficult",
       "Atmospheric",
       "Retro"
@@ -13938,7 +13928,7 @@
       "Platformer",
       "Exploration",
       "Dark",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -14335,7 +14325,7 @@
     "subgenres": [
       "Action",
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Linear",
       "Fast-Paced"
     ]
@@ -14724,7 +14714,7 @@
       "Retro",
       "Fast-Paced",
       "Hardcore",
-      "Pixel-Art"
+      "Pixel Art"
     ],
     "description": "Hell is Other Demons — это динамичный аркадный шутер с пиксельной графикой, вдохновленный классикой жанра. Повествование здесь минималистично и подается через атмосферу и визуальный стиль, создавая ощущение бесконечной битвы в инфернальных глубинах. Геймплейный цикл представляет собой непрерывный танец смерти: игрок молниеносно перемещается по процедурно генерируемым аренам, уворачивается от завес вражеских снарядов и отвечает шквальным огнем, очищая волны все более изощренных демонов. Цель — выжить как можно дольше, набирая очки и совершенствуя свой арсенал между заходами, чтобы в следующем раунде продержаться еще чуть-чуть и подняться выше в глобальной таблице рекордов. Ключевой вызов заключается в идеальном контроле пространства и запоминании паттернов атак, превращая каждый пройденный уровень в личное достижение.",
     "subgenres": [
@@ -14752,7 +14742,7 @@
       "Shooter",
       "BulletHell",
       "Arcade",
-      "Boss Rush",
+      "Boss-Rush",
       "Fast-Paced"
     ]
   },
@@ -15622,7 +15612,7 @@
       "Rhythm",
       "Arcade",
       "No Narrative",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -15803,7 +15793,7 @@
       "Dungeon Crawler",
       "BulletHell",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -15907,7 +15897,7 @@
     ],
     "description": "World of Goo 2 — это головоломка-конструктор, где физика становится главным инструментом для творчества. Игрок управляет сообществом живых, любопытных шариков гоо, соединяя их в хрупкие, но функциональные сооружения: мосты через пропасти, башни к небу или шаткие механизмы. Каждый уровень — это инженерная загадка, решаемая через эксперимент: нужно не просто построить, но и почувствовать баланс, напряжение и упругость своей создающейся конструкции, постоянно оптимизируя расход «населения» гоо. Игра поощряет нестандартное мышление, где элегантное и минималистичное решение приносит большее удовлетворение, чем грубая сила. Мир вокруг оживает и реагирует на ваши постройки, а легкий, почти немой нарратив, передаваемый через среду и поведение самих шариков, превращает процесс из простого конструирования в трогательную историю сотрудничества и изобретательности.",
     "subgenres": [
-      "TD (Tower Defense)",
+      "Tower Defense",
       "Physics-Sim",
       "Puzzle",
       "Sandbox",
@@ -15955,7 +15945,7 @@
       "Rhythm",
       "Management",
       "Mission-Based",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -15995,7 +15985,7 @@
     ],
     "description": "Castle Craft — это стратегическая игра о строительстве и управлении собственным феодальным владением, где вы выступаете в роли лорда, восстанавливающего свои земли. Повествование здесь нелинейное и формируется через ваши решения: развитие замка, отношения с подданными и реакция на случайные события создают уникальную историю вашего правления. Геймплейный цикл вращается вокруг сбора ресурсов, найма и распределения жителей по профессиям, а также постепенного расширения и укрепления вашей цитадели от скромного форта до неприступной крепости. Ваша цель — не просто выжить, а создать процветающее, самодостаточное королевство, балансируя между экономическим ростом, обороной и благополучием вашего народа. Ключевыми механиками являются глубокое управление персонажами с их потребностями и навыками, а также тактическое планирование обороны от внешних угроз.",
     "subgenres": [
-      "TD",
+      "Tower Defense",
       "Management",
       "Sandbox",
       "Crafting",
@@ -16070,7 +16060,7 @@
       "BulletHell",
       "Arcade",
       "SHMUP",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -16200,7 +16190,7 @@
     ],
     "description": "Loop Hero — это уникальная смесь рогалика, карточной игры и автоматического симулятора, где вы выступаете в роли архитектора собственного апокалипсиса. Вы не управляете героем напрямую, а формируете его мир, расставляя на пути карты локаций, врагов и строений. Повествование здесь возникает из самого геймплейного цикла: каждая новая плитка, каждое сражение и каждое возвращение в лагерь с добычей постепенно приоткрывают тайны этого забытого мира, восстанавливая его историю через игровые механики. Ваша цель — выжить как можно дольше в каждом зацикленном путешествии, чтобы собрать ресурсы для улучшения лагеря, который, в свою очередь, открывает новые карты, классы героев и возможности. Ключевой интерес заключается в тонкой балансировке риска и награды: размещение слишком многих врагов может погубить героя, но именно они приносят ценнейшую добычу, заставляя вас постоянно оптимизировать смертельную петлю приключений.",
     "subgenres": [
-      "TD",
+      "Tower Defense",
       "Management",
       "Roguelite",
       "Resource Management",
@@ -16245,7 +16235,7 @@
     "description": "Illusion Carnival — это сюрреалистичный карнавал, где пули плетут гипнотические узоры, превращая экран в психоделический водоворот цвета и хаоса. Игрок вступает в непрерывный танец выживания, маневрируя сквозь смертоносные лабиринты снарядов и отвечая точными выстрелами, чтобы прорваться к эпическим схваткам с боссами, где каждый бой становится абстрактным ритуалом, передающим нарратив через визуальный символизм и ощущение аркадного транса. Странность игры проявляется в её визуальном стиле, напоминающем кошмарный карнавал с искажёнными формами и ломаной логикой, погружая в состояние тревожного восторга, где граница между игрой и психоделическим опытом стирается.",
     "subgenres": [
       "BulletHell",
-      "Boss Rush",
+      "Boss-Rush",
       "Surreal",
       "Atmospheric",
       "Abstract",
@@ -16557,7 +16547,7 @@
     "description": "The Nameless: Slay Dragon — это хардкорный экшен, целиком построенный вокруг дуэлей с титаническими боссами. Вместо традиционного повествования история мира и вашей роли в нем раскрывается через дизайн самих чудовищ и окружающих их арен, каждая деталь которых намекает на древние мифы и причины конфликта. Геймплейный цикл представляет собой напряженный танец смерти: вы изучаете паттерны атак дракона, уклоняетесь от сокрушительных ударов, находите узкие окна для контратак, используя мечи и магию. Каждая победа — это не просто прохождение, а личное мастерство, которое материализуется в виде нового снаряжения и боевых техник, мотивируя на новые, еще более сложные испытания.",
     "subgenres": [
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Souls-Like",
       "Dark"
     ]
@@ -16577,7 +16567,7 @@
     ],
     "description": "Minion Masters — это динамичная карточная стратегия в реальном времени, где игроки соревнуются на одной вертикальной арене. Нарративный элемент здесь минимален и служит лишь фоном для бесконечных дуэлей, а вся история вашего восхождения к славе пишется в каждом матче через выбор колоды и реакцию на действия противника. Основной цикл вращается вокруг постоянного накопления маны, которую вы тратите на призыв миньонов и применение заклинаний прямо в гущу сражения. Цель — перехитрить оппонента, захватывая ключевые точки и направляя свои отряды к его башне, чтобы разрушить её. Ключевая механика — это управление толпой и позиционирование, где каждая карта, разыгранная в нужный момент и в правильном месте, может переломить ход битвы, а адаптация к постоянно меняющейся ситуации на поле боя является главным залогом победы.",
     "subgenres": [
-      "TD",
+      "Tower Defense",
       "Auto-Battler",
       "Arcade",
       "Competitive",
@@ -16599,7 +16589,7 @@
     ],
     "description": "Ratropolis — это уникальный гибрид карточной стратегии и защиты башни в реальном времени, где вы строите и обороняете свой мышиный мегаполис. Повествование здесь минималистично и полностью процедурно: история вашего города рождается из комбинаций разыгранных карт, случайных событий и выбора лидера, формируя уникальную сагу о взлетах и падениях с каждым новым забегом. Основной геймплейный цикл — это напряженный баланс между молниеносным принятием решений: вы разыгрываете карты для возведения зданий, найма армии и активации способностей, одновременно управляя золотом и населением, чтобы сдержать неумолимые волны врагов. Цель — продержаться как можно дольше, а мотивацией служит прогресс: после каждого падения города вы возвращаетесь с перманентными улучшениями и новыми картами, чтобы в следующем забеге построить еще более грозную и эффективную крысиную крепость.",
     "subgenres": [
-      "TD",
+      "Tower Defense",
       "Colony-Sim",
       "Management",
       "Roguelite",
@@ -16735,7 +16725,7 @@
     "subgenres": [
       "Slasher",
       "Souls-Like",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration",
       "Dark"
     ]
@@ -16801,7 +16791,7 @@
     ],
     "description": "Jotun: Valhalla Edition — это эпичная приключенческая игра с ручной анимацией в стиле живописной скандинавской мифологии. Повествование здесь ведёт сама героиня: её голос за кадром, полный решимости и сожаления, озвучивает путешествие по воспоминаниям, а история её подвига раскрывается через величественные визуальные сцены и саму архитектуру девяти миров. Геймплейный цикл строится на исследовании обширных, завораживающих локаций в поисках магических рун, которые служат ключами к главному испытанию — дуэлям с исполинскими йотунами. Каждая такая битва становится уникальным спектаклем, где победа достигается не грубой силой, а через внимательное изучение цикличных паттернов атак гигантов, точное уклонение и выжидание момента для ответного удара. Цель проста и величава: доказать свою доблесть богам, преодолеть судьбу и заслужить место среди избранных в чертогах Вальхаллы.",
     "subgenres": [
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration",
       "Mythology",
       "Adventure"
@@ -16850,7 +16840,7 @@
       "Platformer",
       "Exploration",
       "Story-Driven",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -16868,7 +16858,7 @@
     ],
     "description": "Dome Keeper — это компактный гибрид шахтера и защитника башни, где каждый раунд разбит на напряженные циклы. Вы спускаетесь в темные недра планеты, чтобы добыть ценные ресурсы, а затем срочно возвращаетесь на поверхность, чтобы отбить волну инопланетных атак и отремонтировать свой купол. Повествование здесь минималистично и экологично: история древней цивилизации и вашей миссии раскрывается через находки в глубинах — артефакты и обломки, которые вы постепенно собираете воедино. Геймплейный цикл — это постоянный баланс между жадностью и безопасностью, где каждая секунда, проведенная в шахте, увеличивает риск наверху. Ваша цель — выжить как можно дольше, инвестируя добычу в перманентные улучшения оружия, снаряжения и купола, что с каждым новым забегом открывает доступ к более глубоким и опасным слоям, полным новых угроз и секретов.",
     "subgenres": [
-      "TD",
+      "Tower Defense",
       "Crafting",
       "Exploration",
       "Resource Management",
@@ -16912,7 +16902,7 @@
     "description": "Katana Dragon — это минималистичный экшен-файтинг, где игрок управляет драконом-самураем, вступая в череду напряженных дуэлей с могущественными боссами. Вся история и характер мира раскрываются не через слова, а через сам геймплей: стиль и философия каждого противника читаются в его анимации, боевых позах и уникальных атаках. Основной цикл игры — это изучение, анализ и преодоление: каждая битва превращается в танец клинков, где успех зависит от безупречного парирования, точного уклонения и своевременной контратаки. Игрок учится читать паттерны врагов, оттачивая свои рефлексы, чтобы в идеальном ритме парировать комбо и находить уязвимости. Цель — не спасти мир, а достичь чистоты мастерства, пройдя путь от ученика до истинного мастера меча, где каждая победа становится наградой за терпение и наблюдательность.",
     "subgenres": [
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade",
       "Fast-Paced"
     ]
@@ -17000,7 +16990,7 @@
       "Shooter",
       "Slasher",
       "Stealth",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration",
       "Crafting"
     ]
@@ -17152,7 +17142,7 @@
     "description": "Blood Rush — это динамичный шутер от первого лица, где выживание зависит от постоянного, стремительного движения и агрессивного стиля игры. Повествование здесь минималистично и абстрактно, оно проявляется через само игровое пространство и нарастающую интенсивность волн противников, создавая атмосферу чистого, неостановимого экшена. Основной цикл строится на непрерывном беге, прыжках и стрельбе по ордам врагов, где ключевую роль играют эффектные добивания, восполняющие здоровье и боеприпасы и поддерживающие безумный ритм боя. Ваша цель — продержаться как можно дольше, отточить свои рефлексы до совершенства и взобраться на вершины глобальных таблиц рекордов, преодолевая всё более хаотичные и сложные волны.",
     "subgenres": [
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade",
       "Fast-Paced",
       "No Narrative"
@@ -17177,7 +17167,7 @@
       "BulletHell",
       "Arcade",
       "Mission-Based",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -17219,7 +17209,7 @@
       "Slasher",
       "Souls-Like",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -17302,7 +17292,7 @@
     ],
     "description": "Kingdom: Classic — это минималистичная стратегия в пиксельном стиле, где вы управляете монархом, скачущим по краю своего зарождающегося королевства. История здесь не рассказывается, а ощущается: молчаливое повествование разворачивается через смену дня и ночи, через тихую экспансию ваших земель и постоянную угрозу из мрачного леса. Ваш геймплейный цикл — это медитативный ритм: днем вы путешествуете верхом, собирая разбросанные монеты, чтобы нанимать бездомных в подданных, строить стены и развивать инфраструктуру. С наступлением ночи этот мирный труд сменяется напряженной обороной, когда волны жутких существ пытаются прорваться к вашей короне. Ключевая механика — это не прямое управление, а мудрое распределение ресурсов и планирование обороны, где каждое потраченное золото приближает вас либо к процветанию, либо к гибели. Ваша цель — не завоевать, а сохранить и расширить свое хрупкое королевство в этом бесконечном цикле жизни и смерти.",
     "subgenres": [
-      "TD (Tower Defense)",
+      "Tower Defense",
       "Management",
       "Resource Management",
       "Survival",
@@ -17389,8 +17379,8 @@
     ],
     "description": "Bad North — это минималистичная стратегия в реальном времени с рогалик-элементами, где вы управляете обороной живописных островов от орд викингов. Повествование здесь абстрактно и безмолвно, история разворачивается в самой географии вашего путешествия от острова к острову, а драма рождается из потерь ваших отрядов. Геймплейный цикл представляет собой напряженную волновую оборону: вы расставляете небольшие группы лучников, копейщиков и мечников на ограниченном пространстве, наблюдая за приближением вражеских лодок, и в реальном времени реагируете на их атаки, перебрасывая войска на угрожаемые участки. Ваша цель — выжить и довести свою армию до конца кампании, ведь каждый павший солдат уходит навсегда, что превращает каждое тактическое решение в высокоставную игру на выживание.",
     "subgenres": [
-      "TD (Tower Defense)",
-      "RTS (Real-Time)",
+      "Tower Defense",
+      "RTS",
       "Roguelite",
       "Mission-Based",
       "Survival"
@@ -17426,14 +17416,14 @@
     "genre": "Strategy",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Atmospheric",
       "Casual",
       "Retro"
     ],
     "description": "Kingdom: New Lands — это минималистичная стратегия на выживание с пиксельной графикой, где вы управляете безмолвным монархом, исследующим таинственные острова. Повествование здесь полностью немое и экологичное: история забытого королевства и его угрозы раскрывается через руины, встреченных странников и цикличные набеги жутких «жадных» существ, чьё появление каждый вечер становится суровым испытанием. Ваш геймплейный цикл — это размеренное управление экономикой в светлое время суток: вы собираете золотые монеты, нанимаете бездомных в крестьян и лучников, расширяете и укрепляете стены своего лагеря. С наступлением ночи этот уютный ход вещей сменяется напряжённой обороной от волн тварей, где каждая потраченная монета и каждый потерянный подданный имеют вес. Конечная цель — накопить достаточно ресурсов, чтобы починить и снарядить корабль, который унесёт вас к следующему, ещё более опасному острову в этом бесконечном путешествии за восстановлением своего королевства.",
     "subgenres": [
-      "TD (Tower Defense)",
+      "Tower Defense",
       "Management",
       "Survival",
       "Resource Management",
@@ -17636,7 +17626,7 @@
       "SHMUP",
       "BulletHell",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -17657,7 +17647,7 @@
       "Shooter",
       "BulletHell",
       "Arcade",
-      "Boss Rush",
+      "Boss-Rush",
       "Fast-Paced"
     ]
   },
@@ -17814,7 +17804,7 @@
     ],
     "description": "Towertale — это динамичный гибрид tower defense и экшена, где вы не только строите оборонительные укрепления, но и лично вступаете в бой. Вместо пассивного наблюдения вы активно исследуете карту, собирая ресурсы для возведения и улучшения башен, а затем сражаетесь плечом к плечу со своими же творениями против наступающих волн противников. Этот цикл строительства, добычи и прямого участия в сражениях создает напряженный и вовлекающий геймплей, где успех зависит как от стратегического планирования, так и от ваших рефлексов. Игра поддерживает как одиночное прохождение, так и совместную игру на одном экране, превращая защиту базы в веселый и хаотичный кооперативный вызов.",
     "subgenres": [
-      "TD",
+      "Tower Defense",
       "Management",
       "Resource Management",
       "Arcade"
@@ -17930,7 +17920,7 @@
       "Shooter",
       "BulletHell",
       "Arcade",
-      "Boss Rush",
+      "Boss-Rush",
       "Fast-Paced"
     ]
   },
@@ -18088,7 +18078,7 @@
       "Slasher",
       "Souls-Like",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Exploration"
     ]
   },
@@ -18154,7 +18144,7 @@
     "description": "Devil May Cry 5 — это эталонный слэшер, доводящий до совершенства идею стильного экшена, где главной валютой является не победа, а зрелищность. Повествование здесь подается через стремительные кинематографичные катсцены и диалоги, полные фирменного пафоса, раскрывающие характеры трех протагонистов через их отношение к бою. Геймплейный цикл вращается вокруг прохождения линейных, но насыщенных арен миссий, где игрок попеременно берет под контроль разных героев, каждый со своим уникальным арсеналом и философией сражения. Цель — не просто уничтожить орды демонов и эпических боссов, а делать это с максимальным разнообразием и минимальными потерями, чтобы система оценок Style Rank вознаградила высшим баллом. Ключевая механика — это бесконечная комбинаторика атак, уклонений и специальных приемов, поощряющая эксперименты для создания нескончаемых и эффектных комбо.",
     "subgenres": [
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade",
       "Linear Narrative",
       "Story-Driven"
@@ -18179,7 +18169,7 @@
       "RPG",
       "Story-Driven",
       "Linear Narrative",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -18200,7 +18190,7 @@
       "Slasher",
       "Souls-Like",
       "Action-Adventure",
-      "Boss Rush",
+      "Boss-Rush",
       "Linear Narrative"
     ]
   },
@@ -18222,7 +18212,7 @@
       "Shooter",
       "Slasher",
       "Platformer",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade"
     ]
   },
@@ -18537,7 +18527,7 @@
     "subgenres": [
       "Rhythm",
       "BulletHell",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade"
     ]
   },
@@ -18944,7 +18934,7 @@
       "Retro",
       "Atmospheric",
       "Dark",
-      "Pixel-Art"
+      "Pixel Art"
     ],
     "description": "В «The Count Lucanor» вы блуждаете по замку, где геймплей сводится к методичному поиску предметов и решению загадок, требующих внимания к деталям, а опасности обходятся скрытностью, а не конфронтацией. Атмосфера пронизана тревогой благодаря пиксель-арту, который балансирует между сказочной эстетикой и мрачными тенями, создавая ощущение сюрреалистичной сказки, где каждый уголок скрывает необъяснимые тайны. Игра становится странной из-за философского подтекста о цене любопытства, где выборы необратимо ведут к разным концовкам, подчеркивая хрупкость реальности в этом психологическом кошмаре.",
     "subgenres": [
@@ -19151,7 +19141,7 @@
     "genre": "Adventure",
     "tags": [
       "2D",
-      "Pixel-Art",
+      "Pixel Art",
       "Atmospheric",
       "Retro",
       "Dark"
@@ -19253,7 +19243,7 @@
       "Boomer-Shooter",
       "BulletHell",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -19343,7 +19333,7 @@
     "subgenres": [
       "Slasher",
       "Souls-Like",
-      "Boss Rush",
+      "Boss-Rush",
       "Dark",
       "Hardcore"
     ]
@@ -19437,7 +19427,7 @@
       "BulletHell",
       "SHMUP",
       "Arcade",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -19526,7 +19516,7 @@
       "Arcade",
       "Horror",
       "Horde Survival",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -19591,7 +19581,7 @@
       "Atmospheric",
       "Psychological Horror",
       "Nonlinear",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -19609,7 +19599,7 @@
     ],
     "description": "Orcs Must Die! 3 — это динамичный гибрид Tower Defense и экшена от третьего лица, где вы становитесь последним рубежом обороны против полчищ глупых, но опасных орков. Повествование здесь минималистично и подается через короткие забавные диалоги и комичные внутриигровые события, которые лишь задают легкий тон очередному хаотичному сражению. Основной геймплейный цикл представляет собой напряженный танец между тактическим планированием и безостановочным действием: вы исследуете карту, расставляя хитроумные ловушки от потолочных гильотин до магических рун, а затем лично вступаете в бой, чтобы поддержать свою оборону с помощью мощного арсенала оружия и способностей. Цель — не просто пережить волну за волной, а сделать это с максимальным стилем и эффективностью, комбинируя ловушки для создания смертоносных цепочек и оптимизируя каждую оборонительную линию, чтобы получить высшую оценку и открыть новые, еще более изощренные инструменты для истребления зелёной угрозы.",
     "subgenres": [
-      "TD (Tower Defense)",
+      "Tower Defense",
       "Action",
       "Co-op Focused",
       "Horde Survival",
@@ -19653,7 +19643,7 @@
     ],
     "description": "Dungeon Defenders — это динамичный гибрид башенной защиты и экшен-RPG, где игроки выступают в роли одновременно стратега и героя. Повествование здесь минималистично и служит лишь фоном для бесконечных волн врагов, а вся история вашего отряда пишется через коллекционирование легендарных предметов и бесчисленные попытки защитить хрустальный кристалл. Основной геймплейный цикл представляет собой напряженный танец между двумя фазами: в перерывах между атаками вы расставляете и улучшаете оборонительные сооружения, а с началом волны переключаетесь на непосредственное управление героем, чтобы лично сражаться с ордами монстров. Цель проста — выстоять любой ценой, а мотивацией служит бесконечный прогресс: прокачка уникальных персонажей, поиск всё более мощного лута и оптимизация вашей оборонительной стратегии для следующих, ещё более сложных вылазок в подземелья.",
     "subgenres": [
-      "TD",
+      "Tower Defense",
       "Action",
       "Co-op Focused",
       "RPG",
@@ -19696,7 +19686,7 @@
     ],
     "description": "Emberward — это тактическая башенная оборона, где каждая миссия превращается в головоломку на выживание. История мира и конфликта раскрывается не через диалоги, а через сам дизайн уровней и постепенное усложнение угроз, заставляя игрока анализировать и адаптироваться. Геймплейный цикл представляет собой напряженный танец между планированием и реакцией: вы расставляете и улучшаете оборонительные башни, тщательно управляя ограниченными ресурсами, чтобы сдержать натиск всё более изощренных волн противников. Ваша цель — не просто пережить атаку, а найти оптимальное, почти элегантное решение для каждой оборонительной задачи, превращая хаос битвы в отлаженный механизм защиты. Ключевой интерес здесь заключается в решении сложных сценариев, где каждая новая миссия бросает вызов вашей способности к стратегическому мышлению и эффективному распределению сил.",
     "subgenres": [
-      "TD",
+      "Tower Defense",
       "Management",
       "Resource Management",
       "Mission-Based",
@@ -19817,7 +19807,7 @@
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/518790/a444f68c73ce903da950ab3351cffe6710cee6d7/header_alt_assets_24.jpg?t=1765292276",
     "steam_url": "https://store.steampowered.com/app/518790",
     "coop": "CO-OP",
-    "genre": "Adventure",
+    "genre": "Simulation",
     "tags": [
       "First-Person",
       "3D",
@@ -19872,7 +19862,6 @@
     "subgenres": [
       "Action-Roguelike",
       "BulletHell",
-      "Auto-Shooting",
       "Horde Survival",
       "Arcade"
     ]
@@ -19894,7 +19883,7 @@
     "subgenres": [
       "Shooter",
       "BulletHell",
-      "Boss Rush",
+      "Boss-Rush",
       "Arcade",
       "Story-Driven"
     ]
@@ -19942,7 +19931,7 @@
       "Customization",
       "Souls-Like",
       "Fast-Paced",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -20144,7 +20133,7 @@
       "Boomer-Shooter",
       "Arcade",
       "Horde Survival",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -20162,7 +20151,7 @@
     ],
     "description": "Deflector — это динамичный аркадный шутер с уникальной механикой, где ваш корабль полностью безоружен и полагается лишь на собственный щит. Вся суть геймплея завязана на непрерывном движении и точном позиционировании: вы уворачиваетесь от плотных заградительных очередей, чтобы в нужный момент подставить щит и отправить вражеские снаряды обратно в отправителей. Этот цикл уклонения и отражения создаёт напряжённый, почти танцевальный ритм, где каждая волна противников превращается в головоломку на время и реакцию. Ваша цель — выжить в этом хаотичном космосе, используя атаки врагов как единственное оружие, чтобы пробиться к эпическим битвам с боссами, требующим идеального владения этой зеркальной механикой.",
     "subgenres": [
-      "Boss Rush",
+      "Boss-Rush",
       "BulletHell",
       "Arcade",
       "Reverse-BulletHell"
@@ -20187,7 +20176,7 @@
       "BulletHell",
       "Arcade",
       "Platformer",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
@@ -20322,7 +20311,7 @@
     "subgenres": [
       "Slasher",
       "Souls-Like",
-      "Boss Rush",
+      "Boss-Rush",
       "Dark",
       "Exploration"
     ]
@@ -20344,7 +20333,7 @@
     "subgenres": [
       "Shooter",
       "Arena-Fighter",
-      "Boss Rush",
+      "Boss-Rush",
       "Competitive",
       "Arcade"
     ]
@@ -20368,7 +20357,7 @@
       "Roguelite",
       "DeckBuilder",
       "Arcade",
-      "Boss Rush",
+      "Boss-Rush",
       "Fast-Paced"
     ]
   },
@@ -20412,7 +20401,7 @@
       "Slasher",
       "Souls-Like",
       "Dark",
-      "Boss Rush",
+      "Boss-Rush",
       "Linear"
     ]
   },
@@ -20454,8 +20443,8 @@
     "description": "Cuphead — это кооперативный run’n’gun, стилизованный под классическую рисованную анимацию 1930-х годов. История о двух братьях, заключивших сделку с дьяволом, подается не через диалоги, а через визуальный язык самого мультфильма: каждый босс, от поющего цветка до азартного карточного короля, является живой, одушевленной историей со своим характером и сценарной хореографией. Игровой цикл представляет собой череду напряженных дуэлей с этими уникальными противниками, где успех зависит от безупречного запоминания постоянно меняющихся паттернов атак, точных прыжков и меткой стрельбы.\n\nЦель проста, но безжалостна — пройти через этот красочный ад, чтобы расплатиться с долгом. Ключевая механика — это управление двумя братьями, которое в кооперативе превращает игру в слаженный танец уклонений и атак, где синхронность действий становится залогом победы. Очарование ручной анимации, джазовый саундтрек и безжалостный вызов сливаются воедино, создавая опыт, который чувствуется как участие в собственном винтажном мультфильме, где каждый кадр может стать последним.",
     "subgenres": [
       "Shooter",
-      "Boss Rush",
-      "Run and Gun",
+      "Boss-Rush",
+      "Run-and-Gun",
       "Arcade",
       "BulletHell"
     ]
@@ -20523,7 +20512,7 @@
     "description": "В Notch - The Innocent LunA: Eclipsed SinnerS геймплей сводится к медитативному уклонению от пуль и точному ответному огню, где каждый выстрел и движение становятся частью ритуального танца с хаосом. Атмосфера пронизана сюрреализмом: абстрактные визуалы, искажённые формы боссов и минималистичное повествование, передаваемое через узоры снарядов, создают ощущение погружения в безумный сон. Игра ломает ожидания, превращая каждую схватку в философское противостояние с внутренними демонами, где пульверизаторные волны служат метафорой психологического ужаса.",
     "subgenres": [
       "Shooter",
-      "Boss Rush",
+      "Boss-Rush",
       "BulletHell",
       "Psychological Horror",
       "Surreal",
@@ -21125,7 +21114,7 @@
     "description": "Monster Hunter: World — это масштабная кооперативная Action-RPG, где вы становитесь частью исследовательской экспедиции в неизведанные земли. Повествование здесь нелинейное и экологическое: история континента и его тайн раскрывается не через сюжетные повороты, а через само изучение мира — вы читаете следы, наблюдаете за поведением монстров и взаимодействием видов в сложной пищевой цепи. Основной геймплейный цикл представляет собой ритуал подготовки, выслеживания и эпической схватки с титаническими существами, где каждая охота — это уникальный бой на выживание, требующий изучения атак и уязвимостей противника. Мотивация проста и невероятно увлекательна: вы добываете трофеи и ресурсы, чтобы ковать из костей и шкур поверженных чудовищ всё более мощное оружие и доспехи, постепенно превращаясь из добычи в вершину этой живой экосистемы. Ключевой особенностью является тактический, весомый бой, где каждое движение осмысленно, а кооперативная охота с друзьями превращается в слаженный танец клинков и снарядов.",
     "subgenres": [
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Co-op Focused",
       "Crafting",
       "Resource Management",
@@ -21148,7 +21137,7 @@
     "description": "MONSTER HUNTER RISE — это культовая кооперативная Action-RPG, где вы становитесь охотником в мире, полном титанических существ. Повествование здесь минималистично и служит лишь фоном: история мира и его угроз раскрывается через дизайн локаций, записи исследователей и самих монстров, чье поведение и экология рассказывают больше любых диалогов. Основной геймплейный цикл — это ритуал подготовки, выслеживания и эпического противостояния. Вы изучаете повадки гигантского зверя, выбирая один из 14 уникальных типов оружия, каждый из которых представляет собой отдельный боевой стиль, а затем вступаете в многофазный танец-сражение, где важны позиционирование, время и слаженная работа команды. Мотивация проста и невероятно затягивает: после победы вы используете добытые трофеи для создания нового, более мощного снаряжения, чтобы бросить вызов еще более грозному чудовищу, в бесконечном и невероятно удовлетворяющем цикле самосовершенствования и охоты.",
     "subgenres": [
       "Slasher",
-      "Boss Rush",
+      "Boss-Rush",
       "Co-op Focused",
       "Crafting",
       "Mission-Based",
@@ -21239,7 +21228,7 @@
       "Slasher",
       "Crafting",
       "Co-op Focused",
-      "Boss Rush",
+      "Boss-Rush",
       "Horde Survival",
       "Open-World"
     ]
@@ -21532,7 +21521,7 @@
       "Story-Driven",
       "Action-Adventure",
       "Slasher",
-      "Boss Rush"
+      "Boss-Rush"
     ]
   },
   {
