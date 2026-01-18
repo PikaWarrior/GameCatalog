@@ -14039,7 +14039,8 @@
       "Dating-Sim",
       "Linear Narrative",
       "Mystery",
-      "Story-Driven"
+      "Story-Driven",
+      "No Gameplay"
     ]
   },
   {
@@ -14084,7 +14085,8 @@
       "Atmospheric",
       "Meta",
       "Nonlinear",
-      "Choices Matter"
+      "Choices Matter",
+      "No Gameplay"
     ]
   },
   {
@@ -14104,7 +14106,8 @@
       "Dating-Sim",
       "Rhythm",
       "Story-Driven",
-      "Linear Narrative"
+      "Linear Narrative",
+      "No Gameplay"
     ]
   },
   {
@@ -14574,7 +14577,8 @@
       "Dating-Sim",
       "Eroge",
       "Narrative",
-      "Story-Driven"
+      "Story-Driven",
+      "No Gameplay"
     ]
   },
   {
@@ -14643,7 +14647,8 @@
       "Meta",
       "Atmospheric",
       "Mystery",
-      "Story-Driven"
+      "Story-Driven",
+      "No Gameplay"
     ]
   },
   {
@@ -14686,7 +14691,8 @@
       "Choose Your Own Adventure",
       "Dating-Sim",
       "Interactive Fiction",
-      "Narrative"
+      "Narrative",
+      "No Gameplay"
     ]
   },
   {
@@ -19387,7 +19393,8 @@
       "Surreal",
       "Atmospheric",
       "Meta",
-      "Branching Narrative"
+      "Branching Narrative",
+      "No Gameplay"
     ]
   },
   {
