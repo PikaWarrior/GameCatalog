@@ -89,9 +89,14 @@ function App() {
     return Array.from(genres).sort();
   }, [games]);
 
-  // Вернули пункт обратно
+  // Обновленный список режимов
   const allCoopModes = [
-    'All', 'Single', 'Multiplayer', 'Split Screen', 'Co-op & Multiplayer'
+    'All', 
+    'Single', 
+    'Multiplayer', 
+    'Split Screen', 
+    'Co-op & Multiplayer',
+    'Co-op & Multiplayer & Split Screen' // Новая опция
   ];
 
   const filteredGames = useMemo(() => {
@@ -144,10 +149,18 @@ function App() {
              const hasCoop = gameModes.includes('co-op');
              const hasMulti = gameModes.includes('multiplayer');
              
-             // ИСПРАВЛЕНИЕ: Убрали проверку split screen.
-             // Теперь этот фильтр показывает только явный Co-op или Multiplayer
              if (!hasCoop && !hasMulti) return false;
           }
+          // --- НОВАЯ ЛОГИКА ---
+          else if (targetMode === 'co-op & multiplayer & split screen') {
+             const hasCoop = gameModes.includes('co-op');
+             const hasMulti = gameModes.includes('multiplayer');
+             const hasSplit = gameModes.includes('split screen') || gameModes.includes('splitscreen');
+             
+             // Логика OR: показываем, если есть ХОТЯ БЫ ОДИН из перечисленных режимов
+             if (!hasCoop && !hasMulti && !hasSplit) return false;
+          }
+          // --------------------
           else {
              if (!gameModes.includes(targetMode)) return false;
           }
