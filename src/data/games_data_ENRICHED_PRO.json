@@ -20,7 +20,8 @@
       "Meta",
       "Nonlinear Narrative",
       "Surreal",
-      "Atmospheric"
+      "Atmospheric",
+      "No Gameplay"
     ]
   },
   {
@@ -66,7 +67,8 @@
       "Atmospheric",
       "Meta",
       "Nonlinear",
-      "Text-Based Narrative"
+      "Text-Based Narrative",
+      "No Gameplay"
     ]
   },
   {
@@ -7720,7 +7722,8 @@
       "Atmospheric",
       "Nonlinear",
       "Choices Matter",
-      "Investigation"
+      "Investigation",
+      "No Gameplay"
     ]
   },
   {
@@ -14371,7 +14374,8 @@
       "Dating-Sim",
       "Mystery",
       "Nonlinear Narrative",
-      "Story-Driven"
+      "Story-Driven",
+      "No Gameplay"
     ]
   },
   {
@@ -15317,7 +15321,6 @@
     "subgenres": [
       "Story-Driven",
       "Interactive Fiction",
-      "No Gameplay",
       "Walking-Sim",
       "Linear Narrative"
     ]
@@ -20065,7 +20068,8 @@
       "Mystery",
       "Nonlinear Narrative",
       "Psychological Horror",
-      "Story-Driven"
+      "Story-Driven",
+      "No Gameplay"
     ]
   },
   {
@@ -20088,7 +20092,8 @@
       "Choose Your Own Adventure",
       "Dark",
       "Dating-Sim",
-      "Psychological Horror"
+      "Psychological Horror",
+      "No Gameplay"
     ]
   },
   {
