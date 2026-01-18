@@ -19,15 +19,29 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
     return '👤';
   };
 
-  // Логика выбора цвета для жанра
+  // --- ОБНОВЛЕННАЯ ЛОГИКА ЦВЕТОВ ---
   const getGenreColor = (genre: string) => {
     const g = genre.toLowerCase();
-    if (g.includes('action') || g.includes('shooter') || g.includes('fighting') || g.includes('hack')) return 'var(--genre-red)';
-    if (g.includes('adventure') || g.includes('rpg') || g.includes('role')) return 'var(--genre-green)';
-    if (g.includes('strategy') || g.includes('simulation') || g.includes('management') || g.includes('city')) return 'var(--genre-blue)';
+    
+    // Action / Fighting / Shooter -> Красный
+    if (g.includes('action') || g.includes('shooter') || g.includes('fighting') || g.includes('hack') || g.includes('beat')) return 'var(--genre-red)';
+    
+    // Adventure / RPG / Metroidvania -> Зеленый
+    if (g.includes('adventure') || g.includes('rpg') || g.includes('role') || g.includes('metroidvania')) return 'var(--genre-green)';
+    
+    // Strategy / Sim / Sandbox -> Синий
+    if (g.includes('strategy') || g.includes('simulation') || g.includes('management') || g.includes('city') || g.includes('sandbox')) return 'var(--genre-blue)';
+    
+    // Horror / Survival -> Фиолетовый
     if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) return 'var(--genre-purple)';
+    
+    // Puzzle / Platformer -> Желтый
     if (g.includes('puzzle') || g.includes('platformer') || g.includes('arcade')) return 'var(--genre-yellow)';
+    
+    // Roguelike / Roguelite -> Оранжевый
     if (g.includes('rogue') || g.includes('lite') || g.includes('dungeon')) return 'var(--genre-orange)';
+    
+    // Fallback
     return 'var(--genre-default)';
   };
 
@@ -85,7 +99,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             {game.name}
           </h3>
           
-          {/* Статичное описание (как было в CSS) */}
+          {/* Статичное описание */}
           <div className="card-description-static">
             {game.description || "Описание отсутствует..."}
           </div>
