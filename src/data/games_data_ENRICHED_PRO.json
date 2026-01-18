@@ -9844,7 +9844,7 @@
     "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1441670/header.jpg?t=1619293899",
     "steam_url": "https://store.steampowered.com/app/1441670",
     "coop": "Single",
-    "genre": "Visual Novel",
+    "genre": "Metroidvania",
     "tags": [
       "Anime",
       "2D",
@@ -9854,11 +9854,11 @@
     ],
     "description": "«SJ-19 Learns To Love!» — это визуальная новелла, где повествование строится на ветвящихся диалогах и выборе реплик, формирующих уникальную динамику отношений с другими персонажами. Игрок погружается в историю через последовательность визуальных сцен и текстовых описаний, где каждое принятое решение тонко меняет характер взаимодействий и эмоциональную окраску событий. Основной геймплейный цикл заключается в чтении, выборе ответов и наблюдении за последствиями, что мотивирует к повторным прохождениям для раскрытия всех возможных концовок и оттенков романтических линий. Ключевая механика — это система отношений, где неочевидные выборы ведут к разным уровням близости и финалам, делая каждый диалог значимым шагом в построении истории.",
     "subgenres": [
-      "Dating-Sim",
+      "Platformer",
       "Story-Driven",
       "Choices Matter",
       "Narrative",
-      "Interactive Fiction"
+      "Action-Adventure"
     ]
   },
   {
@@ -14290,7 +14290,8 @@
       "Atmospheric",
       "Meta",
       "Nonlinear",
-      "Interactive Fiction"
+      "Interactive Fiction",
+      "No Gameplay"
     ]
   },
   {
@@ -15055,7 +15056,8 @@
       "Surreal",
       "Atmospheric",
       "Nonlinear",
-      "Interactive Fiction"
+      "Interactive Fiction",
+      "No Gameplay"
     ]
   },
   {
