@@ -1,195 +1,143 @@
+/* src/styles/TagFilter.css */
+
 .tag-filter-container {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* Уменьшили отступ между секциями */
-  margin-top: 20px;
+  gap: 24px;
 }
 
-/* Блок секции (Поджанры / Теги) */
-.filter-section {
-  background: rgba(30, 41, 59, 0.5); /* Slate-800 c прозрачностью */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-group-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-left: 4px;
+}
+
+/* Кастомный селект */
+.custom-select {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+  
+  appearance: none; 
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.custom-select:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background-color: #1a2436;
+}
+
+.custom-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+
+/* Секции аккордеона */
+.filter-section {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: #0f172a;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: border-color 0.2s;
 }
 
-.filter-section:hover {
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Заголовок секции (Кнопка аккордеона) */
 .filter-header {
   width: 100%;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 10px 12px;
+  align-items: center;
+  padding: 12px;
   background: transparent;
   border: none;
+  color: #cbd5e1;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
-  color: #e2e8f0; /* Slate-200 */
-  font-family: inherit;
   transition: background 0.2s;
 }
 
 .filter-header:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
 }
 
-.filter-title-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.section-icon {
-  color: #94a3b8; /* Slate-400 */
-}
-
-.count-badge {
-  font-size: 0.7rem;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 2px 6px;
-  border-radius: 12px;
-  color: #94a3b8;
-  font-weight: normal;
-}
-
-/* Контент секции (раскрывающийся) */
 .filter-content {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(15, 23, 42, 0.3); /* Slate-900 transparent */
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0;
+  background: rgba(0, 0, 0, 0.1);
 }
 
-/* Поле поиска */
 .search-input-wrapper {
-  padding: 8px 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   gap: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.search-icon {
-  color: #64748b;
 }
 
 .tag-search-input {
-  flex: 1;
+  width: 100%;
   background: transparent;
   border: none;
-  color: #e2e8f0;
+  color: #fff;
   font-size: 0.85rem;
   outline: none;
-  font-family: inherit;
 }
+.tag-search-input::placeholder { color: #64748b; }
 
-.tag-search-input::placeholder {
-  color: #64748b;
-}
-
-.clear-search {
-  background: transparent;
-  border: none;
-  color: #64748b;
-  cursor: pointer;
-  font-size: 1.2rem;
-  line-height: 1;
-  padding: 0 4px;
-}
-
-.clear-search:hover {
-  color: #e2e8f0;
-}
-
-/* Облако тегов */
 .tags-cloud {
   padding: 10px;
-  max-height: 240px;
-  overflow-y: auto;
-  
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  align-content: flex-start;
-  
-  /* Кастомный скроллбар */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.1) transparent;
+  max-height: 240px;
+  overflow-y: auto;
 }
 
-.tags-cloud::-webkit-scrollbar {
-  width: 4px;
-}
-.tags-cloud::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.1);
-  border-radius: 4px;
-}
-
-/* Стиль одной кнопки-тега */
 .filter-tag {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-  color: #cbd5e1; /* Slate-300 */
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: all 0.15s ease;
-  font-family: inherit;
-  line-height: 1.2;
+  transition: all 0.2s;
+  text-align: left;
 }
 
 .filter-tag:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: white;
+  color: #fff;
 }
 
-/* --- СОСТОЯНИЕ: АКТИВЕН (ВКЛЮЧЕН) --- */
 .filter-tag.active {
-  background: rgba(59, 130, 246, 0.2); /* Blue-500 transparent */
-  border-color: #3b82f6;
-  color: #93c5fd; /* Blue-300 */
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.15);
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
-.filter-tag.active:hover {
-  background: rgba(59, 130, 246, 0.3);
-}
-
-/* --- СОСТОЯНИЕ: ИСКЛЮЧЕН (НОВОЕ) --- */
 .filter-tag.excluded {
-  background: rgba(239, 68, 68, 0.15); /* Red-500 transparent */
-  border-color: #ef4444; /* Red-500 */
-  color: #fca5a5; /* Red-300 */
-  text-decoration: line-through; /* Зачеркивание */
-  opacity: 0.9;
-}
-
-.filter-tag.excluded:hover {
-  background: rgba(239, 68, 68, 0.25);
-  opacity: 1;
-}
-
-/* Иконки внутри тега */
-.tag-icon {
-  display: block;
-}
-.tag-icon.check { color: #60a5fa; }
-.tag-icon.ban { color: #f87171; }
-
-.no-tags {
-  width: 100%;
-  text-align: center;
-  padding: 10px;
-  color: #64748b;
-  font-size: 0.8rem;
-  font-style: italic;
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.3);
+  text-decoration: line-through;
+  opacity: 0.8;
 }
