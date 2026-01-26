@@ -208,7 +208,6 @@ function App() {
     });
   }, [setFilterState]);
 
-  // Хендлеры для новых селектов
   const handleCoopChange = useCallback((coop: string) => setFilterState(p => ({ ...p, selectedCoop: coop })), [setFilterState]);
   const handleSortChange = useCallback((sort: any) => setFilterState(p => ({ ...p, sortBy: sort })), [setFilterState]);
 
@@ -242,7 +241,6 @@ function App() {
               excludedTags={filterState.excludedTags}
               onTagToggle={handleTagToggle}
               
-              // Прокидываем новые пропсы
               selectedCoop={filterState.selectedCoop}
               onCoopChange={handleCoopChange}
               sortBy={filterState.sortBy}
@@ -254,4 +252,16 @@ function App() {
             <Suspense fallback={<LoadingSkeleton count={12} />}>
               <GameGrid 
                 games={filteredGames} 
-                onOpenModal={handleOpenModal
+                onOpenModal={handleOpenModal} 
+              />
+            </Suspense>
+          </section>
+        </main>
+
+        <GameModal game={selectedGame} onClose={handleCloseModal} />
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+export default App;
