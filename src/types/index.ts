@@ -1,6 +1,5 @@
 // src/types/index.ts
 
-// Обновленный тип: id необязателен (так как в JSON его нет), добавлен url
 export interface SimilarGameRef {
   id?: string | number;
   name: string;
@@ -8,34 +7,33 @@ export interface SimilarGameRef {
   url?: string;
 }
 
-// Интерфейс для ВХОДЯЩЕГО (сырого) JSON
+// ВХОДЯЩИЙ JSON: Разрешаем any[], чтобы приложение не падало от объектов в массивах
 export interface RawGame {
   id?: string | number;
   steamId?: string | number;
   name: string;
-  // Варианты ключей для изображений
   header_image?: string;
   image?: string;
-  // Варианты ключей для ссылок
   steam_url?: string;
   url?: string;
   link?: string;
-  // Описания
   description?: string;
   short_description?: string;
   about_the_game?: string;
-  // Списки
-  tags?: string[];
-  genres?: string[];
-  categories?: string[];
-  // Новые данные
-  similar_games?: SimilarGameRef[] | { name: string; url: string; image: string }[]; // Поддержка структуры JSON
-  similar_games_summary?: string[]; // Поле из JSON, которое вызывало ошибку
+  
+  // Разрешаем любой мусор на входе, чистить будем в sanitize.ts
+  tags?: any[]; 
+  genres?: any[];
+  categories?: any[];
+  
+  similar_games?: any[];
+  similar_games_summary?: string[];
   review_score?: number | string;
   rating?: number | string;
+  coop?: string; // На случай если в JSON уже есть строка
 }
 
-// ОСНОВНОЙ интерфейс (внутренний)
+// ВНУТРЕННИЙ интерфейс: Здесь всё строго типизировано
 export interface Game {
   id: string;
   name: string;
@@ -43,9 +41,9 @@ export interface Game {
   steam_url: string;
   coop: string;
   genre: string;
-  tags: string[];
+  tags: string[];      // Строго массив строк!
   description: string;
-  subgenres: string[];
+  subgenres: string[]; // Строго массив строк!
   rating?: string | number;
   similar_games: SimilarGameRef[];
 }
@@ -68,13 +66,7 @@ export interface FilterState {
   currentPage?: number;
 }
 
-export interface PaginationState {
-  currentPage: number;
-  totalPages: number;
-  itemsPerPage: number;
-  totalItems: number;
-}
-
+// Вспомогательные типы
 export interface AccessibilityProps {
   'aria-label'?: string;
   'aria-labelledby'?: string;
