@@ -5,7 +5,7 @@ import { Game, RawGame } from '../types';
 const cleanDescription = (html: string) => {
   if (!html) return '';
   return sanitizeHtml(html, {
-    allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'li', 'h1', 'h2'],
+    allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'li', 'h1', 'h2', 'h3'],
     allowedAttributes: {} 
   });
 };
@@ -38,17 +38,19 @@ const deriveCoopStatus = (existingCoop: string | undefined, tags: string[]): str
 };
 
 export const sanitizeGameData = (raw: RawGame): Game => {
+  // Прямой маппинг полей
   const genre = raw.genre || 'Unknown';
   const subgenres = Array.isArray(raw.subgenres) ? raw.subgenres : [];
   const tags = Array.isArray(raw.tags) ? raw.tags : [];
   
-  // Обработка саммари
+  // Обработка текстового саммари
   const similarSummary = cleanList(raw.similar_games_summary);
 
   const coop = deriveCoopStatus(raw.coop, tags);
   const rawDesc = raw.description || raw.short_description || '';
   const description = cleanDescription(rawDesc);
 
+  // Обработка картинок похожих игр
   const similar = (Array.isArray(raw.similar_games) ? raw.similar_games : []).map((sim: any) => ({
     name: sim.name || 'Unknown',
     image: sim.image || sim.header_image || '/fallback-game.jpg',
@@ -61,14 +63,16 @@ export const sanitizeGameData = (raw: RawGame): Game => {
     name: raw.name || 'Unknown Game',
     image: raw.image || raw.header_image || '/fallback-game.jpg',
     steam_url: raw.steam_url || raw.url || '#',
+    
     genre: genre,
     subgenres: subgenres,
     tags: tags,
     coop: coop,
+    
     description: description,
     rating: raw.review_score || raw.rating,
+    
     similar_games: similar,
-    // Добавляем в объект
     similar_games_summary: similarSummary
   };
 };
