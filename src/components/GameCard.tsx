@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { 
   Gamepad2, Users, Globe, Monitor, User, 
-  Sword, Scroll, Brain, Pickaxe, Ghost, 
+  Sword, Scroll, Brain, Hammer, Ghost,   // <--- Hammer вместо Pickaxe
   Trophy, Car, Rocket, Puzzle, Coffee 
 } from 'lucide-react';
 import { ProcessedGame } from '../types';
@@ -15,69 +15,67 @@ interface GameCardProps {
 
 const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) => {
   
-  // --- ЛОГИКА КООП-РЕЖИМОВ (Цвет + Иконка) ---
+  // --- ЛОГИКА КООП-РЕЖИМОВ ---
   const getCoopDetails = (coop: string) => {
     const lower = (coop || '').toLowerCase();
     
     if (lower.includes('single')) {
-      return { color: '#64748b', icon: <User size={11} />, label: 'Single' }; // Серый
+      return { color: '#64748b', icon: <User size={11} />, label: 'Single' };
     }
     if (lower.includes('split') || lower.includes('shared') || lower.includes('local')) {
-      return { color: '#d97706', icon: <Monitor size={11} />, label: 'Split Screen' }; // Янтарный/Оранжевый
+      return { color: '#d97706', icon: <Monitor size={11} />, label: 'Split Screen' };
     }
     if (lower.includes('online') || lower.includes('mmo') || lower.includes('multi')) {
-      return { color: '#7c3aed', icon: <Globe size={11} />, label: 'Multiplayer' }; // Фиолетовый
+      return { color: '#7c3aed', icon: <Globe size={11} />, label: 'Multiplayer' };
     }
-    // По умолчанию Co-op
-    return { color: '#059669', icon: <Users size={11} />, label: 'Co-op' }; // Изумрудный
+    return { color: '#059669', icon: <Users size={11} />, label: 'Co-op' };
   };
 
-  // --- ЛОГИКА ЖАНРОВ (Цвет + Иконка) ---
+  // --- ЛОГИКА ЖАНРОВ ---
   const getGenreDetails = (genre: string) => {
     const g = (genre || '').toLowerCase();
 
-    // 1. Action (Красный + Меч)
+    // 1. Action
     if (g.includes('action') || g.includes('shooter') || g.includes('hack') || g.includes('fighting')) {
       return { color: '#ef4444', icon: <Sword size={11} /> };
     }
-    // 2. RPG / Adventure (Зеленый + Свиток)
+    // 2. RPG
     if (g.includes('rpg') || g.includes('role') || g.includes('adventure')) {
       return { color: '#10b981', icon: <Scroll size={11} /> };
     }
-    // 3. Strategy / Card (Синий + Мозг)
+    // 3. Strategy
     if (g.includes('strategy') || g.includes('rts') || g.includes('card') || g.includes('turn')) {
       return { color: '#3b82f6', icon: <Brain size={11} /> };
     }
-    // 4. Simulation / Craft (Желтый + Кирка)
+    // 4. Simulation / Craft (Hammer вместо Pickaxe)
     if (g.includes('sim') || g.includes('build') || g.includes('craft') || g.includes('sandbox') || g.includes('farm')) {
-      return { color: '#eab308', icon: <Pickaxe size={11} /> };
+      return { color: '#eab308', icon: <Hammer size={11} /> }; 
     }
-    // 5. Horror (Темно-красный + Призрак)
+    // 5. Horror
     if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) {
       return { color: '#be123c', icon: <Ghost size={11} /> };
     }
-    // 6. Sports (Фиолетовый + Кубок)
+    // 6. Sports
     if (g.includes('sport')) {
       return { color: '#8b5cf6', icon: <Trophy size={11} /> };
     }
-    // 7. Racing (Оранжевый + Машина)
+    // 7. Racing
     if (g.includes('racing') || g.includes('drive') || g.includes('automotive')) {
       return { color: '#f97316', icon: <Car size={11} /> };
     }
-    // 8. Sci-Fi / Space (Индиго + Ракета)
+    // 8. Sci-Fi
     if (g.includes('space') || g.includes('sci-fi') || g.includes('cyberpunk')) {
       return { color: '#6366f1', icon: <Rocket size={11} /> };
     }
-    // 9. Puzzle (Розовый + Пазл)
+    // 9. Puzzle
     if (g.includes('puzzle') || g.includes('logic')) {
       return { color: '#ec4899', icon: <Puzzle size={11} /> };
     }
-    // 10. Casual / Indie (Бирюзовый + Кофе)
+    // 10. Casual
     if (g.includes('casual') || g.includes('indie') || g.includes('visual novel')) {
       return { color: '#06b6d4', icon: <Coffee size={11} /> };
     }
 
-    // Дефолт (Серый + Геймпад)
     return { color: '#475569', icon: <Gamepad2 size={11} /> };
   };
 
@@ -103,13 +101,11 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
           />
           
           <div className="card-badges">
-            {/* Жанр */}
             <span className="badge" style={{ backgroundColor: genreInfo.color, borderColor: genreInfo.color }}>
               {genreInfo.icon}
               <span style={{ marginLeft: 4 }}>{game.genre}</span>
             </span>
             
-            {/* Режим */}
             <span className="badge" style={{ backgroundColor: coopInfo.color, borderColor: coopInfo.color }}>
               {coopInfo.icon}
               <span style={{ marginLeft: 4 }}>{coopInfo.label}</span>
