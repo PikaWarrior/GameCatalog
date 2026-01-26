@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { 
-  X, Star, Play, FileText, Tag, // <--- Вернул Tag сюда
+  X, Star, Play, FileText, Tag,
   Gamepad2, Users, Globe, Monitor, User,
   Sword, Scroll, Brain, Hammer, Ghost,
-  Trophy, Car, Rocket, Puzzle, Coffee 
+  Trophy, Car, Rocket, Puzzle, Coffee,
+  Skull, Crosshair, Map, Dna, Music
 } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameModal.css';
@@ -16,9 +17,9 @@ interface GameModalProps {
 const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   
-  // Увеличенные иконки для модалки
+  // Для модалки иконки еще чуть крупнее
   const ICON_SIZE = 16;
-  const ICON_STROKE = 2;
+  const ICON_STROKE = 2.5;
 
   if (!game) return null;
 
@@ -39,26 +40,36 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     if (modalRef.current) modalRef.current.scrollTop = 0;
   }, [game.id]);
 
-  // --- ЛОГИКА ЦВЕТОВ ---
+  // --- 1. КООП ЛОГИКА ---
   const getCoopDetails = (coop: string) => {
     const lower = (coop || '').toLowerCase();
     if (lower.includes('single')) return { color: '#64748b', icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Single' };
-    if (lower.includes('split') || lower.includes('shared')) return { color: '#d97706', icon: <Monitor size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Split Screen' };
+    if (lower.includes('split') || lower.includes('shared')) return { color: '#ea580c', icon: <Monitor size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Split Screen' };
     if (lower.includes('online') || lower.includes('multi')) return { color: '#7c3aed', icon: <Globe size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Multiplayer' };
     return { color: '#059669', icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Co-op' };
   };
 
+  // --- 2. ЖАНР ЛОГИКА ---
   const getGenreDetails = (genre: string) => {
     const g = (genre || '').toLowerCase();
-    if (g.includes('action') || g.includes('shooter')) return { color: '#ef4444', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
-    if (g.includes('rpg') || g.includes('adventure')) return { color: '#10b981', icon: <Scroll size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
-    if (g.includes('strategy') || g.includes('card')) return { color: '#3b82f6', icon: <Brain size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
-    if (g.includes('sim') || g.includes('craft')) return { color: '#eab308', icon: <Hammer size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
-    if (g.includes('horror')) return { color: '#be123c', icon: <Ghost size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
-    if (g.includes('sport')) return { color: '#8b5cf6', icon: <Trophy size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
-    if (g.includes('racing')) return { color: '#f97316', icon: <Car size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
-    if (g.includes('indie') || g.includes('casual')) return { color: '#06b6d4', icon: <Coffee size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
-    return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
+    
+    if (g.includes('action') || g.includes('hack') || g.includes('fighting')) return { color: '#dc2626', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('shooter') || g.includes('fps')) return { color: '#b91c1c', icon: <Crosshair size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('adventure')) return { color: '#059669', icon: <Map size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('rpg')) return { color: '#16a34a', icon: <Scroll size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('rogue') || g.includes('dungeon')) return { color: '#d97706', icon: <Skull size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('metroidvania') || g.includes('platformer')) return { color: '#db2777', icon: <Dna size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('strategy') || g.includes('card')) return { color: '#2563eb', icon: <Brain size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('sim') || g.includes('craft')) return { color: '#d97706', icon: <Hammer size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('horror')) return { color: '#9f1239', icon: <Ghost size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('sport')) return { color: '#7c3aed', icon: <Trophy size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('racing')) return { color: '#ea580c', icon: <Car size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('space') || g.includes('sci-fi')) return { color: '#4f46e5', icon: <Rocket size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('puzzle')) return { color: '#c026d3', icon: <Puzzle size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('music')) return { color: '#65a30d', icon: <Music size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('casual') || g.includes('indie')) return { color: '#0891b2', icon: <Coffee size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    
+    return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   };
 
   const { name, image, genre, coop, rating, subgenres, tags, similar_games_summary } = game;
@@ -88,14 +99,14 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
               <div className="meta-row">
                 <span 
                   className="meta-badge" 
-                  style={{ backgroundColor: `${genreInfo.color}33`, color: '#e2e8f0', borderColor: genreInfo.color }}
+                  style={{ backgroundColor: `${genreInfo.color}40`, color: '#f1f5f9', borderColor: genreInfo.color }}
                 >
                   <span style={{marginRight:6, display:'flex'}}>{genreInfo.icon}</span> {genre}
                 </span>
 
                 <span 
                   className="meta-badge"
-                  style={{ backgroundColor: `${coopInfo.color}33`, color: '#e2e8f0', borderColor: coopInfo.color }}
+                  style={{ backgroundColor: `${coopInfo.color}40`, color: '#f1f5f9', borderColor: coopInfo.color }}
                 >
                    <span style={{marginRight:6, display:'flex'}}>{coopInfo.icon}</span> {coopInfo.label}
                 </span>
