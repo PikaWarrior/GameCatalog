@@ -1,3 +1,4 @@
+/* --- ОСНОВНОЙ КОНТЕЙНЕР --- */
 .game-card-wrapper {
   padding: 0;
   box-sizing: border-box;
@@ -21,14 +22,14 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* КАРТИНКА */
+/* --- КАРТИНКА ГЛАВНАЯ --- */
 .game-card-image {
   position: relative;
   width: 100%;
   aspect-ratio: 16/9;
   overflow: hidden;
   background: #0f172a;
-  flex-shrink: 0; /* Чтобы картинка не сжималась */
+  flex-shrink: 0;
 }
 
 .game-card-image img {
@@ -42,7 +43,7 @@
   transform: scale(1.05);
 }
 
-/* БЕЙДЖИ */
+/* --- БЕЙДЖИ (ЦВЕТА) --- */
 .card-badges {
   position: absolute;
   top: 8px;
@@ -51,27 +52,30 @@
   display: flex;
   justify-content: space-between;
   pointer-events: none;
+  z-index: 2;
 }
 
 .badge {
   padding: 4px 8px;
   border-radius: 6px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700; /* Жирный шрифт для читаемости */
   color: white;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
   display: flex;
   align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Легкая обводка */
 }
 
-/* КОНТЕНТ */
+/* --- КОНТЕНТ --- */
 .card-content {
   padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  flex: 1; /* Занимает все оставшееся место */
-  min-height: 0; /* Важно для работы flexbox скролла внутри */
+  flex: 1;
+  justify-content: space-between;
+  min-height: 0;
 }
 
 .card-header-row {
@@ -107,25 +111,25 @@
   color: #3b82f6;
 }
 
-/* --- ОПИСАНИЕ (ВЕРНУЛОСЬ) --- */
+/* --- ОПИСАНИЕ --- */
 .card-description-static {
   font-size: 0.85rem;
   line-height: 1.4;
   color: #94a3b8;
   margin-bottom: 12px;
   
-  /* Обрезка текста */
+  /* Ограничиваем описание 2-3 строками, чтобы влезли большие картинки */
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Показываем 3 строки */
+  -webkit-line-clamp: 2; 
   -webkit-box-orient: vertical;
   overflow: hidden;
   
-  flex-grow: 1; /* Растягиваем, если есть место */
+  flex-grow: 1;
 }
 
-/* --- СЕКЦИЯ ПОХОЖИХ ИГР --- */
+/* --- СЕКЦИЯ ПОХОЖИХ ИГР (УВЕЛИЧЕННАЯ) --- */
 .card-similar-section {
-  margin-top: auto; /* Прижимаем к самому низу */
+  margin-top: auto;
   padding-top: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   flex-shrink: 0;
@@ -136,7 +140,7 @@
   text-transform: uppercase;
   color: #64748b;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   letter-spacing: 0.5px;
 }
 
@@ -148,8 +152,8 @@
 
 .card-similar-item {
   flex: 1;
-  /* УВЕЛИЧЕННАЯ ВЫСОТА */
-  height: 50px; 
+  /* УВЕЛИЧЕНА ВЫСОТА (было 50px) */
+  height: 75px; 
   border-radius: 6px;
   overflow: hidden;
   position: relative;
@@ -160,10 +164,10 @@
 }
 
 .card-similar-item:hover {
-  transform: scale(1.15);
+  transform: scale(1.2); /* Увеличение при наведении */
   border-color: #3b82f6;
   z-index: 10;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.6);
 }
 
 .card-similar-item img {
