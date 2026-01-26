@@ -14,7 +14,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   if (!game) return null;
 
   useEffect(() => {
-    // Блокировка скролла
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = 'unset'; };
   }, []);
@@ -31,7 +30,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     if (modalRef.current) modalRef.current.scrollTop = 0;
   }, [game.id]);
 
-  // Извлекаем нужные поля. Теперь нам важен similar_games_summary
   const { name, image, genre, coop, rating, subgenres, tags, similar_games_summary } = game;
 
   return (
@@ -94,8 +92,9 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
             />
           </div>
 
+          {/* --- ПЕРЕИМЕНОВАНО: Details -> Tags & Subgenres --- */}
           <div className="modal-section">
-            <h3>Details</h3>
+            <h3>Tags & Subgenres</h3>
             <div className="tags-cloud">
               {subgenres.map((sg, i) => (
                 <span key={`sub-${i}`} className="tag-pill subgenre">{sg}</span>
@@ -108,13 +107,12 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
             </div>
           </div>
 
-          {/* --- НОВАЯ СЕКЦИЯ: SUMMARY --- */}
-          {/* Выводим только если есть summary */}
+          {/* --- ПЕРЕИМЕНОВАНО: Why Similar? -> Similar Games --- */}
           {similar_games_summary && similar_games_summary.length > 0 && (
             <div className="modal-section">
               <h3>
                 <FileText size={16} style={{ marginRight: 8 }}/>
-                Why Similar?
+                Similar Games
               </h3>
               <div className="summary-list">
                 {similar_games_summary.map((text, i) => (
