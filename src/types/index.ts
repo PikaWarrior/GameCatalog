@@ -14,7 +14,7 @@ export interface RawGame {
   name: string;
   tags?: any[];
   subgenres?: any[]; // Явно добавляем subgenres, так как оно было в твоем старом коде
-  genres?: any[];
+  genre?: any[];
   categories?: any[];
   similar_games?: any[];
 }
