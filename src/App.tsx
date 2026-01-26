@@ -11,6 +11,7 @@ import { Game, ProcessedGame, FilterState, RawGame } from './types';
 import '@styles/App.css';
 import '@styles/improvements.css';
 
+// Импорт твоего JSON. Убедись, что имя файла верное!
 // @ts-ignore
 import rawGamesData from './data/FinalGameLib_WithSimilar.json';
 
@@ -24,14 +25,17 @@ interface ExtendedFilterState extends Omit<FilterState, 'selectedGenre'> {
 
 function App() {
   const games: Game[] = useMemo(() => {
-    // Теперь это преобразование безопасно, так как мы обновили типы
-    return (rawGamesData as RawGame[]).map(game => sanitizeGameData(game));
+    // Безопасное преобразование
+    const data = Array.isArray(rawGamesData) ? rawGamesData : [];
+    return (data as RawGame[]).map(game => sanitizeGameData(game));
   }, []);
 
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
-  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v8', {
+  // !!! ВАЖНО: Ключ изменен на 'gameFilters_v10_FINAL'.
+  // Это ОБЯЗАТЕЛЬНО сбросит старый сломанный кеш в браузере.
+  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v10_FINAL', {
     searchQuery: '',
     selectedTags: [],
     excludedTags: [],
