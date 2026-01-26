@@ -1,3 +1,5 @@
+// src/types/index.ts
+
 export interface SimilarGameRef {
   id?: string | number;
   name: string;
@@ -5,30 +7,46 @@ export interface SimilarGameRef {
   url?: string;
 }
 
-// Интерфейс для ВХОДЯЩЕГО JSON
-// Используем [key: string]: any, чтобы позволить JSON иметь любые поля
-// Но описываем ключевые для автодополнения
+// ВХОДЯЩИЙ ФОРМАТ (Строго по твоему JSON)
 export interface RawGame {
-  [key: string]: any; // Разрешаем любые дополнительные поля
   id?: string | number;
   name: string;
-  tags?: any[];
-  subgenres?: any[]; // Явно добавляем subgenres, так как оно было в твоем старом коде
-  genre?: any[];
-  categories?: any[];
-  similar_games?: any[];
+  
+  // Картинки и ссылки
+  header_image?: string;
+  image?: string;
+  steam_url?: string;
+  url?: string;
+  
+  // Твои конкретные поля
+  genre: string;          // Одиночная строка! (Например: "RPG")
+  subgenres: string[];    // Массив строк! (Например: ["Action", "Indie"])
+  tags: string[];         // Массив строк!
+  
+  coop?: string;          // Может быть в JSON
+  
+  description?: string;
+  short_description?: string;
+  
+  rating?: string | number;
+  review_score?: string | number;
+  
+  similar_games?: SimilarGameRef[];
 }
 
+// ВНУТРЕННИЙ ФОРМАТ (React использует это)
 export interface Game {
   id: string;
   name: string;
   image: string;
   steam_url: string;
+  
   coop: string;
-  genre: string;
-  tags: string[];
+  genre: string;       // Главный жанр
+  subgenres: string[]; // Список поджанров
+  tags: string[];      // Список тегов
+  
   description: string;
-  subgenres: string[];
   rating?: string | number;
   similar_games: SimilarGameRef[];
 }
@@ -36,10 +54,11 @@ export interface Game {
 export interface ProcessedGame extends Game {
   searchableText: string;
   normalizedCoop: string;
-  normalizedGenre: string;
+  normalizedGenre: string; // Для сортировки
   sanitizedDescription: string;
 }
 
+// ... Остальные интерфейсы (FilterState и т.д.) оставляем как есть
 export interface FilterState {
   searchQuery: string;
   selectedTags: string[];
