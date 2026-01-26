@@ -11,25 +11,18 @@ import { Game, ProcessedGame, FilterState } from './types';
 import './styles/App.css';
 import './styles/improvements.css';
 
-// Импортируем новый файл данных
 // @ts-ignore
 import rawGamesData from './data/FinalGameLib_WithSimilar.json';
 
 const GameGrid = lazy(() => import('./components/GameGrid'));
 
-// Расширенный тип для фильтров внутри компонента, если нужно
-interface ExtendedFilterState extends FilterState {}
-
 function App() {
-  // Первичная обработка и санитизация
   const games: Game[] = useMemo(() => {
     return (rawGamesData as any[]).map(game => sanitizeGameData(game));
   }, []);
 
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
-  // Состояние фильтров с сохранением в LocalStorage
-  // Обновил версию ключа на v8, чтобы сбросить старые настройки пользователей из-за новой структуры
   const [filterState, setFilterState] = useLocalStorage<FilterState>('gameFilters_v8', {
     searchQuery: '',
     selectedTags: [],
@@ -42,13 +35,11 @@ function App() {
 
   const debouncedSearch = useDebounce(filterState.searchQuery, 300);
 
-  // Подготовка данных для рендера (добавление ID, нормализация, текстовый индекс)
   const processedGames = useMemo(() => {
     return games.map((game, index): ProcessedGame => {
       const coopLower = game.coop.toLowerCase();
       let displayCoop = game.coop.split(' / ')[0];
 
-      // Нормализация Coop режимов
       if (displayCoop === 'Single' && (
         coopLower.includes('multiplayer') || 
         coopLower.includes('co-op') || 
@@ -62,8 +53,7 @@ function App() {
         else if (coopLower.includes('online')) displayCoop = 'Online';
       }
 
-      // Формируем строку для поиска. Добавляем similar_games!
-      const similarText = game.similar_games.map(s => s.name).join(' ');
+      const similarText = game.similar_games?.map(s => s.name).join(' ') || '';
 
       return {
         ...game,
@@ -76,7 +66,6 @@ function App() {
     });
   }, [games]);
 
-  // Списки для фильтров (вычисляются один раз)
   const allSubgenres = useMemo(() => {
     const subSet = new Set<string>();
     games.forEach(game => game.subgenres.forEach(sub => subSet.add(sub)));
@@ -95,7 +84,6 @@ function App() {
     return Array.from(genres).sort();
   }, [games]);
 
-  // Логика фильтрации
   const filteredGames = useMemo(() => {
     const {
       selectedTags, excludedTags,
@@ -107,32 +95,26 @@ function App() {
 
     return processedGames
       .filter(game => {
-        // 1. Поиск
         if (searchLower && !game.searchableText.includes(searchLower)) return false;
 
         const gameTags = new Set([...game.tags, ...game.subgenres]);
 
-        // 2. Теги (Include)
         if (selectedTags.length > 0) {
           if (!selectedTags.every(tag => gameTags.has(tag))) return false;
         }
 
-        // 3. Теги (Exclude)
         if (excludedTags && excludedTags.length > 0) {
           if (excludedTags.some(tag => gameTags.has(tag))) return false;
         }
 
-        // 4. Жанры (Exclude - приоритетнее)
         if (excludedGenres && excludedGenres.length > 0) {
           if (excludedGenres.includes(game.genre)) return false;
         }
 
-        // 5. Жанры (Include)
         if (selectedGenres && selectedGenres.length > 0) {
           if (!selectedGenres.includes(game.genre)) return false;
         }
 
-        // 6. Coop режим
         if (selectedCoop !== 'All') {
           const gameModes = game.coop.toLowerCase();
           const targetMode = selectedCoop.toLowerCase();
@@ -159,7 +141,6 @@ function App() {
             const hasCoop = gameModes.includes('co-op');
             const hasMulti = gameModes.includes('multiplayer');
             const hasSplit = gameModes.includes('split screen') || gameModes.includes('splitscreen');
-            // OR logic
             if (!hasCoop && !hasMulti && !hasSplit) return false;
           }
           else {
@@ -181,7 +162,6 @@ function App() {
   const handleOpenModal = useCallback((game: ProcessedGame) => setSelectedGame(game), []);
   const handleCloseModal = useCallback(() => setSelectedGame(null), []);
 
-  // Хендлеры фильтров
   const toggleFilterItem = (
     item: string,
     keySelected: keyof FilterState,
@@ -222,10 +202,6 @@ function App() {
     toggleFilterItem(genre, 'selectedGenres', 'excludedGenres');
   }, [setFilterState]);
 
-  const handleCoopChange = useCallback((coop: string) => setFilterState(p => ({ ...p, selectedCoop: coop })), [setFilterState]);
-  const handleSortChange = useCallback((sortBy: any) => setFilterState(p => ({ ...p, sortBy })), [setFilterState]);
-  const handleSearchChange = useCallback((value: string) => setFilterState(p => ({ ...p, searchQuery: value })), [setFilterState]);
-  
   const handleResetFilters = useCallback(() => {
     setFilterState({
       searchQuery: '',
@@ -271,11 +247,6 @@ function App() {
           </aside>
 
           <section className="content-area">
-             {/* Поиск и контролы сортировки можно добавить сюда или в Header */}
-             <div className="top-controls">
-                {/* Компонент поиска */}
-             </div>
-
             <Suspense fallback={<LoadingSkeleton count={12} />}>
               <GameGrid 
                 games={filteredGames} 
