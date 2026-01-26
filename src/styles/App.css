@@ -1,71 +1,84 @@
-/* src/styles/App.css */
 :root {
-  --primary-bg: #0f172a;      /* Slate 900 */
-  --sidebar-bg: #1e293b;      /* Slate 800 */
-  --border-color: rgba(255,255,255,0.08);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
+  --bg-color: #121212;
+  --sidebar-bg: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent-color: #3b82f6;
+  --border-color: #333;
 }
 
 body {
   margin: 0;
-  background-color: var(--primary-bg);
+  padding: 0;
+  background-color: var(--bg-color);
   color: var(--text-primary);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  overflow: hidden; /* Скроллим только контент */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  overflow: hidden; /* Важно для скролла */
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; /* Фикс пустой сетки */
   width: 100vw;
 }
 
-/* Основной контейнер с отступом под фиксированный хедер (64px) */
 .main-content {
   display: flex;
   flex: 1;
-  margin-top: 64px; 
   overflow: hidden;
   position: relative;
 }
 
-/* Левая панель */
 .sidebar {
-  width: 280px; /* Фиксированная ширина */
+  width: 300px;
   background-color: var(--sidebar-bg);
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
+  padding: 20px;
+  gap: 20px;
   overflow-y: auto;
-  padding: 24px 16px; /* Отступы внутри сайдбара */
-  z-index: 40;
+  flex-shrink: 0;
 }
 
-/* Правая область контента */
 .content-area {
   flex: 1;
-  position: relative;
-  background-color: var(--primary-bg);
-  overflow: hidden; 
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Кастомный скроллбар */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* Стили для контролов в сайдбаре (как в оригинале) */
+.sidebar-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
 }
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 3px;
+
+.control-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  text-transform: uppercase;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+
+.control-select {
+  width: 100%;
+  padding: 8px 12px;
+  background-color: #252525;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  outline: none;
 }
-::-webkit-scrollbar-track {
-  background: transparent;
+
+.control-select:focus {
+  border-color: var(--accent-color);
 }
