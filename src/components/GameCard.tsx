@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { 
   Gamepad2, Users, Globe, Monitor, User, 
-  Sword, Scroll, Brain, Hammer, Ghost,   // <--- Hammer вместо Pickaxe
+  Sword, Scroll, Brain, Hammer, Ghost, 
   Trophy, Car, Rocket, Puzzle, Coffee 
 } from 'lucide-react';
 import { ProcessedGame } from '../types';
@@ -15,20 +15,24 @@ interface GameCardProps {
 
 const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) => {
   
+  // Увеличиваем размер иконок и толщину линий для четкости
+  const ICON_SIZE = 14;
+  const ICON_STROKE = 2;
+
   // --- ЛОГИКА КООП-РЕЖИМОВ ---
   const getCoopDetails = (coop: string) => {
     const lower = (coop || '').toLowerCase();
     
     if (lower.includes('single')) {
-      return { color: '#64748b', icon: <User size={11} />, label: 'Single' };
+      return { color: '#64748b', icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Single' };
     }
     if (lower.includes('split') || lower.includes('shared') || lower.includes('local')) {
-      return { color: '#d97706', icon: <Monitor size={11} />, label: 'Split Screen' };
+      return { color: '#d97706', icon: <Monitor size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Split Screen' };
     }
     if (lower.includes('online') || lower.includes('mmo') || lower.includes('multi')) {
-      return { color: '#7c3aed', icon: <Globe size={11} />, label: 'Multiplayer' };
+      return { color: '#7c3aed', icon: <Globe size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Multiplayer' };
     }
-    return { color: '#059669', icon: <Users size={11} />, label: 'Co-op' };
+    return { color: '#059669', icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Co-op' };
   };
 
   // --- ЛОГИКА ЖАНРОВ ---
@@ -36,47 +40,47 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
     const g = (genre || '').toLowerCase();
 
     // 1. Action
-    if (g.includes('action') || g.includes('shooter') || g.includes('hack') || g.includes('fighting')) {
-      return { color: '#ef4444', icon: <Sword size={11} /> };
+    if (g.includes('action') || g.includes('shooter') || g.includes('fighting') || g.includes('hack')) {
+      return { color: '#ef4444', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     }
     // 2. RPG
     if (g.includes('rpg') || g.includes('role') || g.includes('adventure')) {
-      return { color: '#10b981', icon: <Scroll size={11} /> };
+      return { color: '#10b981', icon: <Scroll size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     }
     // 3. Strategy
     if (g.includes('strategy') || g.includes('rts') || g.includes('card') || g.includes('turn')) {
-      return { color: '#3b82f6', icon: <Brain size={11} /> };
+      return { color: '#3b82f6', icon: <Brain size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     }
-    // 4. Simulation / Craft (Hammer вместо Pickaxe)
-    if (g.includes('sim') || g.includes('build') || g.includes('craft') || g.includes('sandbox') || g.includes('farm')) {
-      return { color: '#eab308', icon: <Hammer size={11} /> }; 
+    // 4. Simulation / Craft
+    if (g.includes('sim') || g.includes('build') || g.includes('craft') || g.includes('sandbox')) {
+      return { color: '#eab308', icon: <Hammer size={ICON_SIZE} strokeWidth={ICON_STROKE} /> }; 
     }
     // 5. Horror
     if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) {
-      return { color: '#be123c', icon: <Ghost size={11} /> };
+      return { color: '#be123c', icon: <Ghost size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     }
     // 6. Sports
     if (g.includes('sport')) {
-      return { color: '#8b5cf6', icon: <Trophy size={11} /> };
+      return { color: '#8b5cf6', icon: <Trophy size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     }
     // 7. Racing
-    if (g.includes('racing') || g.includes('drive') || g.includes('automotive')) {
-      return { color: '#f97316', icon: <Car size={11} /> };
+    if (g.includes('racing') || g.includes('drive')) {
+      return { color: '#f97316', icon: <Car size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     }
     // 8. Sci-Fi
     if (g.includes('space') || g.includes('sci-fi') || g.includes('cyberpunk')) {
-      return { color: '#6366f1', icon: <Rocket size={11} /> };
+      return { color: '#6366f1', icon: <Rocket size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     }
     // 9. Puzzle
     if (g.includes('puzzle') || g.includes('logic')) {
-      return { color: '#ec4899', icon: <Puzzle size={11} /> };
+      return { color: '#ec4899', icon: <Puzzle size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     }
-    // 10. Casual
-    if (g.includes('casual') || g.includes('indie') || g.includes('visual novel')) {
-      return { color: '#06b6d4', icon: <Coffee size={11} /> };
+    // 10. Casual / Indie
+    if (g.includes('casual') || g.includes('indie')) {
+      return { color: '#06b6d4', icon: <Coffee size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     }
 
-    return { color: '#475569', icon: <Gamepad2 size={11} /> };
+    return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   };
 
   const genreInfo = getGenreDetails(game.genre);
@@ -102,13 +106,13 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
           
           <div className="card-badges">
             <span className="badge" style={{ backgroundColor: genreInfo.color, borderColor: genreInfo.color }}>
-              {genreInfo.icon}
-              <span style={{ marginLeft: 4 }}>{game.genre}</span>
+              <span className="badge-icon">{genreInfo.icon}</span>
+              <span>{game.genre}</span>
             </span>
             
             <span className="badge" style={{ backgroundColor: coopInfo.color, borderColor: coopInfo.color }}>
-              {coopInfo.icon}
-              <span style={{ marginLeft: 4 }}>{coopInfo.label}</span>
+              <span className="badge-icon">{coopInfo.icon}</span>
+              <span>{coopInfo.label}</span>
             </span>
           </div>
         </div>
