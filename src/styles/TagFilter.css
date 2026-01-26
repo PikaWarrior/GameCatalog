@@ -1,72 +1,195 @@
 .tag-filter-container {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px; /* Уменьшили отступ между секциями */
+  margin-top: 20px;
 }
 
+/* Блок секции (Поджанры / Теги) */
 .filter-section {
-  border: 1px solid #333;
+  background: rgba(30, 41, 59, 0.5); /* Slate-800 c прозрачностью */
   border-radius: 8px;
-  background: #252525;
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: border-color 0.2s;
 }
 
+.filter-section:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Заголовок секции (Кнопка аккордеона) */
 .filter-header {
   width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 10px 12px;
   background: transparent;
   border: none;
-  color: #fff;
-  font-weight: 600;
   cursor: pointer;
+  color: #e2e8f0; /* Slate-200 */
+  font-family: inherit;
+  transition: background 0.2s;
 }
 
-.filter-content {
-  border-top: 1px solid #333;
-  background: #1e1e1e;
+.filter-header:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.search-input-wrapper {
-  padding: 8px;
-  border-bottom: 1px solid #333;
+.filter-title-wrapper {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
-.search-icon { color: #888; }
+.section-icon {
+  color: #94a3b8; /* Slate-400 */
+}
+
+.count-badge {
+  font-size: 0.7rem;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 12px;
+  color: #94a3b8;
+  font-weight: normal;
+}
+
+/* Контент секции (раскрывающийся) */
+.filter-content {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(15, 23, 42, 0.3); /* Slate-900 transparent */
+}
+
+/* Поле поиска */
+.search-input-wrapper {
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.search-icon {
+  color: #64748b;
+}
 
 .tag-search-input {
-  width: 100%;
+  flex: 1;
   background: transparent;
   border: none;
-  color: #fff;
+  color: #e2e8f0;
+  font-size: 0.85rem;
   outline: none;
+  font-family: inherit;
 }
 
+.tag-search-input::placeholder {
+  color: #64748b;
+}
+
+.clear-search {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.clear-search:hover {
+  color: #e2e8f0;
+}
+
+/* Облако тегов */
 .tags-cloud {
   padding: 10px;
+  max-height: 240px;
+  overflow-y: auto;
+  
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  max-height: 250px;
-  overflow-y: auto;
+  align-content: flex-start;
+  
+  /* Кастомный скроллбар */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
 }
 
-.filter-tag {
-  font-size: 0.75rem;
-  padding: 4px 8px;
+.tags-cloud::-webkit-scrollbar {
+  width: 4px;
+}
+.tags-cloud::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
   border-radius: 4px;
-  background: #333;
-  color: #aaa;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
 }
 
-.filter-tag:hover { background: #444; color: #fff; }
-.filter-tag.active { background: #2563eb; color: #fff; }
-.filter-tag.excluded { background: #dc2626; color: #fff; text-decoration: line-through; }
+/* Стиль одной кнопки-тега */
+.filter-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: #cbd5e1; /* Slate-300 */
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  line-height: 1.2;
+}
+
+.filter-tag:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* --- СОСТОЯНИЕ: АКТИВЕН (ВКЛЮЧЕН) --- */
+.filter-tag.active {
+  background: rgba(59, 130, 246, 0.2); /* Blue-500 transparent */
+  border-color: #3b82f6;
+  color: #93c5fd; /* Blue-300 */
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.15);
+}
+
+.filter-tag.active:hover {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+/* --- СОСТОЯНИЕ: ИСКЛЮЧЕН (НОВОЕ) --- */
+.filter-tag.excluded {
+  background: rgba(239, 68, 68, 0.15); /* Red-500 transparent */
+  border-color: #ef4444; /* Red-500 */
+  color: #fca5a5; /* Red-300 */
+  text-decoration: line-through; /* Зачеркивание */
+  opacity: 0.9;
+}
+
+.filter-tag.excluded:hover {
+  background: rgba(239, 68, 68, 0.25);
+  opacity: 1;
+}
+
+/* Иконки внутри тега */
+.tag-icon {
+  display: block;
+}
+.tag-icon.check { color: #60a5fa; }
+.tag-icon.ban { color: #f87171; }
+
+.no-tags {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-style: italic;
+}
