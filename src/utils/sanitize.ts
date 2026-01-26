@@ -1,39 +1,25 @@
-// src/utils/sanitize.ts
 import sanitizeHtml from 'sanitize-html';
 import { Game, RawGame } from '../types';
 
-/**
- * ФУНДАМЕНТАЛЬНАЯ ФУНКЦИЯ ОЧИСТКИ.
- * Превращает массив чего угодно (объектов, чисел, null) в массив чистых строк.
- * Это предотвращает ошибку "Objects are not valid as a React child".
- */
-const safeStringList = (input: any): string[] => {
+// Вспомогательная функция для поиска поля (учитывает регистр и вариации)
+const findField = (obj: any, keys: string[]) => {
+  for (const key of keys) {
+    if (obj[key] !== undefined && obj[key] !== null) return obj[key];
+  }
+  return undefined;
+};
+
+// Простой список строк без агрессивной "магии"
+const getStringList = (input: any): string[] => {
   if (!Array.isArray(input)) return [];
-  
-  return input
-    .map(item => {
-      // 1. Если уже строка - отлично
-      if (typeof item === 'string') return item;
-      
-      // 2. Если число - в строку
-      if (typeof item === 'number') return String(item);
-      
-      // 3. Если объект - ищем поле с названием
-      if (item && typeof item === 'object') {
-        return item.name || item.value || item.label || item.description || item.tag || '';
-      }
-      
-      return '';
-    })
-    // Убираем пустые и слишком короткие строки
-    .filter(str => str && str.trim().length > 0);
+  return input.map(String).filter(s => s.trim().length > 0);
 };
 
 const deriveCoopStatus = (tags: string[], categories: string[]): string => {
   const combined = [...tags, ...categories].map(t => t.toLowerCase());
   const modes: string[] = [];
 
-  const hasSingle = combined.some(t => t === 'single-player' || t === 'singleplayer');
+  const hasSingle = combined.some(t => t.includes('single'));
   const hasMulti = combined.some(t => t.includes('multi') || t.includes('mmo') || t.includes('pvp') || t.includes('online'));
   const hasCoop = combined.some(t => t.includes('co-op') || t.includes('cooperative'));
   const hasSplit = combined.some(t => t.includes('split') || t.includes('shared') || t.includes('local'));
@@ -47,33 +33,42 @@ const deriveCoopStatus = (tags: string[], categories: string[]): string => {
 };
 
 export const sanitizeGameData = (raw: RawGame): Game => {
-  // 1. Принудительная очистка всех списков
-  const rawTags = safeStringList(raw.tags);
-  const rawGenres = safeStringList(raw.genres);
-  const rawCategories = safeStringList(raw.categories);
-
-  const image = raw.header_image || raw.image || '/fallback-game.jpg';
-  const descriptionRaw = raw.short_description || raw.description || raw.about_the_game || '';
+  // 1. Ищем поля по возможным именам (важно для совместимости с разными парсерами)
+  // Приоритет: subgenres (как в старом коде) -> genres -> Genres
+  const rawSubgenres = findField(raw, ['subgenres', 'genres', 'Genres', 'steam_genres']) || [];
+  // Приоритет: tags -> Tags -> steam_tags -> categories
+  const rawTags = findField(raw, ['tags', 'Tags', 'steam_tags', 'categories']) || [];
   
-  // 2. Безопасное получение кооператива
-  const coopString = raw.coop || deriveCoopStatus(rawTags, rawCategories);
+  // Для категорий (кооп/сингл)
+  const rawCategories = findField(raw, ['categories', 'Categories']) || [];
 
-  // 3. Определение жанра
+  const cleanTags = getStringList(rawTags);
+  const cleanSubgenres = getStringList(rawSubgenres);
+  const cleanCategories = getStringList(rawCategories);
+
+  // 2. Картинка и описание
+  const image = findField(raw, ['header_image', 'image', 'cover']) || '/fallback-game.jpg';
+  const descriptionRaw = findField(raw, ['short_description', 'description', 'about_the_game']) || '';
+
+  // 3. Режимы игры
+  const coopString = raw.coop || deriveCoopStatus(cleanTags, cleanCategories);
+
+  // 4. Основной жанр
   let mainGenre = 'Action';
-  if (rawGenres.length > 0) mainGenre = rawGenres[0];
-  else if (rawTags.includes('Indie')) mainGenre = 'Indie';
-  else if (rawTags.includes('RPG')) mainGenre = 'RPG';
-  else if (rawTags.includes('Strategy')) mainGenre = 'Strategy';
-  else if (rawTags.includes('Simulation')) mainGenre = 'Simulation';
+  if (cleanSubgenres.length > 0) mainGenre = cleanSubgenres[0];
+  else if (cleanTags.includes('Indie')) mainGenre = 'Indie';
+  else if (cleanTags.includes('Strategy')) mainGenre = 'Strategy';
+  else if (cleanTags.includes('RPG')) mainGenre = 'RPG';
 
-  // 4. Безопасная обработка похожих игр
-  const safeSimilar = (Array.isArray(raw.similar_games) ? raw.similar_games : []).map((sim: any) => ({
+  // 5. Похожие игры
+  // Простая проверка и маппинг, без лишних оберток
+  const rawSimilar = findField(raw, ['similar_games', 'similar']) || [];
+  const similarGames = Array.isArray(rawSimilar) ? rawSimilar.map((sim: any) => ({
     name: sim.name || 'Unknown',
     image: sim.header_image || sim.image || '/fallback-game.jpg',
     url: sim.steam_url || sim.url || '#',
-    // Генерируем ID, если его нет
     id: sim.id || sim.steamId || (sim.url ? sim.url : `sim-${Math.random()}`)
-  }));
+  })) : [];
 
   return {
     id: raw.id ? String(raw.id) : `gen-${Math.random().toString(36).substr(2, 9)}`,
@@ -82,16 +77,13 @@ export const sanitizeGameData = (raw: RawGame): Game => {
     steam_url: raw.steam_url || raw.url || raw.link || '#',
     coop: coopString,
     genre: mainGenre,
-    
-    tags: rawTags,        // Теперь здесь ГАРАНТИРОВАННО строки
-    subgenres: rawGenres, // Здесь тоже
-    
+    tags: cleanTags,
+    subgenres: cleanSubgenres, // Теперь точно не будет пустым, если поле subgenres есть в JSON
     description: sanitizeHtml(descriptionRaw, {
-      allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'li', 'h1', 'h2', 'h3'],
+      allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'li'],
       allowedAttributes: {}
     }),
-
     rating: raw.review_score || raw.rating,
-    similar_games: safeSimilar
+    similar_games: similarGames
   };
 };
