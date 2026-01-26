@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Gamepad2, ArrowRightLeft } from 'lucide-react';
+import { Gamepad2, Users, Globe, Monitor, User } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameCard.css';
 
@@ -10,26 +10,34 @@ interface GameCardProps {
 }
 
 const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) => {
+  
+  // 1. Логика иконки коопа
   const getCoopIcon = (coop: string) => {
     const lower = coop.toLowerCase();
-    if (lower.includes('online')) return '🌐';
-    if (lower.includes('lan')) return '🏠';
-    if (lower.includes('shared') || lower.includes('split')) return '📺';
-    return '👤';
+    if (lower.includes('online')) return <Globe size={12} />;
+    if (lower.includes('lan')) return <Monitor size={12} />;
+    if (lower.includes('split') || lower.includes('shared')) return <Users size={12} />;
+    return <User size={12} />;
   };
 
+  // 2. Логика цвета жанра (Восстановлена)
   const getGenreColor = (genre: string) => {
-    const g = genre.toLowerCase();
-    if (g.includes('action') || g.includes('shooter') || g.includes('fighting')) return 'var(--genre-red)';
-    if (g.includes('adventure') || g.includes('rpg') || g.includes('role')) return 'var(--genre-green)';
-    if (g.includes('strategy') || g.includes('sim') || g.includes('card')) return 'var(--genre-blue)';
-    if (g.includes('horror') || g.includes('survival')) return 'var(--genre-orange)';
-    if (g.includes('sport') || g.includes('racing')) return 'var(--genre-yellow)';
+    const g = (genre || '').toLowerCase();
+    
+    if (g.includes('action') || g.includes('shooter') || g.includes('fighting') || g.includes('hack')) return 'var(--genre-red)';
+    if (g.includes('adventure') || g.includes('rpg') || g.includes('role') || g.includes('metroidvania')) return 'var(--genre-green)';
+    if (g.includes('strategy') || g.includes('rts') || g.includes('card') || g.includes('turn')) return 'var(--genre-blue)';
+    if (g.includes('sim') || g.includes('sandbox') || g.includes('build') || g.includes('craft')) return 'var(--genre-yellow)';
+    if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) return 'var(--genre-orange)';
+    if (g.includes('sport') || g.includes('racing')) return 'var(--genre-purple)';
+    
     return 'var(--genre-default)';
   };
 
   const genreColor = getGenreColor(game.genre);
-  const coopClass = game.normalizedCoop === 'Single' ? 'single' : 'multi';
+  
+  // Определяем класс для цвета бейджа коопа
+  const coopClass = (game.normalizedCoop === 'Single') ? 'single' : 'multi';
 
   return (
     <div 
@@ -39,7 +47,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
     >
       <div className="game-card-inner">
         
-        {/* Картинка */}
+        {/* --- Верхняя часть: Картинка --- */}
         <div className="game-card-image">
           <img 
             src={game.image} 
@@ -47,60 +55,69 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             loading="lazy"
             onError={(e) => { (e.target as HTMLImageElement).src = '/fallback-game.jpg'; }}
           />
+          
           <div className="card-badges">
+            {/* Жанр с цветом */}
             <span className="badge genre" style={{ backgroundColor: genreColor }}>
               {game.genre}
             </span>
+            {/* Кооп режим */}
             <span className={`badge coop ${coopClass}`}>
-              {getCoopIcon(game.coop)} {game.normalizedCoop}
+              {getCoopIcon(game.coop)} 
+              <span style={{marginLeft: 4}}>{game.normalizedCoop}</span>
             </span>
           </div>
         </div>
 
-        {/* Контент */}
+        {/* --- Нижняя часть: Контент --- */}
         <div className="card-content">
-          <h3 className="card-title" title={game.name}>
-            {game.name}
-          </h3>
-          
-          <div className="card-description-static">
-            {game.description ? game.description.replace(/<[^>]*>?/gm, '') : "No description"}
+          <div className="card-header-row">
+            <h3 className="card-title" title={game.name}>
+              {game.name}
+            </h3>
+            <a 
+              href={game.steam_url} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="steam-icon-link"
+              onClick={(e) => e.stopPropagation()}
+              title="Open in Steam"
+            >
+              <Gamepad2 size={18} />
+            </a>
           </div>
-          
-          {/* --- ИЗМЕНЕНИЕ: ВЫВОД SIMILAR GAMES ВМЕСТО SUBGENRES --- */}
-          <div className="card-tags">
-             {/* Добавляем иконку, чтобы было понятно, что это */}
-            <span className="tag-label" style={{ opacity: 0.5, fontSize: '0.7rem', marginRight: 4, display: 'flex', alignItems: 'center' }}>
-               <ArrowRightLeft size={10} style={{marginRight:2}}/> Sim:
-            </span>
+
+          {/* Секция: Похожие игры (Визуальные превью) */}
+          <div className="card-similar-section">
+            <div className="similar-label">Similar Games:</div>
             
             {game.similar_games && game.similar_games.length > 0 ? (
-              game.similar_games.slice(0, 3).map((sim, i) => (
-                <span key={i} className="tag subgenre-tag" title={sim.name}>
-                  {sim.name}
-                </span>
-              ))
+              <div className="card-similar-grid">
+                {game.similar_games.slice(0, 3).map((sim, i) => (
+                  <a 
+                    key={sim.id || i}
+                    href={sim.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="card-similar-item"
+                    title={sim.name} // Тултип с названием при наведении
+                    onClick={(e) => e.stopPropagation()} // Чтобы не открывалась модалка
+                  >
+                    <img src={sim.image} alt={sim.name} loading="lazy" />
+                  </a>
+                ))}
+                {game.similar_games.length > 3 && (
+                  <div className="card-similar-more">
+                    +{game.similar_games.length - 3}
+                  </div>
+                )}
+              </div>
             ) : (
-              <span className="tag" style={{ opacity: 0.3 }}>None</span>
-            )}
-            
-            {game.similar_games && game.similar_games.length > 3 && (
-              <span className="tag more-tag">+{game.similar_games.length - 3}</span>
+              <div className="no-similar">No similar games found</div>
             )}
           </div>
-          
-          <a 
-            href={game.steam_url} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="steam-button"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Gamepad2 size={18} />
-            Steam
-          </a>
-        </div>
 
+        </div>
       </div>
     </div>
   );
