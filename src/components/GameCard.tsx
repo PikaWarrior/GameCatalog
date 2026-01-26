@@ -11,6 +11,7 @@ interface GameCardProps {
 
 const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) => {
   
+  // 1. ИКОНКИ КООПА
   const getCoopIcon = (coop: string) => {
     const lower = coop.toLowerCase();
     if (lower.includes('online')) return <Globe size={12} />;
@@ -19,19 +20,27 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
     return <User size={12} />;
   };
 
+  // 2. ЦВЕТА (Прямо в коде, чтобы не ломались)
   const getGenreColor = (genre: string) => {
     const g = (genre || '').toLowerCase();
-    if (g.includes('action') || g.includes('shooter') || g.includes('fighting') || g.includes('hack')) return 'var(--genre-red)';
-    if (g.includes('adventure') || g.includes('rpg') || g.includes('role') || g.includes('metroidvania')) return 'var(--genre-green)';
-    if (g.includes('strategy') || g.includes('rts') || g.includes('card') || g.includes('turn')) return 'var(--genre-blue)';
-    if (g.includes('sim') || g.includes('sandbox') || g.includes('build') || g.includes('craft')) return 'var(--genre-yellow)';
-    if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) return 'var(--genre-orange)';
-    if (g.includes('sport') || g.includes('racing')) return 'var(--genre-purple)';
-    return 'var(--genre-default)';
+    if (g.includes('action') || g.includes('shooter') || g.includes('fighting')) return '#ef4444'; // Red
+    if (g.includes('adventure') || g.includes('rpg') || g.includes('role')) return '#10b981'; // Green
+    if (g.includes('strategy') || g.includes('rts') || g.includes('card')) return '#3b82f6'; // Blue
+    if (g.includes('sim') || g.includes('build') || g.includes('craft')) return '#f59e0b'; // Yellow
+    if (g.includes('horror') || g.includes('survival')) return '#f97316'; // Orange
+    if (g.includes('sport') || g.includes('racing')) return '#8b5cf6'; // Purple
+    return '#64748b'; // Default Slate
+  };
+
+  const getCoopColor = (coop: string) => {
+    return coop === 'Single' ? '#475569' : '#059669'; // Серый или Изумрудный
   };
 
   const genreColor = getGenreColor(game.genre);
-  const coopClass = (game.normalizedCoop === 'Single') ? 'single' : 'multi';
+  const coopColor = getCoopColor(game.normalizedCoop);
+  
+  // Очистка описания от HTML тегов для превью
+  const cleanDesc = (game.description || "No description").replace(/<[^>]*>?/gm, '');
 
   return (
     <div 
@@ -41,7 +50,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
     >
       <div className="game-card-inner">
         
-        {/* Картинка */}
+        {/* --- КАРТИНКА --- */}
         <div className="game-card-image">
           <img 
             src={game.image} 
@@ -49,18 +58,19 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             loading="lazy"
             onError={(e) => { (e.target as HTMLImageElement).src = '/fallback-game.jpg'; }}
           />
+          
           <div className="card-badges">
-            <span className="badge genre" style={{ backgroundColor: genreColor }}>
+            <span className="badge" style={{ backgroundColor: genreColor }}>
               {game.genre}
             </span>
-            <span className={`badge coop ${coopClass}`}>
+            <span className="badge" style={{ backgroundColor: coopColor }}>
               {getCoopIcon(game.coop)} 
               <span style={{marginLeft: 4}}>{game.normalizedCoop}</span>
             </span>
           </div>
         </div>
 
-        {/* Контент */}
+        {/* --- КОНТЕНТ --- */ }
         <div className="card-content">
           <div className="card-header-row">
             <h3 className="card-title" title={game.name}>
@@ -78,7 +88,12 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             </a>
           </div>
 
-          {/* ПОХОЖИЕ ИГРЫ (Крупные превью) */}
+          {/* --- ВОЗВРАЩЕННОЕ ОПИСАНИЕ --- */}
+          <div className="card-description-static">
+            {cleanDesc}
+          </div>
+
+          {/* --- ПОХОЖИЕ ИГРЫ --- */}
           <div className="card-similar-section">
             <div className="similar-label">Similar Games:</div>
             
@@ -97,14 +112,9 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
                     <img src={sim.image} alt={sim.name} loading="lazy" />
                   </a>
                 ))}
-                {game.similar_games.length > 3 && (
-                  <div className="card-similar-more">
-                    +{game.similar_games.length - 3}
-                  </div>
-                )}
               </div>
             ) : (
-              <div className="no-similar">No similar games</div>
+              <div className="no-similar">No similar games found</div>
             )}
           </div>
 
