@@ -10,7 +10,7 @@ interface GameCardProps {
 }
 
 const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) => {
-  // Функция выбора иконки для кооператива
+  
   const getCoopIcon = (coop: string) => {
     const lower = coop.toLowerCase();
     if (lower.includes('online')) return '🌐';
@@ -19,75 +19,59 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
     return '👤';
   };
 
-  // --- ОБНОВЛЕННАЯ ЛОГИКА ЦВЕТОВ ---
   const getGenreColor = (genre: string) => {
     const g = genre.toLowerCase();
-    
-    // Action / Fighting / Shooter -> Красный
-    if (g.includes('action') || g.includes('shooter') || g.includes('fighting') || g.includes('hack') || g.includes('beat')) return 'var(--genre-red)';
-    
-    // Adventure / RPG / Metroidvania -> Зеленый
-    if (g.includes('adventure') || g.includes('rpg') || g.includes('role') || g.includes('metroidvania')) return 'var(--genre-green)';
-    
-    // Strategy / Sim / Sandbox -> Синий
-    if (g.includes('strategy') || g.includes('simulation') || g.includes('management') || g.includes('city') || g.includes('sandbox')) return 'var(--genre-blue)';
-    
-    // Horror / Survival -> Фиолетовый
-    if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) return 'var(--genre-purple)';
-    
-    // Puzzle / Platformer -> Желтый
-    if (g.includes('puzzle') || g.includes('platformer') || g.includes('arcade')) return 'var(--genre-yellow)';
-    
-    // Roguelike / Roguelite -> Оранжевый
-    if (g.includes('rogue') || g.includes('lite') || g.includes('dungeon')) return 'var(--genre-orange)';
-    
-    // Fallback
+    if (g.includes('action') || g.includes('shooter') || g.includes('fighting')) return 'var(--genre-red)';
+    if (g.includes('adventure') || g.includes('rpg') || g.includes('metroidvania')) return 'var(--genre-green)';
+    if (g.includes('strategy') || g.includes('simulation') || g.includes('sandbox')) return 'var(--genre-blue)';
+    if (g.includes('horror') || g.includes('survival')) return 'var(--genre-purple)';
+    if (g.includes('puzzle') || g.includes('platformer')) return 'var(--genre-yellow)';
+    if (g.includes('rogue')) return 'var(--genre-orange)';
     return 'var(--genre-default)';
   };
 
-  // Логика выбора цвета для режима
   const getCoopColorClass = (coop: string) => {
     const lower = coop.toLowerCase();
-    if (lower.includes('online') || lower.includes('co-op') || lower.includes('multiplayer') || lower.includes('split') || lower.includes('lan')) {
+    if (lower.includes('online') || lower.includes('co-op') || lower.includes('multiplayer') || lower.includes('split')) {
       return 'coop-online';
     }
     return 'coop-single';
   };
 
-  const genreColor = getGenreColor(game.genre);
-  const coopClass = getCoopColorClass(game.coop);
-
   return (
     <div 
-      className="game-card" 
+      className="game-card-container" 
       style={style}
-      role="button"
-      tabIndex={0}
-      onClick={() => onOpenModal && onOpenModal(game)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          onOpenModal && onOpenModal(game);
-        }
-      }}
     >
-      <div className="game-card-inner">
-        
+      <div 
+        className="game-card-inner"
+        onClick={() => onOpenModal && onOpenModal(game)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            onOpenModal && onOpenModal(game);
+          }
+        }}
+        tabIndex={0}
+        role="button"
+      >
         {/* Картинка и Бейджи */}
         <div className="card-image-container">
           <img 
             src={game.image} 
             alt={game.name} 
-            className="card-image" 
+            className="card-image"
             loading="lazy"
             onError={(e) => {
               (e.target as HTMLImageElement).src = '/fallback-game.jpg';
             }}
           />
+          <div className="card-image-overlay" />
+          
           <div className="card-badges">
-            <span className="badge genre" style={{ backgroundColor: genreColor }}>
+            <span className="badge" style={{ backgroundColor: getGenreColor(game.genre) }}>
               {game.genre}
             </span>
-            <span className={`badge coop ${coopClass}`}>
+            <span className={`badge coop ${getCoopColorClass(game.coop)}`}>
               {getCoopIcon(game.coop)} {game.normalizedCoop}
             </span>
           </div>
@@ -95,42 +79,32 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
 
         {/* Контент */}
         <div className="card-content">
-          <h3 className="card-title" title={game.name}>
-            {game.name}
-          </h3>
+          <h3 className="card-title" title={game.name}>{game.name}</h3>
           
-          {/* Статичное описание */}
           <div className="card-description-static">
-            {game.description || "Описание отсутствует..."}
+             <div dangerouslySetInnerHTML={{ __html: game.sanitizedDescription || "No description available." }} />
           </div>
-          
-          {/* Теги */}
+
           <div className="card-tags">
-            {game.subgenres.slice(0, 6).map((sub, i) => (
-              <span key={i} className="tag subgenre-tag">
-                {sub}
-              </span>
+            {game.subgenres.slice(0, 5).map((sub, i) => (
+              <span key={`sg-${i}`} className="tag subgenre-tag">{sub}</span>
             ))}
-            {game.subgenres.length > 6 && (
-              <span className="tag more-tag">
-                +{game.subgenres.length - 6}
-              </span>
+            {game.subgenres.length > 5 && (
+              <span className="tag more-tag">+{game.subgenres.length - 5}</span>
             )}
           </div>
-          
-          {/* Кнопка Steam */}
+
           <a 
-            href={game.steam_url} 
-            target="_blank" 
-            rel="noopener noreferrer" 
+            href={game.steam_url || '#'} 
             className="steam-button"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
           >
-            <Gamepad2 size={18} />
-            В Steam
+            <Gamepad2 size={16} />
+            {game.steam_url ? 'In Steam' : 'No Link'}
           </a>
         </div>
-
       </div>
     </div>
   );
