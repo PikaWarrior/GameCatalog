@@ -2,32 +2,37 @@ import sanitizeHtml from 'sanitize-html';
 import { Game, RawGame } from '../types';
 
 /**
- * Вспомогательная функция для очистки массивов строк.
- * Если в JSON прилетел объект {name: "RPG"} вместо строки "RPG", она это исправит.
+ * АГРЕССИВНАЯ очистка списков.
+ * Превращает всё (объекты, null, undefined) в массив строк.
  */
 const safeStringList = (input: any): string[] => {
+  // 1. Если это вообще не массив (например, null или undefined), возвращаем пустой массив
   if (!Array.isArray(input)) return [];
   
   return input
     .map(item => {
+      // Если строка - оставляем
       if (typeof item === 'string') return item;
+      // Если число - превращаем в строку
+      if (typeof item === 'number') return String(item);
+      // Если объект - пытаемся вытащить имя
       if (item && typeof item === 'object') {
-        // Пытаемся достать имя из популярных полей
-        return item.name || item.description || item.tag || item.label || '';
+        return item.name || item.value || item.label || item.description || '';
       }
-      return String(item || '');
+      return '';
     })
-    .filter(str => str.trim().length > 0); // Убираем пустые
+    // Фильтруем пустые строки и мусор
+    .filter(str => str && str.trim().length > 0);
 };
 
+// Функция определения коопа (без изменений)
 const deriveCoopStatus = (tags: string[], categories: string[]): string => {
   const combined = [...tags, ...categories].map(t => t.toLowerCase());
   const modes: string[] = [];
-
   const hasSingle = combined.some(t => t === 'single-player' || t === 'singleplayer');
-  const hasMulti = combined.some(t => t.includes('multi-player') || t.includes('multiplayer') || t.includes('mmo') || t.includes('online') || t.includes('pvp'));
+  const hasMulti = combined.some(t => t.includes('multi') || t.includes('mmo') || t.includes('pvp') || t.includes('online'));
   const hasCoop = combined.some(t => t.includes('co-op') || t.includes('cooperative'));
-  const hasSplit = combined.some(t => t.includes('split screen') || t.includes('shared/split') || t.includes('local'));
+  const hasSplit = combined.some(t => t.includes('split') || t.includes('shared') || t.includes('local'));
 
   if (hasSingle) modes.push('Single');
   if (hasMulti) modes.push('Multiplayer');
@@ -38,27 +43,36 @@ const deriveCoopStatus = (tags: string[], categories: string[]): string => {
 };
 
 export const sanitizeGameData = (raw: RawGame): Game => {
-  // 1. Безопасное извлечение списков через новую функцию
+  // 1. Жестко чистим все списки
   const rawTags = safeStringList(raw.tags);
   const rawGenres = safeStringList(raw.genres);
   const rawCategories = safeStringList(raw.categories);
+  
+  // Для отладки: выведем первую игру в консоль, чтобы убедиться, что теги стали строками
+  if (raw.id === 1 || raw.name === 'Test') {
+     console.log('Sanitized Tags:', rawTags); 
+  }
 
-  // 2. Картинка
   const image = raw.header_image || raw.image || '/fallback-game.jpg';
-
-  // 3. Описание
   const descriptionRaw = raw.short_description || raw.description || raw.about_the_game || '';
-
-  // 4. Режимы игры
+  
+  // Безопасно берем coop, если его нет - вычисляем
   const coopString = (raw as any).coop || deriveCoopStatus(rawTags, rawCategories);
 
-  // 5. Основной жанр
+  // Определение жанра
   let mainGenre = 'Action';
   if (rawGenres.length > 0) mainGenre = rawGenres[0];
   else if (rawTags.includes('Indie')) mainGenre = 'Indie';
   else if (rawTags.includes('RPG')) mainGenre = 'RPG';
   else if (rawTags.includes('Strategy')) mainGenre = 'Strategy';
-  else if (rawTags.includes('Simulation')) mainGenre = 'Simulation';
+
+  // Обработка похожих игр
+  const safeSimilar = (Array.isArray(raw.similar_games) ? raw.similar_games : []).map((sim: any) => ({
+    name: sim.name || 'Unknown',
+    image: sim.header_image || sim.image || '/fallback-game.jpg',
+    url: sim.steam_url || sim.url || '#',
+    id: sim.id || sim.steamId || (sim.url ? sim.url : `sim-${Math.random()}`)
+  }));
 
   return {
     id: raw.id ? String(raw.id) : `gen-${Math.random().toString(36).substr(2, 9)}`,
@@ -67,22 +81,13 @@ export const sanitizeGameData = (raw: RawGame): Game => {
     steam_url: raw.steam_url || raw.url || raw.link || '#',
     coop: coopString,
     genre: mainGenre,
-    tags: rawTags,
-    subgenres: rawGenres, // Используем жанры как поджанры
-    
+    tags: rawTags,        // Теперь это ГАРАНТИРОВАННО массив строк
+    subgenres: rawGenres, // И это тоже
     description: sanitizeHtml(descriptionRaw, {
-      allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'li', 'h1', 'h2', 'h3'],
+      allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'li'],
       allowedAttributes: {}
     }),
-
     rating: raw.review_score || raw.rating,
-    
-    // Обработка похожих игр
-    similar_games: (raw.similar_games || []).map((sim: any) => ({
-      name: sim.name || 'Unknown',
-      image: sim.header_image || sim.image || '/fallback-game.jpg',
-      url: sim.steam_url || sim.url || '#',
-      id: sim.id || sim.steamId || (sim.url ? sim.url : `sim-${Math.random()}`)
-    }))
+    similar_games: safeSimilar
   };
 };
