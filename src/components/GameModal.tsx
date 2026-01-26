@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X, Tag, ExternalLink, Gamepad2 } from 'lucide-react';
+import { X, Tag, ExternalLink, Gamepad2 } from 'lucide-react'; 
 import { ProcessedGame } from '../types';
 import '../styles/GameModal.css';
 
@@ -29,7 +29,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <button className="modal-close-btn" onClick={onClose} aria-label="Close modal">
+        <button className="modal-close-btn" onClick={onClose} aria-label="Close">
           <X size={24} />
         </button>
 
