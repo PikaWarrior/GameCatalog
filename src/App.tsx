@@ -11,7 +11,6 @@ import { Game, ProcessedGame, FilterState, RawGame } from './types';
 import '@styles/App.css';
 import '@styles/improvements.css';
 
-// Импорт твоего нового файла
 // @ts-ignore
 import rawGamesData from './data/FinalGameLib_WithSimilar.json';
 
@@ -33,7 +32,8 @@ function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
-  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v9', {
+  // !!! Ключ изменен на 'v12_FINAL' для сброса кеша
+  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v12_FINAL', {
     searchQuery: '',
     selectedTags: [],
     excludedTags: [],
@@ -43,10 +43,6 @@ function App() {
     sortBy: 'name',
   });
 
-  // ... (Остальной код App.tsx без изменений) ...
-  // Скопируй оставшуюся часть файла из твоего оригинала или предыдущего ответа
-  // Включая useMemo для processedGames, filteredGames и return JSX
-  
   const debouncedSearch = useDebounce(filterState.searchQuery, 300);
 
   const processedGames = useMemo(() => {
