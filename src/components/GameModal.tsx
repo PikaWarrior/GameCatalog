@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { 
-  X, Star, Play, FileText, 
+  X, Star, Play, FileText, Tag, // <--- Вернул Tag сюда
   Gamepad2, Users, Globe, Monitor, User,
-  Sword, Scroll, Brain, Hammer, Ghost, // Hammer!
+  Sword, Scroll, Brain, Hammer, Ghost,
   Trophy, Car, Rocket, Puzzle, Coffee 
 } from 'lucide-react';
 import { ProcessedGame } from '../types';
