@@ -1,4 +1,12 @@
-// Основные типы данных
+import { CSSProperties } from 'react';
+
+// --- Новые интерфейсы для рекомендаций ---
+export interface SimilarGame {
+  name: string;
+  url: string;
+  image: string;
+}
+
 export interface Game {
   id?: string;
   name: string;
@@ -9,6 +17,10 @@ export interface Game {
   tags: string[];
   description: string;
   subgenres: string[];
+  // Новые поля
+  similar_games: SimilarGame[];
+  similar_games_summary?: string[];
+  rating?: string; // На случай если есть в будущем
 }
 
 export interface ProcessedGame extends Game {
@@ -17,16 +29,16 @@ export interface ProcessedGame extends Game {
   normalizedCoop: string;
   normalizedGenre: string;
   sanitizedDescription: string;
-  popularity?: number;
 }
 
 export interface FilterState {
   searchQuery: string;
   selectedTags: string[];
-  selectedGenre: string;
+  excludedTags: string[]; // Добавлено, так как используется в App
+  selectedGenres: string[];
+  excludedGenres: string[]; // Добавлено
   selectedCoop: string;
   sortBy: 'name' | 'genre' | 'coop';
-  currentPage?: number;
 }
 
 export interface PaginationState {
@@ -44,7 +56,6 @@ export interface AccessibilityProps {
   tabIndex?: number;
 }
 
-// Типы для обработки ошибок
 export interface AppError {
   id: string;
   message: string;
@@ -59,7 +70,6 @@ export interface ValidationResult {
   warnings: string[];
 }
 
-// Типы для производительности
 export interface PerformanceMetrics {
   loadTime: number;
   filterTime: number;
@@ -67,9 +77,8 @@ export interface PerformanceMetrics {
   memoryUsage?: number;
 }
 
-// Типы для виртуализации
 export interface VirtualizedItem {
   index: number;
-  style: React.CSSProperties;
+  style: CSSProperties;
   data: any;
 }
