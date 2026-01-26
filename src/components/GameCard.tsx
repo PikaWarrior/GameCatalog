@@ -2,7 +2,8 @@ import React, { memo } from 'react';
 import { 
   Gamepad2, Users, Globe, Monitor, User, 
   Sword, Scroll, Brain, Hammer, Ghost, 
-  Trophy, Car, Rocket, Puzzle, Coffee 
+  Trophy, Car, Rocket, Puzzle, Coffee,
+  Skull, Crosshair, Map, Dna, Music
 } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameCard.css';
@@ -15,71 +16,128 @@ interface GameCardProps {
 
 const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) => {
   
-  // Увеличиваем размер иконок и толщину линий для четкости
-  const ICON_SIZE = 14;
-  const ICON_STROKE = 2;
+  // НАСТРОЙКИ ИКОНОК
+  const ICON_SIZE = 15;      // Чуть крупнее
+  const ICON_STROKE = 2.5;   // Жирные линии для "сочности"
 
-  // --- ЛОГИКА КООП-РЕЖИМОВ ---
+  // --- 1. ЛОГИКА КООП-РЕЖИМОВ (Уникальные цвета и иконки) ---
   const getCoopDetails = (coop: string) => {
     const lower = (coop || '').toLowerCase();
     
+    // Singleplayer -> Серый + Человек
     if (lower.includes('single')) {
-      return { color: '#64748b', icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Single' };
+      return { 
+        color: '#64748b', 
+        borderColor: 'rgba(255,255,255,0.2)',
+        icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 
+        label: 'Single' 
+      };
     }
+    // Split Screen / Local -> Оранжевый + Монитор
     if (lower.includes('split') || lower.includes('shared') || lower.includes('local')) {
-      return { color: '#d97706', icon: <Monitor size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Split Screen' };
+      return { 
+        color: '#ea580c', // Orange-600
+        borderColor: '#fb923c',
+        icon: <Monitor size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 
+        label: 'Split Screen' 
+      };
     }
+    // Online Multiplayer -> Фиолетовый + Глобус
     if (lower.includes('online') || lower.includes('mmo') || lower.includes('multi')) {
-      return { color: '#7c3aed', icon: <Globe size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Multiplayer' };
+      return { 
+        color: '#7c3aed', // Violet-600
+        borderColor: '#a78bfa',
+        icon: <Globe size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 
+        label: 'Multiplayer' 
+      };
     }
-    return { color: '#059669', icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Co-op' };
+    // Co-op (General) -> Изумрудный + Группа
+    return { 
+      color: '#059669', // Emerald-600
+      borderColor: '#34d399',
+      icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 
+      label: 'Co-op' 
+    };
   };
 
-  // --- ЛОГИКА ЖАНРОВ ---
+  // --- 2. ЛОГИКА ЖАНРОВ (ДЕТАЛЬНАЯ ПРОВЕРКА) ---
   const getGenreDetails = (genre: string) => {
     const g = (genre || '').toLowerCase();
 
-    // 1. Action
-    if (g.includes('action') || g.includes('shooter') || g.includes('fighting') || g.includes('hack')) {
-      return { color: '#ef4444', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    // Action / Fighting / Hack & Slash -> Красный + Меч
+    if (g.includes('action') || g.includes('hack') || g.includes('fighting') || g.includes('beat')) {
+      return { color: '#dc2626', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     }
-    // 2. RPG
-    if (g.includes('rpg') || g.includes('role') || g.includes('adventure')) {
-      return { color: '#10b981', icon: <Scroll size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-    // 3. Strategy
-    if (g.includes('strategy') || g.includes('rts') || g.includes('card') || g.includes('turn')) {
-      return { color: '#3b82f6', icon: <Brain size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-    // 4. Simulation / Craft
-    if (g.includes('sim') || g.includes('build') || g.includes('craft') || g.includes('sandbox')) {
-      return { color: '#eab308', icon: <Hammer size={ICON_SIZE} strokeWidth={ICON_STROKE} /> }; 
-    }
-    // 5. Horror
-    if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) {
-      return { color: '#be123c', icon: <Ghost size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-    // 6. Sports
-    if (g.includes('sport')) {
-      return { color: '#8b5cf6', icon: <Trophy size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-    // 7. Racing
-    if (g.includes('racing') || g.includes('drive')) {
-      return { color: '#f97316', icon: <Car size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-    // 8. Sci-Fi
-    if (g.includes('space') || g.includes('sci-fi') || g.includes('cyberpunk')) {
-      return { color: '#6366f1', icon: <Rocket size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-    // 9. Puzzle
-    if (g.includes('puzzle') || g.includes('logic')) {
-      return { color: '#ec4899', icon: <Puzzle size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-    // 10. Casual / Indie
-    if (g.includes('casual') || g.includes('indie')) {
-      return { color: '#06b6d4', icon: <Coffee size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    
+    // Shooter / FPS / TPS -> Темно-Красный + Прицел
+    if (g.includes('shooter') || g.includes('fps') || g.includes('tps') || g.includes('gun')) {
+      return { color: '#b91c1c', icon: <Crosshair size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     }
 
+    // RPG / Adventure -> Зеленый + Карта/Свиток
+    if (g.includes('adventure') || g.includes('quest')) {
+      return { color: '#059669', icon: <Map size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    }
+    if (g.includes('rpg') || g.includes('role')) {
+      return { color: '#16a34a', icon: <Scroll size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    }
+
+    // Roguelike / Dungeon -> Оранжевый + Череп
+    if (g.includes('rogue') || g.includes('dungeon') || g.includes('souls')) {
+      return { color: '#d97706', icon: <Skull size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    }
+
+    // Metroidvania / Platformer -> Розовый + ДНК (или Пазл)
+    if (g.includes('metroidvania') || g.includes('platformer')) {
+      return { color: '#db2777', icon: <Dna size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    }
+
+    // Strategy / Card -> Синий + Мозг
+    if (g.includes('strategy') || g.includes('rts') || g.includes('card') || g.includes('turn') || g.includes('tactical')) {
+      return { color: '#2563eb', icon: <Brain size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    }
+
+    // Simulation / Build -> Желтый/Янтарный + Молоток
+    if (g.includes('sim') || g.includes('build') || g.includes('craft') || g.includes('sandbox') || g.includes('farm') || g.includes('city')) {
+      return { color: '#d97706', icon: <Hammer size={ICON_SIZE} strokeWidth={ICON_STROKE} /> }; 
+    }
+
+    // Horror -> Бордовый + Призрак
+    if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) {
+      return { color: '#9f1239', icon: <Ghost size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    }
+
+    // Sports -> Фиолетовый + Кубок
+    if (g.includes('sport')) {
+      return { color: '#7c3aed', icon: <Trophy size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    }
+
+    // Racing -> Оранжевый яркий + Машина
+    if (g.includes('racing') || g.includes('drive') || g.includes('automotive')) {
+      return { color: '#ea580c', icon: <Car size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    }
+
+    // Sci-Fi / Cyberpunk -> Индиго + Ракета
+    if (g.includes('space') || g.includes('sci-fi') || g.includes('cyberpunk')) {
+      return { color: '#4f46e5', icon: <Rocket size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    }
+
+    // Puzzle -> Фуксия + Пазл
+    if (g.includes('puzzle') || g.includes('logic')) {
+      return { color: '#c026d3', icon: <Puzzle size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    }
+    
+    // Rhythm / Music -> Лайм + Музыка
+    if (g.includes('music') || g.includes('rhythm')) {
+      return { color: '#65a30d', icon: <Music size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    }
+
+    // Casual / Indie / Visual Novel -> Голубой + Кофе
+    if (g.includes('casual') || g.includes('indie') || g.includes('novel')) {
+      return { color: '#0891b2', icon: <Coffee size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    }
+
+    // Default -> Slate + Gamepad
     return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   };
 
@@ -105,12 +163,20 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
           />
           
           <div className="card-badges">
-            <span className="badge" style={{ backgroundColor: genreInfo.color, borderColor: genreInfo.color }}>
+            {/* ЖАНР */}
+            <span 
+              className="badge" 
+              style={{ backgroundColor: genreInfo.color, borderColor: 'rgba(255,255,255,0.3)' }}
+            >
               <span className="badge-icon">{genreInfo.icon}</span>
               <span>{game.genre}</span>
             </span>
             
-            <span className="badge" style={{ backgroundColor: coopInfo.color, borderColor: coopInfo.color }}>
+            {/* РЕЖИМ */}
+            <span 
+              className="badge" 
+              style={{ backgroundColor: coopInfo.color, borderColor: coopInfo.borderColor }}
+            >
               <span className="badge-icon">{coopInfo.icon}</span>
               <span>{coopInfo.label}</span>
             </span>
@@ -139,7 +205,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             {cleanDesc}
           </div>
 
-          {/* ПОХОЖИЕ ИГРЫ */}
+          {/* ПОХОЖИЕ ИГРЫ (МАСШТАБИРУЕМЫЕ) */}
           <div className="card-similar-section">
             <div className="similar-label">Similar Games:</div>
             
