@@ -64,7 +64,7 @@
   right: 8px;
   display: flex;
   justify-content: space-between;
-  pointer-events: none; /* Чтобы клик проходил сквозь них */
+  pointer-events: none;
 }
 
 .badge {
@@ -79,7 +79,6 @@
   align-items: center;
 }
 
-/* Специфичные стили для коопа */
 .badge.coop.single { background-color: var(--coop-single); }
 .badge.coop.multi { background-color: var(--coop-multi); }
 
@@ -123,9 +122,9 @@
   color: #3b82f6;
 }
 
-/* --- СЕКЦИЯ ПОХОЖИХ ИГР (Новый стиль) --- */
+/* --- НОВАЯ СЕКЦИЯ: Похожие игры (Превью) --- */
 .card-similar-section {
-  margin-top: auto; /* Прижимаем к низу */
+  margin-top: auto;
   padding-top: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -146,20 +145,22 @@
 }
 
 .card-similar-item {
-  width: 48px; /* Небольшой размер */
-  height: 27px; /* Сохраняем пропорцию 16:9 */
+  width: 52px; /* Чуть шире */
+  height: 29px;
   border-radius: 4px;
   overflow: hidden;
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: transform 0.2s, border-color 0.2s;
   background: #0f172a;
+  display: block; /* Важно для ссылок */
 }
 
 .card-similar-item:hover {
   transform: scale(1.15);
   border-color: #3b82f6;
   z-index: 2;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
 .card-similar-item img {
