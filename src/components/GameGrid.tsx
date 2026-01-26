@@ -16,22 +16,19 @@ interface GridItemData {
   onOpenModal: (game: ProcessedGame) => void;
 }
 
-// Отдельная ячейка сетки
 const Cell = memo(({ columnIndex, rowIndex, style, data }: GridChildComponentProps<GridItemData>) => {
   const { games, columnCount, onOpenModal } = data;
   const index = rowIndex * columnCount + columnIndex;
 
-  // Если индекс выходит за пределы (пустая ячейка в последней строке)
   if (index >= games.length) {
     return null;
   }
 
   const game = games[index];
   
-  // Отступы между карточками
-  const gutter = 16;
+  // Увеличенный отступ для "воздуха"
+  const gutter = 24;
   
-  // Корректируем стиль, чтобы учесть отступы
   const cardStyle: CSSProperties = {
     ...style,
     left: Number(style.left) + gutter,
@@ -50,9 +47,8 @@ const Cell = memo(({ columnIndex, rowIndex, style, data }: GridChildComponentPro
 }, areEqual);
 
 const GameGrid: React.FC<GameGridProps> = ({ games, onOpenModal }) => {
-  // Настройки сетки
-  const MIN_COLUMN_WIDTH = 320; 
-  const ROW_HEIGHT = 480; 
+  const MIN_COLUMN_WIDTH = 340; // Немного шире для лучшего контента
+  const ROW_HEIGHT = 520; // Чуть выше для баланса
 
   if (games.length === 0) {
     return (
@@ -67,7 +63,6 @@ const GameGrid: React.FC<GameGridProps> = ({ games, onOpenModal }) => {
     <div style={{ flex: 1, height: '100%', width: '100%' }}>
       <AutoSizer>
         {({ height, width }) => {
-          // Вычисляем количество колонок
           const columnCount = Math.floor(width / MIN_COLUMN_WIDTH) || 1;
           const columnWidth = width / columnCount;
           const rowCount = Math.ceil(games.length / columnCount);
@@ -88,6 +83,7 @@ const GameGrid: React.FC<GameGridProps> = ({ games, onOpenModal }) => {
               width={width}
               itemData={itemData}
               className="game-grid-scroll-container"
+              style={{ overflowX: 'hidden' }}
             >
               {Cell}
             </Grid>
