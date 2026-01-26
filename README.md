@@ -1,2 +1,2 @@
-# GameCatalog
-GameCatalog
+# Game Catalog
+Game Catalog
