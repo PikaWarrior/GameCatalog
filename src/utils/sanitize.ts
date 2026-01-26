@@ -1,12 +1,15 @@
-// src/utils/sanitize.ts
 import sanitizeHtml from 'sanitize-html';
 import { Game, RawGame } from '../types';
 
 const cleanDescription = (html: string) => {
-  if (!html) return '';
+  if (!html) return 'No description available.';
+  
+  // Разрешаем больше тегов, чтобы текст не пропадал
   return sanitizeHtml(html, {
-    allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'li', 'h1', 'h2', 'h3'],
-    allowedAttributes: {} 
+    allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'li', 'h1', 'h2', 'h3', 'div', 'span'],
+    allowedAttributes: {
+      '*': ['style', 'class'] // Разрешаем простые стили, иногда Steam хранит текст в них
+    }
   });
 };
 
@@ -38,19 +41,18 @@ const deriveCoopStatus = (existingCoop: string | undefined, tags: string[]): str
 };
 
 export const sanitizeGameData = (raw: RawGame): Game => {
-  // Прямой маппинг полей
   const genre = raw.genre || 'Unknown';
   const subgenres = Array.isArray(raw.subgenres) ? raw.subgenres : [];
   const tags = Array.isArray(raw.tags) ? raw.tags : [];
   
-  // Обработка текстового саммари
   const similarSummary = cleanList(raw.similar_games_summary);
-
   const coop = deriveCoopStatus(raw.coop, tags);
-  const rawDesc = raw.description || raw.short_description || '';
+
+  // --- ИСПРАВЛЕНИЕ ОПИСАНИЯ ---
+  // Проверяем все возможные поля. Часто описание лежит в about_the_game
+  const rawDesc = raw.description || raw.about_the_game || raw.short_description || '';
   const description = cleanDescription(rawDesc);
 
-  // Обработка картинок похожих игр
   const similar = (Array.isArray(raw.similar_games) ? raw.similar_games : []).map((sim: any) => ({
     name: sim.name || 'Unknown',
     image: sim.image || sim.header_image || '/fallback-game.jpg',
@@ -63,15 +65,12 @@ export const sanitizeGameData = (raw: RawGame): Game => {
     name: raw.name || 'Unknown Game',
     image: raw.image || raw.header_image || '/fallback-game.jpg',
     steam_url: raw.steam_url || raw.url || '#',
-    
     genre: genre,
     subgenres: subgenres,
     tags: tags,
     coop: coop,
-    
     description: description,
     rating: raw.review_score || raw.rating,
-    
     similar_games: similar,
     similar_games_summary: similarSummary
   };
