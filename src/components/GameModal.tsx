@@ -32,20 +32,16 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     }
   }, [game.id]);
 
-  const { name, image, genre, coop, rating } = game;
-  
-  // Дополнительная защита на уровне рендеринга
-  const tags = Array.isArray(game.tags) ? game.tags : [];
-  const subgenres = Array.isArray(game.subgenres) ? game.subgenres : [];
-  const similarGames = Array.isArray(game.similar_games) ? game.similar_games : [];
-  
-  const description = game.sanitizedDescription || game.description || 'No description available.';
+  const { name, image, genre, coop, rating, similar_games } = game;
+  const tags = game.tags || [];
+  const subgenres = game.subgenres || [];
+  const description = game.sanitizedDescription || game.description;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
         
-        <button className="close-btn" onClick={onClose} aria-label="Close">
+        <button className="close-btn" onClick={onClose}>
           <X size={24} />
         </button>
 
@@ -94,50 +90,39 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           
           <div className="modal-section">
             <h3>About</h3>
+            {/* Используем dangerouslySetInnerHTML для поддержки HTML-тегов из описания Steam */}
             <div 
-              className="description-text"
-              dangerouslySetInnerHTML={{ __html: description }} 
+              className="description-text" 
+              dangerouslySetInnerHTML={{ __html: description }}
             />
           </div>
 
           <div className="modal-section">
             <h3>Tags & Genres</h3>
             <div className="tags-cloud">
-              {/* Принудительное приведение к строке String(sg) защищает от объектов */}
-              {subgenres.map((sg, i) => (
-                <span key={`sub-${i}`} className="tag-pill subgenre">{String(sg)}</span>
+              {subgenres.map(sg => (
+                <span key={`sub-${sg}`} className="tag-pill subgenre">{sg}</span>
               ))}
-              
-              {tags.slice(0, 30).map((tag, i) => (
-                <span key={`tag-${i}`} className="tag-pill">
-                   <Tag size={12} /> {String(tag)}
+              {tags.map(tag => (
+                <span key={`tag-${tag}`} className="tag-pill">
+                   <Tag size={12} /> {tag}
                 </span>
               ))}
-
-              {subgenres.length === 0 && tags.length === 0 && (
-                <span className="no-tags-msg" style={{color: '#64748b', fontSize: '0.9rem'}}>
-                  No tags available
-                </span>
-              )}
             </div>
           </div>
 
-          {similarGames.length > 0 && (
+          {/* НОВАЯ СЕКЦИЯ: Похожие игры */}
+          {similar_games && similar_games.length > 0 && (
             <div className="modal-section">
               <h3>
-                <LayoutGrid size={16} style={{display:'inline', marginRight: 8, verticalAlign: 'text-bottom'}}/>
+                <LayoutGrid size={16} style={{display:'inline', marginRight: 8}}/>
                 Similar Games
               </h3>
               <div className="similar-games-grid">
-                {similarGames.slice(0, 6).map((sim) => (
+                {similar_games.slice(0, 6).map((sim) => (
                   <div key={sim.id} className="similar-game-card">
                     <div className="similar-image-wrap">
-                      <img 
-                        src={sim.image} 
-                        alt={sim.name} 
-                        loading="lazy" 
-                        onError={(e) => { (e.target as HTMLImageElement).src = '/fallback-game.jpg'; }}
-                      />
+                      <img src={sim.image} alt={sim.name} loading="lazy" />
                     </div>
                     <span className="similar-name">{sim.name}</span>
                   </div>
