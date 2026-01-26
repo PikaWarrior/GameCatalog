@@ -1,15 +1,3 @@
-:root {
-  --genre-red: #ef4444;
-  --genre-green: #10b981;
-  --genre-blue: #3b82f6;
-  --genre-yellow: #f59e0b;
-  --genre-orange: #f97316;
-  --genre-purple: #8b5cf6;
-  --genre-default: #64748b;
-  --coop-single: #475569;
-  --coop-multi: #059669;
-}
-
 .game-card-wrapper {
   padding: 0;
   box-sizing: border-box;
@@ -40,6 +28,7 @@
   aspect-ratio: 16/9;
   overflow: hidden;
   background: #0f172a;
+  flex-shrink: 0; /* Чтобы картинка не сжималась */
 }
 
 .game-card-image img {
@@ -76,23 +65,21 @@
   align-items: center;
 }
 
-.badge.coop.single { background-color: var(--coop-single); }
-.badge.coop.multi { background-color: var(--coop-multi); }
-
 /* КОНТЕНТ */
 .card-content {
   padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  flex: 1;
-  justify-content: space-between;
+  flex: 1; /* Занимает все оставшееся место */
+  min-height: 0; /* Важно для работы flexbox скролла внутри */
 }
 
 .card-header-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .card-title {
@@ -113,17 +100,35 @@
   color: #64748b;
   transition: color 0.2s;
   margin-top: 2px;
+  flex-shrink: 0;
 }
 
 .steam-icon-link:hover {
   color: #3b82f6;
 }
 
-/* --- СЕКЦИЯ ПОХОЖИХ ИГР (УВЕЛИЧЕННАЯ) --- */
+/* --- ОПИСАНИЕ (ВЕРНУЛОСЬ) --- */
+.card-description-static {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #94a3b8;
+  margin-bottom: 12px;
+  
+  /* Обрезка текста */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Показываем 3 строки */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  
+  flex-grow: 1; /* Растягиваем, если есть место */
+}
+
+/* --- СЕКЦИЯ ПОХОЖИХ ИГР --- */
 .card-similar-section {
-  margin-top: auto;
+  margin-top: auto; /* Прижимаем к самому низу */
   padding-top: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
 }
 
 .similar-label {
@@ -131,20 +136,20 @@
   text-transform: uppercase;
   color: #64748b;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   letter-spacing: 0.5px;
 }
 
 .card-similar-grid {
   display: flex;
-  gap: 8px; /* Больше отступ */
-  align-items: center;
+  gap: 8px;
   width: 100%;
 }
 
 .card-similar-item {
-  flex: 1; /* Растягиваем на всю ширину */
-  aspect-ratio: 16/9; /* Сохраняем пропорции */
+  flex: 1;
+  /* УВЕЛИЧЕННАЯ ВЫСОТА */
+  height: 50px; 
   border-radius: 6px;
   overflow: hidden;
   position: relative;
@@ -155,24 +160,16 @@
 }
 
 .card-similar-item:hover {
-  transform: scale(1.25); /* Сильное увеличение при наведении */
+  transform: scale(1.15);
   border-color: #3b82f6;
   z-index: 10;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 .card-similar-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.card-similar-more {
-  font-size: 0.8rem;
-  color: #64748b;
-  font-weight: 600;
-  min-width: 20px;
-  text-align: center;
 }
 
 .no-similar {
