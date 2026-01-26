@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X, Play, Tag, ExternalLink, Steam } from 'lucide-react'; // Убедитесь, что Steam/ExternalLink есть в lucide-react, если нет - используйте ExternalLink
+import { X, Tag, ExternalLink, Gamepad2 } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameModal.css';
 
@@ -11,13 +11,11 @@ interface GameModalProps {
 const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   if (!game) return null;
 
-  // Блокировка скролла
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = 'unset'; };
   }, []);
 
-  // Закрытие по ESC
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -31,11 +29,10 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <button className="modal-close-btn" onClick={onClose}>
+        <button className="modal-close-btn" onClick={onClose} aria-label="Close modal">
           <X size={24} />
         </button>
 
-        {/* --- HEADER IMAGE --- */}
         <div className="modal-header">
           <img 
             src={image} 
@@ -54,7 +51,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
         </div>
 
         <div className="modal-body-scroll">
-          {/* --- ACTION BUTTONS --- */}
           <div className="modal-actions">
             {steam_url && (
               <a 
@@ -63,20 +59,17 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                 rel="noopener noreferrer" 
                 className="action-btn steam"
               >
-                <ExternalLink size={18} />
+                <Gamepad2 size={18} />
                 Open in Steam
               </a>
             )}
-            {/* Можно добавить другие кнопки, например Play если есть локальный путь */}
           </div>
 
-          {/* --- DESCRIPTION --- */}
           <div 
             className="modal-description"
             dangerouslySetInnerHTML={{ __html: sanitizedDescription || description }}
           />
 
-          {/* --- TAGS & SUBGENRES --- */}
           <div className="modal-tags-section">
             <h3><Tag size={16} /> Tags & Subgenres</h3>
             <div className="tags-cloud">
@@ -89,7 +82,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
             </div>
           </div>
 
-          {/* --- SIMILAR GAMES SECTION (NEW!) --- */}
           {similar_games && similar_games.length > 0 && (
             <div className="similar-games-section">
               <h3>You might also like</h3>
