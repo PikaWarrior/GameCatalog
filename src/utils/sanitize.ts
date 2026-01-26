@@ -1,14 +1,14 @@
+// src/utils/sanitize.ts
 import sanitizeHtml from 'sanitize-html';
 import { Game, RawGame } from '../types';
 
 const cleanDescription = (html: string) => {
   if (!html) return 'No description available.';
   
-  // Разрешаем больше тегов, чтобы текст не пропадал
   return sanitizeHtml(html, {
     allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'li', 'h1', 'h2', 'h3', 'div', 'span'],
     allowedAttributes: {
-      '*': ['style', 'class'] // Разрешаем простые стили, иногда Steam хранит текст в них
+      '*': ['style', 'class']
     }
   });
 };
@@ -48,8 +48,7 @@ export const sanitizeGameData = (raw: RawGame): Game => {
   const similarSummary = cleanList(raw.similar_games_summary);
   const coop = deriveCoopStatus(raw.coop, tags);
 
-  // --- ИСПРАВЛЕНИЕ ОПИСАНИЯ ---
-  // Проверяем все возможные поля. Часто описание лежит в about_the_game
+  // Теперь TypeScript не будет ругаться, так как about_the_game есть в интерфейсе
   const rawDesc = raw.description || raw.about_the_game || raw.short_description || '';
   const description = cleanDescription(rawDesc);
 
