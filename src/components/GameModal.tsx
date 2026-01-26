@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { X, Star, Download, Play, Tag, Users, LayoutGrid } from 'lucide-react';
+import { X, Star, Play, Tag, Users, LayoutGrid } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameModal.css';
 
@@ -18,7 +18,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     return () => { document.body.style.overflow = 'unset'; };
   }, []);
 
-  // Закрытие по ESC
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -27,7 +26,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
-  // Скролл вверх при открытии новой игры
+  // Скроллим модалку вверх при открытии (или смене игры)
   useEffect(() => {
     if (modalRef.current) {
       modalRef.current.scrollTop = 0;
@@ -45,7 +44,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           <X size={24} />
         </button>
 
-        {/* --- Hero Section --- */}
         <div 
           className="modal-hero" 
           style={{ backgroundImage: `url(${image})` }}
@@ -60,9 +58,11 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                 <span className="meta-badge">
                   <Tag size={14} /> {genre}
                 </span>
+                
                 <span className="meta-badge">
                    <Users size={14} /> {coop}
                 </span>
+
                 {rating && (
                   <span className="meta-badge rating-badge">
                     <Star size={14} fill="currentColor" /> {rating}
@@ -71,13 +71,12 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
               </div>
 
               <div className="action-buttons">
-                {/* Если в JSON есть appid, можно сделать ссылку на запуск: steam://run/{id} */}
                 <a 
                   href={game.steam_url} 
                   target="_blank" 
-                  rel="noreferrer" 
-                  className="btn-primary" 
-                  style={{textDecoration: 'none'}}
+                  rel="noreferrer"
+                  className="btn-primary"
+                  style={{ textDecoration: 'none' }}
                 >
                   <Play size={18} fill="currentColor" /> Play / Steam
                 </a>
@@ -86,11 +85,11 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           </div>
         </div>
 
-        {/* --- Body Section --- */}
         <div className="modal-body custom-scrollbar" ref={modalRef}>
           
           <div className="modal-section">
             <h3>About</h3>
+            {/* Используем dangerouslySetInnerHTML, т.к. текст уже прошел санитизацию */}
             <div 
               className="description-text"
               dangerouslySetInnerHTML={{ __html: description }} 
@@ -103,7 +102,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
               {subgenres.map((sg, i) => (
                 <span key={`sub-${i}`} className="tag-pill subgenre">{sg}</span>
               ))}
-              {tags.slice(0, 15).map((tag, i) => (
+              {tags.slice(0, 20).map((tag, i) => (
                 <span key={`tag-${i}`} className="tag-pill">
                    <Tag size={12} /> {tag}
                 </span>
@@ -111,10 +110,13 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
             </div>
           </div>
 
-          {/* --- НОВАЯ СЕКЦИЯ: ПОХОЖИЕ ИГРЫ --- */}
+          {/* --- Секция похожих игр --- */}
           {similar_games && similar_games.length > 0 && (
             <div className="modal-section">
-              <h3><LayoutGrid size={16} style={{display:'inline', marginRight: 8}}/>Similar Games</h3>
+              <h3>
+                <LayoutGrid size={16} style={{display:'inline', marginRight: 8, verticalAlign: 'text-bottom'}}/>
+                Similar Games
+              </h3>
               <div className="similar-games-grid">
                 {similar_games.slice(0, 5).map((sim) => (
                   <div key={sim.id} className="similar-game-card">
