@@ -23,7 +23,7 @@ function App() {
 
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
-  const [filterState, setFilterState] = useLocalStorage<FilterState>('gameFilters_v8', {
+  const [filterState, setFilterState] = useLocalStorage<FilterState>('gameFilters_v9', {
     searchQuery: '',
     selectedTags: [],
     excludedTags: [],
@@ -137,12 +137,6 @@ function App() {
             const hasMulti = gameModes.includes('multiplayer');
             if (!hasCoop && !hasMulti) return false;
           }
-          else if (targetMode === 'co-op & multiplayer & split screen') {
-            const hasCoop = gameModes.includes('co-op');
-            const hasMulti = gameModes.includes('multiplayer');
-            const hasSplit = gameModes.includes('split screen') || gameModes.includes('splitscreen');
-            if (!hasCoop && !hasMulti && !hasSplit) return false;
-          }
           else {
             if (!gameModes.includes(targetMode)) return false;
           }
@@ -214,6 +208,10 @@ function App() {
     });
   }, [setFilterState]);
 
+  // Хендлеры для новых селектов
+  const handleCoopChange = useCallback((coop: string) => setFilterState(p => ({ ...p, selectedCoop: coop })), [setFilterState]);
+  const handleSortChange = useCallback((sort: any) => setFilterState(p => ({ ...p, sortBy: sort })), [setFilterState]);
+
   return (
     <div className="app-container">
       <ErrorBoundary>
@@ -243,6 +241,12 @@ function App() {
               selectedTags={filterState.selectedTags}
               excludedTags={filterState.excludedTags}
               onTagToggle={handleTagToggle}
+              
+              // Прокидываем новые пропсы
+              selectedCoop={filterState.selectedCoop}
+              onCoopChange={handleCoopChange}
+              sortBy={filterState.sortBy}
+              onSortChange={handleSortChange}
             />
           </aside>
 
@@ -250,16 +254,4 @@ function App() {
             <Suspense fallback={<LoadingSkeleton count={12} />}>
               <GameGrid 
                 games={filteredGames} 
-                onOpenModal={handleOpenModal} 
-              />
-            </Suspense>
-          </section>
-        </main>
-
-        <GameModal game={selectedGame} onClose={handleCloseModal} />
-      </ErrorBoundary>
-    </div>
-  );
-}
-
-export default App;
+                onOpenModal={handleOpenModal
