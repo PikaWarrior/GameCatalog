@@ -1,14 +1,14 @@
 // src/types/index.ts
 
-// Тип для ссылки на похожую игру
+// Обновленный тип: id необязателен (так как в JSON его нет), добавлен url
 export interface SimilarGameRef {
-  id: string | number;
+  id?: string | number;
   name: string;
   image: string;
+  url?: string;
 }
 
 // Интерфейс для ВХОДЯЩЕГО (сырого) JSON
-// Поля сделаны опциональными для максимальной совместимости
 export interface RawGame {
   id?: string | number;
   steamId?: string | number;
@@ -24,32 +24,32 @@ export interface RawGame {
   description?: string;
   short_description?: string;
   about_the_game?: string;
-  // Списки тегов и жанров
+  // Списки
   tags?: string[];
   genres?: string[];
-  categories?: string[]; // "Single-player", "Multi-player" и т.д.
+  categories?: string[];
   // Новые данные
-  similar_games?: SimilarGameRef[];
+  similar_games?: SimilarGameRef[] | { name: string; url: string; image: string }[]; // Поддержка структуры JSON
+  similar_games_summary?: string[]; // Поле из JSON, которое вызывало ошибку
   review_score?: number | string;
   rating?: number | string;
 }
 
-// ОСНОВНОЙ интерфейс (внутренний), который используется в приложении
+// ОСНОВНОЙ интерфейс (внутренний)
 export interface Game {
   id: string;
   name: string;
   image: string;
   steam_url: string;
-  coop: string;        // Строка видов "Single / Co-op" для фильтров
-  genre: string;       // Основной жанр
-  tags: string[];      // Теги Steam
+  coop: string;
+  genre: string;
+  tags: string[];
   description: string;
-  subgenres: string[]; // Дополнительные жанры
+  subgenres: string[];
   rating?: string | number;
-  similar_games: SimilarGameRef[]; // Новое поле
+  similar_games: SimilarGameRef[];
 }
 
-// Обработанная игра (с полями для поиска)
 export interface ProcessedGame extends Game {
   searchableText: string;
   normalizedCoop: string;
@@ -57,7 +57,6 @@ export interface ProcessedGame extends Game {
   sanitizedDescription: string;
 }
 
-// Состояние фильтров
 export interface FilterState {
   searchQuery: string;
   selectedTags: string[];
