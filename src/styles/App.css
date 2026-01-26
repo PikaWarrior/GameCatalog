@@ -1,84 +1,183 @@
+/* Сброс и глобальные переменные */
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
 :root {
-  --bg-color: #121212;
-  --sidebar-bg: #1a1a1a;
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0a0;
-  --accent-color: #3b82f6;
-  --border-color: #333;
+--primary-bg: #0f172a;
+--secondary-bg: #1e293b;
+--sidebar-bg: #111827;
+--accent: #3b82f6;
+--text-primary: #f8fafc;
+--text-secondary: #94a3b8;
+--border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Красивый скроллбар для всего сайта */
+::-webkit-scrollbar {
+width: 8px;
+height: 8px;
+}
+::-webkit-scrollbar-track {
+background: transparent;
+}
+::-webkit-scrollbar-thumb {
+background: rgba(255, 255, 255, 0.1);
+border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: rgba(255, 255, 255, 0.2);
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--bg-color);
-  color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  overflow: hidden; /* Важно для скролла */
+background-color: var(--primary-bg);
+color: var(--text-primary);
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+height: 100vh;
+width: 100vw;
+overflow: hidden;
 }
 
+/* --- ЗАЩИТА ОТ ФАНТОМНЫХ ИКОНОК --- */
+/* Если лупа сделана через псевдо-элемент на body или app-container */
+body::before, body::after,
+.app-container::before, .app-container::after {
+content: none !important;
+display: none !important;
+}
+
+/* Жесткий хак: скрываем любые "бродячие" SVG в начале хедера, которые НЕ внутри кнопки */
+/* Это уберет лупу, если она "прибита" прямым SVG в шапке */
+.header > svg {
+display: none !important;
+}
+/* ---------------------------------- */
+
 .app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh; /* Фикс пустой сетки */
-  width: 100vw;
+display: flex;
+flex-direction: column;
+height: 100vh;
+width: 100%;
 }
 
 .main-content {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-  position: relative;
+display: flex;
+flex: 1;
+overflow: hidden;
+position: relative;
+background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%);
 }
 
-.sidebar {
-  width: 300px;
-  background-color: var(--sidebar-bg);
-  border-right: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  gap: 20px;
-  overflow-y: auto;
-  flex-shrink: 0;
+/* --- САЙДБАР С АНИМАЦИЕЙ --- */
+.filters-sidebar {
+width: 300px;
+background: var(--sidebar-bg);
+border-right: 1px solid var(--border-color);
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+overflow-x: hidden;
+overflow-y: auto;
+opacity: 1;
+flex-shrink: 0;
+padding: 20px;
+display: flex;
+flex-direction: column;
 }
 
-.content-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
+.filters-sidebar.closed {
+width: 0;
+padding: 0;
+opacity: 0;
+border: none;
+margin-left: -1px; /* Прячем границу */
 }
 
-/* Стили для контролов в сайдбаре (как в оригинале) */
-.sidebar-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-color);
+.filters-sticky {
+display: flex;
+flex-direction: column;
+gap: 20px;
+min-width: 260px; /* Чтобы контент не сжимался при анимации */
 }
 
-.control-group label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-  text-transform: uppercase;
+/* --- Стили контролов фильтров --- */
+.filter-group label {
+display: block;
+margin-bottom: 8px;
+color: var(--text-secondary);
+font-size: 0.85rem;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.5px;
 }
 
-.control-select {
-  width: 100%;
-  padding: 8px 12px;
-  background-color: #252525;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  outline: none;
+.filter-select {
+width: 100%;
+padding: 10px 12px;
+background: rgba(255, 255, 255, 0.05);
+border: 1px solid var(--border-color);
+border-radius: 8px;
+color: var(--text-primary);
+font-size: 0.95rem;
+cursor: pointer;
+transition: all 0.2s;
+outline: none;
 }
 
-.control-select:focus {
-  border-color: var(--accent-color);
+.filter-select:hover {
+background: rgba(255, 255, 255, 0.08);
+border-color: rgba(255, 255, 255, 0.2);
+}
+
+.filter-select:focus {
+border-color: var(--accent);
+box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.filter-select option {
+background-color: var(--secondary-bg);
+}
+
+.reset-btn {
+width: 100%;
+padding: 12px;
+background: rgba(239, 68, 68, 0.1); /* Красный полупрозрачный */
+color: #fca5a5;
+border: 1px solid rgba(239, 68, 68, 0.2);
+border-radius: 8px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s;
+margin-top: 10px;
+}
+
+.reset-btn:hover {
+background: rgba(239, 68, 68, 0.2);
+color: #fff;
+}
+
+/* --- Секция контента --- */
+.games-grid-section {
+flex: 1;
+height: 100%;
+overflow: hidden;
+position: relative;
+display: flex;
+flex-direction: column;
+padding-top: 20px;
+}
+
+.no-results {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+height: 100%;
+color: var(--text-secondary);
+}
+
+.no-results h3 {
+font-size: 1.5rem;
+margin-bottom: 8px;
+color: var(--text-primary);
 }
