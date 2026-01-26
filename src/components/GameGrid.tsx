@@ -10,86 +10,89 @@ interface GameGridProps {
   onOpenModal: (game: ProcessedGame) => void;
 }
 
+// Интерфейс данных, прокидываемых внутрь ячейки виртуального списка
 interface GridItemData {
   games: ProcessedGame[];
   columnCount: number;
   onOpenModal: (game: ProcessedGame) => void;
 }
 
+// Компонент одной ячейки (Карточки)
+// Используем memo и areEqual для оптимизации рендеринга при скролле
 const Cell = memo(({ columnIndex, rowIndex, style, data }: GridChildComponentProps<GridItemData>) => {
   const { games, columnCount, onOpenModal } = data;
   const index = rowIndex * columnCount + columnIndex;
 
+  // Если индекс выходит за пределы массива (пустая ячейка в последней строке), ничего не рендерим
   if (index >= games.length) {
     return null;
   }
 
   const game = games[index];
   
-  // Увеличенный отступ для "воздуха"
-  const gutter = 24;
-  
+  // Вычисляем отступы (gutter) между карточками
+  const gutter = 20;
   const cardStyle: CSSProperties = {
     ...style,
-    left: Number(style.left) + gutter,
-    top: Number(style.top) + gutter,
+    left: Number(style.left) + gutter / 2,
+    top: Number(style.top) + gutter / 2,
     width: Number(style.width) - gutter,
     height: Number(style.height) - gutter,
   };
 
   return (
-    <GameCard
-      game={game}
-      style={cardStyle}
-      onOpenModal={onOpenModal}
+    <GameCard 
+      game={game} 
+      style={cardStyle} 
+      onOpenModal={onOpenModal} 
     />
   );
 }, areEqual);
 
 const GameGrid: React.FC<GameGridProps> = ({ games, onOpenModal }) => {
-  const MIN_COLUMN_WIDTH = 340; // Немного шире для лучшего контента
-  const ROW_HEIGHT = 520; // Чуть выше для баланса
-
-  if (games.length === 0) {
-    return (
-      <div className="no-games-found">
-        <h2>No games found 😔</h2>
-        <p>Try adjusting your filters or search query</p>
-      </div>
-    );
-  }
+  const MIN_COLUMN_WIDTH = 320; // Минимальная ширина колонки
+  const ROW_HEIGHT = 500; // Высота строки (карточки)
 
   return (
-    <div style={{ flex: 1, height: '100%', width: '100%' }}>
-      <AutoSizer>
-        {({ height, width }) => {
-          const columnCount = Math.floor(width / MIN_COLUMN_WIDTH) || 1;
-          const columnWidth = width / columnCount;
-          const rowCount = Math.ceil(games.length / columnCount);
+    <div className="game-grid-wrapper" style={{ flex: 1, height: '100%', width: '100%' }}>
+      {games.length === 0 ? (
+        <div className="no-results">
+           <h3>Игры не найдены</h3>
+           <p>Попробуйте изменить фильтры или поисковый запрос</p>
+        </div>
+      ) : (
+        <AutoSizer>
+          {({ height, width }) => {
+            // Вычисляем количество колонок динамически
+            const columnCount = Math.floor(width / MIN_COLUMN_WIDTH) || 1;
+            const columnWidth = width / columnCount;
+            const rowCount = Math.ceil(games.length / columnCount);
 
-          const itemData: GridItemData = {
-            games,
-            columnCount,
-            onOpenModal,
-          };
+            // Упаковываем все необходимые данные для ячейки
+            const itemData: GridItemData = {
+              games,
+              columnCount,
+              onOpenModal,
+            };
 
-          return (
-            <Grid
-              columnCount={columnCount}
-              columnWidth={columnWidth}
-              height={height}
-              rowCount={rowCount}
-              rowHeight={ROW_HEIGHT}
-              width={width}
-              itemData={itemData}
-              className="game-grid-scroll-container"
-              style={{ overflowX: 'hidden' }}
-            >
-              {Cell}
-            </Grid>
-          );
-        }}
-      </AutoSizer>
+            return (
+              <Grid
+                className="game-grid-scroll"
+                columnCount={columnCount}
+                columnWidth={columnWidth}
+                height={height}
+                rowCount={rowCount}
+                rowHeight={ROW_HEIGHT}
+                width={width}
+                itemData={itemData}
+                overscanRowCount={2} // Рендерим чуть больше строк для плавного скролла
+              >
+                {Cell}
+              </Grid>
+            );
+          }}
+        </AutoSizer>
+      )}
     </div>
   );
 };
