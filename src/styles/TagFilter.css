@@ -1,60 +1,13 @@
-/* src/styles/TagFilter.css */
-
 .tag-filter-container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 15px;
 }
 
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.filter-group-title {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding-left: 4px;
-}
-
-/* Кастомный селект */
-.custom-select {
-  width: 100%;
-  padding: 10px 12px;
-  background-color: #0f172a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: #e2e8f0;
-  font-size: 0.9rem;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.2s;
-  
-  appearance: none; 
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-}
-
-.custom-select:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  background-color: #1a2436;
-}
-
-.custom-select:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 1px #3b82f6;
-}
-
-/* Секции аккордеона */
 .filter-section {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid #333;
   border-radius: 8px;
-  background: #0f172a;
+  background: #252525;
   overflow: hidden;
 }
 
@@ -63,81 +16,57 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px;
+  padding: 10px 12px;
   background: transparent;
   border: none;
-  color: #cbd5e1;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.filter-header:hover {
-  background: rgba(255, 255, 255, 0.03);
   color: #fff;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .filter-content {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 0;
-  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #333;
+  background: #1e1e1e;
 }
 
 .search-input-wrapper {
-  padding: 8px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  border-bottom: 1px solid #333;
   display: flex;
   align-items: center;
   gap: 8px;
 }
+
+.search-icon { color: #888; }
 
 .tag-search-input {
   width: 100%;
   background: transparent;
   border: none;
   color: #fff;
-  font-size: 0.85rem;
   outline: none;
 }
-.tag-search-input::placeholder { color: #64748b; }
 
 .tags-cloud {
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  max-height: 240px;
+  max-height: 250px;
   overflow-y: auto;
 }
 
 .filter-tag {
   font-size: 0.75rem;
-  padding: 4px 10px;
+  padding: 4px 8px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #94a3b8;
-  border: 1px solid transparent;
+  background: #333;
+  color: #aaa;
+  border: none;
   cursor: pointer;
   transition: all 0.2s;
-  text-align: left;
 }
 
-.filter-tag:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
-
-.filter-tag.active {
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  border-color: rgba(59, 130, 246, 0.3);
-}
-
-.filter-tag.excluded {
-  background: rgba(239, 68, 68, 0.15);
-  color: #fca5a5;
-  border-color: rgba(239, 68, 68, 0.3);
-  text-decoration: line-through;
-  opacity: 0.8;
-}
+.filter-tag:hover { background: #444; color: #fff; }
+.filter-tag.active { background: #2563eb; color: #fff; }
+.filter-tag.excluded { background: #dc2626; color: #fff; text-decoration: line-through; }
