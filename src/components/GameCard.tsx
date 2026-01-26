@@ -13,33 +13,45 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
   
   // 1. ИКОНКИ КООПА
   const getCoopIcon = (coop: string) => {
-    const lower = coop.toLowerCase();
+    const lower = (coop || '').toLowerCase();
     if (lower.includes('online')) return <Globe size={12} />;
     if (lower.includes('lan')) return <Monitor size={12} />;
-    if (lower.includes('split') || lower.includes('shared')) return <Users size={12} />;
+    if (lower.includes('split') || lower.includes('shared') || lower.includes('local')) return <Users size={12} />;
     return <User size={12} />;
   };
 
-  // 2. ЦВЕТА (Прямо в коде, чтобы не ломались)
+  // 2. ЦВЕТА ЖАНРОВ (Расширенная палитра)
   const getGenreColor = (genre: string) => {
     const g = (genre || '').toLowerCase();
-    if (g.includes('action') || g.includes('shooter') || g.includes('fighting')) return '#ef4444'; // Red
-    if (g.includes('adventure') || g.includes('rpg') || g.includes('role')) return '#10b981'; // Green
-    if (g.includes('strategy') || g.includes('rts') || g.includes('card')) return '#3b82f6'; // Blue
-    if (g.includes('sim') || g.includes('build') || g.includes('craft')) return '#f59e0b'; // Yellow
-    if (g.includes('horror') || g.includes('survival')) return '#f97316'; // Orange
-    if (g.includes('sport') || g.includes('racing')) return '#8b5cf6'; // Purple
-    return '#64748b'; // Default Slate
+    
+    // Красные (Экшен)
+    if (g.includes('action') || g.includes('shooter') || g.includes('fighting') || g.includes('hack') || g.includes('fps')) return '#ef4444'; 
+    // Зеленые (Приключения/РПГ)
+    if (g.includes('adventure') || g.includes('rpg') || g.includes('role') || g.includes('metroidvania')) return '#10b981'; 
+    // Синие (Стратегии)
+    if (g.includes('strategy') || g.includes('rts') || g.includes('card') || g.includes('turn') || g.includes('tactical')) return '#3b82f6'; 
+    // Желтые (Симуляторы)
+    if (g.includes('sim') || g.includes('build') || g.includes('craft') || g.includes('sandbox') || g.includes('manage')) return '#f59e0b'; 
+    // Оранжевые (Хоррор/Выживание)
+    if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) return '#f97316'; 
+    // Фиолетовые (Спорт/Гонки)
+    if (g.includes('sport') || g.includes('racing') || g.includes('driving')) return '#8b5cf6'; 
+    // Розовые (Инди/Казуальные/Аркады)
+    if (g.includes('indie') || g.includes('casual') || g.includes('arcade') || g.includes('puzzle') || g.includes('platformer')) return '#ec4899';
+    
+    // Дефолтный (Серый)
+    return '#64748b'; 
   };
 
   const getCoopColor = (coop: string) => {
-    return coop === 'Single' ? '#475569' : '#059669'; // Серый или Изумрудный
+    // Single -> Темно-серый, Всё остальное -> Изумрудный
+    return (coop === 'Single') ? '#475569' : '#059669';
   };
 
   const genreColor = getGenreColor(game.genre);
   const coopColor = getCoopColor(game.normalizedCoop);
   
-  // Очистка описания от HTML тегов для превью
+  // Очистка описания
   const cleanDesc = (game.description || "No description").replace(/<[^>]*>?/gm, '');
 
   return (
@@ -60,10 +72,13 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
           />
           
           <div className="card-badges">
-            <span className="badge" style={{ backgroundColor: genreColor }}>
+            {/* ЖАНР: Цвет передается инлайн, перекрывая CSS */}
+            <span className="badge" style={{ backgroundColor: genreColor, borderColor: genreColor }}>
               {game.genre}
             </span>
-            <span className="badge" style={{ backgroundColor: coopColor }}>
+            
+            {/* КООП: Цвет передается инлайн */}
+            <span className="badge" style={{ backgroundColor: coopColor, borderColor: coopColor }}>
               {getCoopIcon(game.coop)} 
               <span style={{marginLeft: 4}}>{game.normalizedCoop}</span>
             </span>
@@ -88,12 +103,12 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             </a>
           </div>
 
-          {/* --- ВОЗВРАЩЕННОЕ ОПИСАНИЕ --- */}
+          {/* ОПИСАНИЕ */}
           <div className="card-description-static">
             {cleanDesc}
           </div>
 
-          {/* --- ПОХОЖИЕ ИГРЫ --- */}
+          {/* ПОХОЖИЕ ИГРЫ (Увеличенные) */}
           <div className="card-similar-section">
             <div className="similar-label">Similar Games:</div>
             
