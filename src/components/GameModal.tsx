@@ -1,21 +1,23 @@
 import React, { useEffect } from 'react';
-import { X, Star, Download, Play, Tag, Users } from 'lucide-react';
+import { X, Play, Tag, ExternalLink, Steam } from 'lucide-react'; // Убедитесь, что Steam/ExternalLink есть в lucide-react, если нет - используйте ExternalLink
 import { ProcessedGame } from '../types';
 import '../styles/GameModal.css';
 
 interface GameModalProps {
-  game: ProcessedGame | null; 
+  game: ProcessedGame | null;
   onClose: () => void;
 }
 
 const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   if (!game) return null;
 
+  // Блокировка скролла
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = 'unset'; };
   }, []);
 
+  // Закрытие по ESC
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -24,88 +26,98 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
-  const title = game.name;
-  const coverUrl = game.image; 
-  const backdropUrl = coverUrl; 
-  
-  const tags = game.tags || [];
-  const subgenres = game.subgenres || [];
-
-  // Пытаемся безопасно получить рейтинг, если он вдруг появится в типах как optional
-  // @ts-ignore - игнорируем ошибку TS, если поля нет в типе, но оно есть в данных
-  const rating = game.rating;
+  const { name, image, genre, coop, sanitizedDescription, description, tags, subgenres, similar_games, steam_url } = game;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        
-        <button className="close-btn" onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <button className="modal-close-btn" onClick={onClose}>
           <X size={24} />
         </button>
 
-        <div 
-          className="modal-hero" 
-          style={{ backgroundImage: `url(${backdropUrl})` }}
-        >
-          <div className="hero-overlay"></div>
-          <div className="hero-content">
-            <img src={coverUrl} alt={title} className="hero-poster" />
-            <div className="hero-info">
-              <h2 className="game-title">{title}</h2>
-              
-              <div className="meta-row">
-                <span className="meta-badge">
-                  <Tag size={14} /> {game.genre}
-                </span>
-                
-                <span className="meta-badge">
-                   <Users size={14} /> {game.coop}
-                </span>
-
-                {/* БЕЗОПАСНЫЙ РЕНДЕР РЕЙТИНГА */}
-                {/* Рендерим только если rating существует */}
-                {rating && (
-                  <span className="meta-badge rating-badge">
-                    <Star size={14} fill="currentColor" /> {rating}
-                  </span>
-                )}
-              </div>
-
-              <div className="action-buttons">
-                <button className="btn-primary">
-                  <Play size={18} fill="currentColor" /> Play Now
-                </button>
-                <button className="btn-secondary">
-                  <Download size={18} /> Download
-                </button>
-              </div>
+        {/* --- HEADER IMAGE --- */}
+        <div className="modal-header">
+          <img 
+            src={image} 
+            alt={name} 
+            className="modal-cover"
+            onError={(e) => (e.currentTarget.src = '/fallback-game.jpg')}
+          />
+          <div className="modal-header-gradient" />
+          <div className="modal-title-container">
+            <h1>{name}</h1>
+            <div className="modal-meta-row">
+              <span className="modal-badge genre">{genre}</span>
+              <span className="modal-badge coop">{coop}</span>
             </div>
           </div>
         </div>
 
-        <div className="modal-body custom-scrollbar">
-          
-          <div className="modal-section">
-            <h3>About</h3>
-            <p className="description-text">
-              {game.sanitizedDescription || game.description}
-            </p>
+        <div className="modal-body-scroll">
+          {/* --- ACTION BUTTONS --- */}
+          <div className="modal-actions">
+            {steam_url && (
+              <a 
+                href={steam_url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="action-btn steam"
+              >
+                <ExternalLink size={18} />
+                Open in Steam
+              </a>
+            )}
+            {/* Можно добавить другие кнопки, например Play если есть локальный путь */}
           </div>
 
-          <div className="modal-section">
-            <h3>Tags & Genres</h3>
+          {/* --- DESCRIPTION --- */}
+          <div 
+            className="modal-description"
+            dangerouslySetInnerHTML={{ __html: sanitizedDescription || description }}
+          />
+
+          {/* --- TAGS & SUBGENRES --- */}
+          <div className="modal-tags-section">
+            <h3><Tag size={16} /> Tags & Subgenres</h3>
             <div className="tags-cloud">
-              {subgenres.map(sg => (
-                <span key={sg} className="tag-pill subgenre">{sg}</span>
+              {subgenres.map((sg, i) => (
+                <span key={`sub-${i}`} className="tag-chip subgenre">{sg}</span>
               ))}
-              {tags.map(tag => (
-                <span key={tag} className="tag-pill">
-                   <Tag size={12} /> {tag}
-                </span>
+              {tags.map((tag, i) => (
+                <span key={`tag-${i}`} className="tag-chip">{tag}</span>
               ))}
             </div>
           </div>
 
+          {/* --- SIMILAR GAMES SECTION (NEW!) --- */}
+          {similar_games && similar_games.length > 0 && (
+            <div className="similar-games-section">
+              <h3>You might also like</h3>
+              <div className="similar-games-grid">
+                {similar_games.map((sim, idx) => (
+                  <a 
+                    key={idx} 
+                    href={sim.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="similar-game-card"
+                  >
+                    <div className="similar-game-image-wrapper">
+                      <img 
+                        src={sim.image} 
+                        alt={sim.name} 
+                        onError={(e) => (e.currentTarget.src = '/fallback-game.jpg')}
+                      />
+                      <div className="similar-game-overlay">
+                        <ExternalLink size={16} />
+                      </div>
+                    </div>
+                    <span className="similar-game-title">{sim.name}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
