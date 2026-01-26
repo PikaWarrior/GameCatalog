@@ -92,7 +92,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
             />
           </div>
 
-          {/* --- ПЕРЕИМЕНОВАНО: Details -> Tags & Subgenres --- */}
           <div className="modal-section">
             <h3>Tags & Subgenres</h3>
             <div className="tags-cloud">
@@ -107,7 +106,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
             </div>
           </div>
 
-          {/* --- ПЕРЕИМЕНОВАНО: Why Similar? -> Similar Games --- */}
+          {/* СЕКЦИЯ: ТЕКСТОВОЕ ОПИСАНИЕ СХОЖЕСТИ */}
           {similar_games_summary && similar_games_summary.length > 0 && (
             <div className="modal-section">
               <h3>
