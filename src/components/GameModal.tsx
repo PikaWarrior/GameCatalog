@@ -33,10 +33,11 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   }, [game.id]);
 
   const { name, image, genre, coop, rating } = game;
-  // Защита от undefined массивов
-  const tags = game.tags || [];
-  const subgenres = game.subgenres || [];
-  const similarGames = game.similar_games || [];
+  
+  // Дополнительная защита на уровне рендеринга
+  const tags = Array.isArray(game.tags) ? game.tags : [];
+  const subgenres = Array.isArray(game.subgenres) ? game.subgenres : [];
+  const similarGames = Array.isArray(game.similar_games) ? game.similar_games : [];
   
   const description = game.sanitizedDescription || game.description || 'No description available.';
 
@@ -102,13 +103,12 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           <div className="modal-section">
             <h3>Tags & Genres</h3>
             <div className="tags-cloud">
-              {/* Рендерим жанры */}
-              {subgenres.length > 0 && subgenres.map((sg, i) => (
+              {/* Принудительное приведение к строке String(sg) защищает от объектов */}
+              {subgenres.map((sg, i) => (
                 <span key={`sub-${i}`} className="tag-pill subgenre">{String(sg)}</span>
               ))}
               
-              {/* Рендерим теги (до 20 штук) */}
-              {tags.length > 0 && tags.slice(0, 20).map((tag, i) => (
+              {tags.slice(0, 30).map((tag, i) => (
                 <span key={`tag-${i}`} className="tag-pill">
                    <Tag size={12} /> {String(tag)}
                 </span>
@@ -129,7 +129,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                 Similar Games
               </h3>
               <div className="similar-games-grid">
-                {similarGames.slice(0, 5).map((sim) => (
+                {similarGames.slice(0, 6).map((sim) => (
                   <div key={sim.id} className="similar-game-card">
                     <div className="similar-image-wrap">
                       <img 
