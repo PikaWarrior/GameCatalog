@@ -2,16 +2,27 @@
 import sanitizeHtml from 'sanitize-html';
 import { Game, RawGame } from '../types';
 
-// Функция для очистки HTML от мусора
 const cleanDescription = (html: string) => {
   if (!html) return '';
   return sanitizeHtml(html, {
     allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'li', 'h1', 'h2'],
-    allowedAttributes: {} // Убираем классы и стили, оставляем чистую структуру
+    allowedAttributes: {} 
   });
 };
 
-// Функция определения коопа (твоя логика)
+const cleanList = (input: any): string[] => {
+  if (!Array.isArray(input)) return [];
+  return input
+    .map(item => {
+      if (typeof item === 'string') return item.trim();
+      if (item && typeof item === 'object') {
+        return item.name || item.value || item.description || '';
+      }
+      return String(item);
+    })
+    .filter(str => str.length > 0);
+};
+
 const deriveCoopStatus = (existingCoop: string | undefined, tags: string[]): string => {
   if (existingCoop && existingCoop !== 'Unknown') return existingCoop;
 
@@ -27,26 +38,22 @@ const deriveCoopStatus = (existingCoop: string | undefined, tags: string[]): str
 };
 
 export const sanitizeGameData = (raw: RawGame): Game => {
-  // 1. ЖАНР: Берем строку напрямую. Если пусто - 'Unknown'
   const genre = raw.genre || 'Unknown';
-
-  // 2. СПИСКИ: Убеждаемся, что это массивы
   const subgenres = Array.isArray(raw.subgenres) ? raw.subgenres : [];
   const tags = Array.isArray(raw.tags) ? raw.tags : [];
+  
+  // Обработка саммари
+  const similarSummary = cleanList(raw.similar_games_summary);
 
-  // 3. КООП
   const coop = deriveCoopStatus(raw.coop, tags);
-
-  // 4. ОПИСАНИЕ
   const rawDesc = raw.description || raw.short_description || '';
   const description = cleanDescription(rawDesc);
 
-  // 5. ПОХОЖИЕ ИГРЫ (с генерацией ID)
   const similar = (Array.isArray(raw.similar_games) ? raw.similar_games : []).map((sim: any) => ({
     name: sim.name || 'Unknown',
     image: sim.image || sim.header_image || '/fallback-game.jpg',
     url: sim.url || sim.steam_url || '#',
-    id: sim.id || sim.url || `sim-${Math.random()}` // Генерируем ID для React ключей
+    id: sim.id || sim.url || `sim-${Math.random()}`
   }));
 
   return {
@@ -54,15 +61,14 @@ export const sanitizeGameData = (raw: RawGame): Game => {
     name: raw.name || 'Unknown Game',
     image: raw.image || raw.header_image || '/fallback-game.jpg',
     steam_url: raw.steam_url || raw.url || '#',
-    
-    // ПРЯМОЕ СООТВЕТСТВИЕ ПОЛЕЙ
     genre: genre,
     subgenres: subgenres,
     tags: tags,
-    
     coop: coop,
     description: description,
     rating: raw.review_score || raw.rating,
-    similar_games: similar
+    similar_games: similar,
+    // Добавляем в объект
+    similar_games_summary: similarSummary
   };
 };
