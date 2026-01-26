@@ -1,19 +1,15 @@
-/* --- ОПТИМИЗАЦИЯ: Убран blur, упрощены тени --- */
-
+/* --- ГЛАВНАЯ ОПТИМИЗАЦИЯ: Убран BLUR --- */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  /* БЫЛО: backdrop-filter: blur(8px) - это убивает FPS */
-  /* СТАЛО: Просто темный фон */
+  /* Просто непрозрачный темный фон вместо размытия */
   background: rgba(0, 0, 0, 0.92); 
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 20px;
-  /* Упрощенная анимация (только opacity) */
   animation: fadeIn 0.15s ease-out;
-  /* Принудительное использование GPU */
   will-change: opacity;
 }
 
@@ -28,27 +24,26 @@
   display: flex;
   flex-direction: column;
   /* Упрощенная тень */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
   border: 1px solid rgba(255, 255, 255, 0.1);
   animation: slideUp 0.2s ease-out;
   will-change: transform;
 }
 
-/* ШАПКА */
+/* HERO */
 .modal-hero {
   position: relative;
-  height: 320px; /* Чуть уменьшил высоту */
+  height: 320px;
   background-size: cover;
   background-position: center top;
   display: flex;
   align-items: flex-end;
-  background-color: #0f172a; /* Фоллбек цвет */
+  background-color: #0f172a;
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  /* Градиент оставил, он не так сильно грузит как blur */
   background: linear-gradient(
     to bottom, 
     rgba(15, 23, 42, 0.2) 0%, 
@@ -215,7 +210,7 @@
   border-color: rgba(59, 130, 246, 0.2);
 }
 
-/* --- СТИЛИ ДЛЯ SUMMARY (Текст вместо картинок) --- */
+/* Стили для текстового списка схожести */
 .summary-list {
   display: flex;
   flex-direction: column;
@@ -232,7 +227,6 @@
   line-height: 1.4;
 }
 
-/* Анимации */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -250,10 +244,6 @@
     text-align: center;
     padding-top: 40px;
   }
-  .hero-poster {
-    width: 100px;
-    height: 150px;
-  }
-  .hero-info { align-items: center; }
+  .hero-poster { width: 100px; height: 150px; }
   .modal-hero { height: auto; padding-bottom: 20px;}
 }
