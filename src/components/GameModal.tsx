@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { X, Star, Play, Tag, Users, LayoutGrid, Gamepad2 } from 'lucide-react';
+import { X, Star, Play, Tag, Users, FileText, Gamepad2 } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameModal.css';
 
@@ -14,6 +14,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   if (!game) return null;
 
   useEffect(() => {
+    // Блокировка скролла
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = 'unset'; };
   }, []);
@@ -30,18 +31,18 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     if (modalRef.current) modalRef.current.scrollTop = 0;
   }, [game.id]);
 
-  const { name, image, genre, coop, rating, subgenres, tags, similar_games } = game;
+  // Извлекаем нужные поля. Теперь нам важен similar_games_summary
+  const { name, image, genre, coop, rating, subgenres, tags, similar_games_summary } = game;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
         
-        {/* Кнопка закрытия (наверху справа) */}
         <button className="close-btn" onClick={onClose} aria-label="Close">
           <X size={20} />
         </button>
 
-        {/* --- HERO SECTION --- */}
+        {/* HERO */}
         <div 
           className="modal-hero" 
           style={{ backgroundImage: `url(${image})` }}
@@ -49,10 +50,8 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           <div className="hero-overlay"></div>
           
           <div className="hero-content">
-            {/* Постер игры */}
             <img src={image} alt={name} className="hero-poster" />
             
-            {/* Информация справа от постера */}
             <div className="hero-info">
               <h2 className="game-title">{name}</h2>
               
@@ -84,7 +83,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           </div>
         </div>
 
-        {/* --- BODY --- */}
+        {/* BODY */}
         <div className="modal-body custom-scrollbar" ref={modalRef}>
           
           <div className="modal-section">
@@ -98,12 +97,9 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           <div className="modal-section">
             <h3>Details</h3>
             <div className="tags-cloud">
-              {/* Сначала Поджанры */}
               {subgenres.map((sg, i) => (
                 <span key={`sub-${i}`} className="tag-pill subgenre">{sg}</span>
               ))}
-              
-              {/* Потом Теги */}
               {tags.map((tag, i) => (
                 <span key={`tag-${i}`} className="tag-pill">
                    <Tag size={12} /> {tag}
@@ -112,25 +108,18 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
             </div>
           </div>
 
-          {/* Похожие игры */}
-          {similar_games && similar_games.length > 0 && (
+          {/* --- НОВАЯ СЕКЦИЯ: SUMMARY --- */}
+          {/* Выводим только если есть summary */}
+          {similar_games_summary && similar_games_summary.length > 0 && (
             <div className="modal-section">
               <h3>
-                <LayoutGrid size={16} style={{ marginRight: 8 }}/>
-                Similar Games
+                <FileText size={16} style={{ marginRight: 8 }}/>
+                Why Similar?
               </h3>
-              <div className="similar-games-grid">
-                {similar_games.slice(0, 6).map((sim) => (
-                  <div key={sim.id} className="similar-game-card">
-                    <div className="similar-image-wrap">
-                      <img 
-                        src={sim.image} 
-                        alt={sim.name} 
-                        loading="lazy"
-                        onError={(e) => { (e.target as HTMLImageElement).src = '/fallback-game.jpg'; }}
-                      />
-                    </div>
-                    <span className="similar-name">{sim.name}</span>
+              <div className="summary-list">
+                {similar_games_summary.map((text, i) => (
+                  <div key={i} className="summary-item">
+                    {text}
                   </div>
                 ))}
               </div>
