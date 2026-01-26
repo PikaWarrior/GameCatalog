@@ -1,55 +1,35 @@
 import React from 'react';
-import SearchBar from './SearchBar';
+import { Gamepad2, RotateCcw } from 'lucide-react';
 import '../styles/Header.css';
 
 interface HeaderProps {
   totalGames: number;
-  visibleGames: number;
-  onSearch: (value: string) => void;
-  searchTerm: string;
-  onToggleSidebar: () => void;
-  isSidebarOpen: boolean;
+  onReset: () => void;
+  hasActiveFilters: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ 
-  totalGames, visibleGames, onSearch, searchTerm, onToggleSidebar 
-}) => {
+const Header: React.FC<HeaderProps> = ({ totalGames, onReset, hasActiveFilters }) => {
   return (
-    <header className="header">
-      <div className="header-left">
-        <button 
-          className="menu-btn" 
-          onClick={onToggleSidebar} 
-          aria-label="Toggle Sidebar"
-          title="Toggle Sidebar"
-        >
-          {/* Чистый SVG "Гамбургер" (3 линии) без лишних библиотек */}
-          <svg 
-            width="24" 
-            height="24" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          >
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-        <h1>Game Catalog</h1>
-      </div>
-      
-      <div className="header-center">
-        <span className="stats-pill">
-          Showing <b>{visibleGames}</b> of {totalGames}
-        </span>
-      </div>
-
-      <div className="header-right">
-        <SearchBar value={searchTerm} onChange={onSearch} />
+    <header className="app-header">
+      <div className="header-content">
+        <div className="logo-section">
+          <Gamepad2 className="logo-icon" size={32} />
+          <h1>Game Library</h1>
+          <span className="game-count">{totalGames} games</span>
+        </div>
+        
+        <div className="header-actions">
+          {hasActiveFilters && (
+            <button 
+              onClick={onReset} 
+              className="reset-filters-btn"
+              title="Reset all filters"
+            >
+              <RotateCcw size={16} style={{ marginRight: '6px' }} />
+              Reset Filters
+            </button>
+          )}
+        </div>
       </div>
     </header>
   );
