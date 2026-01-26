@@ -26,15 +26,19 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
-  // Скроллим модалку вверх при открытии (или смене игры)
   useEffect(() => {
     if (modalRef.current) {
       modalRef.current.scrollTop = 0;
     }
   }, [game.id]);
 
-  const { name, image, genre, coop, tags, subgenres, rating, similar_games } = game;
-  const description = game.sanitizedDescription || game.description;
+  const { name, image, genre, coop, rating } = game;
+  // Защита от undefined массивов
+  const tags = game.tags || [];
+  const subgenres = game.subgenres || [];
+  const similarGames = game.similar_games || [];
+  
+  const description = game.sanitizedDescription || game.description || 'No description available.';
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -89,7 +93,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           
           <div className="modal-section">
             <h3>About</h3>
-            {/* Используем dangerouslySetInnerHTML, т.к. текст уже прошел санитизацию */}
             <div 
               className="description-text"
               dangerouslySetInnerHTML={{ __html: description }} 
@@ -99,29 +102,42 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           <div className="modal-section">
             <h3>Tags & Genres</h3>
             <div className="tags-cloud">
-              {subgenres.map((sg, i) => (
-                <span key={`sub-${i}`} className="tag-pill subgenre">{sg}</span>
+              {/* Рендерим жанры */}
+              {subgenres.length > 0 && subgenres.map((sg, i) => (
+                <span key={`sub-${i}`} className="tag-pill subgenre">{String(sg)}</span>
               ))}
-              {tags.slice(0, 20).map((tag, i) => (
+              
+              {/* Рендерим теги (до 20 штук) */}
+              {tags.length > 0 && tags.slice(0, 20).map((tag, i) => (
                 <span key={`tag-${i}`} className="tag-pill">
-                   <Tag size={12} /> {tag}
+                   <Tag size={12} /> {String(tag)}
                 </span>
               ))}
+
+              {subgenres.length === 0 && tags.length === 0 && (
+                <span className="no-tags-msg" style={{color: '#64748b', fontSize: '0.9rem'}}>
+                  No tags available
+                </span>
+              )}
             </div>
           </div>
 
-          {/* --- Секция похожих игр --- */}
-          {similar_games && similar_games.length > 0 && (
+          {similarGames.length > 0 && (
             <div className="modal-section">
               <h3>
                 <LayoutGrid size={16} style={{display:'inline', marginRight: 8, verticalAlign: 'text-bottom'}}/>
                 Similar Games
               </h3>
               <div className="similar-games-grid">
-                {similar_games.slice(0, 5).map((sim) => (
+                {similarGames.slice(0, 5).map((sim) => (
                   <div key={sim.id} className="similar-game-card">
                     <div className="similar-image-wrap">
-                      <img src={sim.image} alt={sim.name} loading="lazy" />
+                      <img 
+                        src={sim.image} 
+                        alt={sim.name} 
+                        loading="lazy" 
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/fallback-game.jpg'; }}
+                      />
                     </div>
                     <span className="similar-name">{sim.name}</span>
                   </div>
