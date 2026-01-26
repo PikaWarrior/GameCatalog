@@ -33,7 +33,7 @@ function App() {
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
   // !!! Ключ изменен на 'v12_FINAL' для сброса кеша
-  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v12_FINAL', {
+  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v13_FIXED', {
     searchQuery: '',
     selectedTags: [],
     excludedTags: [],
