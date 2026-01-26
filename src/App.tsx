@@ -11,8 +11,6 @@ import { Game, ProcessedGame, FilterState, RawGame } from './types';
 import '@styles/App.css';
 import '@styles/improvements.css';
 
-// --- ИЗМЕНЕНИЕ: Импорт нового JSON файла ---
-// Убедись, что файл лежит в src/data/FinalGameLib_WithSimilar.json
 // @ts-ignore
 import rawGamesData from './data/FinalGameLib_WithSimilar.json';
 
@@ -26,7 +24,7 @@ interface ExtendedFilterState extends Omit<FilterState, 'selectedGenre'> {
 
 function App() {
   const games: Game[] = useMemo(() => {
-    // Кастуем к RawGame[], так как структура поменялась
+    // Теперь это преобразование безопасно, так как мы обновили типы
     return (rawGamesData as RawGame[]).map(game => sanitizeGameData(game));
   }, []);
 
