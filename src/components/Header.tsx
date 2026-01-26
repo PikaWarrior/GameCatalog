@@ -2,7 +2,8 @@ import React from 'react';
 import { Gamepad2, RotateCcw } from 'lucide-react';
 import '../styles/Header.css';
 
-interface HeaderProps {
+// Определяем интерфейс экспортируемых пропсов
+export interface HeaderProps {
   totalGames: number;
   onReset: () => void;
   hasActiveFilters: boolean;
