@@ -7,7 +7,7 @@ export interface SimilarGameRef {
   url?: string;
 }
 
-// ВХОДЯЩИЙ ФОРМАТ (Строго по твоему JSON)
+// ВХОДЯЩИЙ ФОРМАТ
 export interface RawGame {
   id?: string | number;
   name: string;
@@ -17,19 +17,20 @@ export interface RawGame {
   steam_url?: string;
   url?: string;
   
-  genre: string;          // Строка
-  subgenres: string[];    // Массив строк
-  tags: string[];         // Массив строк
+  genre: string;
+  subgenres: string[];
+  tags: string[];
   coop?: string;
   
   description?: string;
   short_description?: string;
+  about_the_game?: string; // <--- ДОБАВЛЕНО ЭТО ПОЛЕ
   
   rating?: string | number;
   review_score?: string | number;
   
   similar_games?: SimilarGameRef[];
-  similar_games_summary?: string[]; // Текстовое объяснение схожести
+  similar_games_summary?: string[];
 }
 
 // ВНУТРЕННИЙ ФОРМАТ
@@ -47,8 +48,8 @@ export interface Game {
   description: string;
   rating?: string | number;
   
-  similar_games: SimilarGameRef[];     // Для карточек (картинки)
-  similar_games_summary: string[];     // Для модалки (текст)
+  similar_games: SimilarGameRef[];
+  similar_games_summary: string[];
 }
 
 export interface ProcessedGame extends Game {
