@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { 
-  X, Star, Play, Tag, FileText, 
+  X, Star, Play, FileText, 
   Gamepad2, Users, Globe, Monitor, User,
-  Sword, Scroll, Brain, Hammer, Ghost,  // <--- Hammer вместо Pickaxe
+  Sword, Scroll, Brain, Hammer, Ghost, // Hammer!
   Trophy, Car, Rocket, Puzzle, Coffee 
 } from 'lucide-react';
 import { ProcessedGame } from '../types';
@@ -15,6 +15,10 @@ interface GameModalProps {
 
 const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  
+  // Увеличенные иконки для модалки
+  const ICON_SIZE = 16;
+  const ICON_STROKE = 2;
 
   if (!game) return null;
 
@@ -38,23 +42,23 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   // --- ЛОГИКА ЦВЕТОВ ---
   const getCoopDetails = (coop: string) => {
     const lower = (coop || '').toLowerCase();
-    if (lower.includes('single')) return { color: '#64748b', icon: <User size={14} />, label: 'Single' };
-    if (lower.includes('split') || lower.includes('shared')) return { color: '#d97706', icon: <Monitor size={14} />, label: 'Split Screen' };
-    if (lower.includes('online') || lower.includes('multi')) return { color: '#7c3aed', icon: <Globe size={14} />, label: 'Multiplayer' };
-    return { color: '#059669', icon: <Users size={14} />, label: 'Co-op' };
+    if (lower.includes('single')) return { color: '#64748b', icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Single' };
+    if (lower.includes('split') || lower.includes('shared')) return { color: '#d97706', icon: <Monitor size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Split Screen' };
+    if (lower.includes('online') || lower.includes('multi')) return { color: '#7c3aed', icon: <Globe size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Multiplayer' };
+    return { color: '#059669', icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Co-op' };
   };
 
   const getGenreDetails = (genre: string) => {
     const g = (genre || '').toLowerCase();
-    if (g.includes('action') || g.includes('shooter')) return { color: '#ef4444', icon: <Sword size={14} /> };
-    if (g.includes('rpg') || g.includes('adventure')) return { color: '#10b981', icon: <Scroll size={14} /> };
-    if (g.includes('strategy') || g.includes('card')) return { color: '#3b82f6', icon: <Brain size={14} /> };
-    if (g.includes('sim') || g.includes('craft')) return { color: '#eab308', icon: <Hammer size={14} /> }; // <--- Hammer
-    if (g.includes('horror')) return { color: '#be123c', icon: <Ghost size={14} /> };
-    if (g.includes('sport')) return { color: '#8b5cf6', icon: <Trophy size={14} /> };
-    if (g.includes('racing')) return { color: '#f97316', icon: <Car size={14} /> };
-    if (g.includes('indie') || g.includes('casual')) return { color: '#06b6d4', icon: <Coffee size={14} /> };
-    return { color: '#475569', icon: <Gamepad2 size={14} /> };
+    if (g.includes('action') || g.includes('shooter')) return { color: '#ef4444', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
+    if (g.includes('rpg') || g.includes('adventure')) return { color: '#10b981', icon: <Scroll size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
+    if (g.includes('strategy') || g.includes('card')) return { color: '#3b82f6', icon: <Brain size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
+    if (g.includes('sim') || g.includes('craft')) return { color: '#eab308', icon: <Hammer size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
+    if (g.includes('horror')) return { color: '#be123c', icon: <Ghost size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
+    if (g.includes('sport')) return { color: '#8b5cf6', icon: <Trophy size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
+    if (g.includes('racing')) return { color: '#f97316', icon: <Car size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
+    if (g.includes('indie') || g.includes('casual')) return { color: '#06b6d4', icon: <Coffee size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
+    return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE}/> };
   };
 
   const { name, image, genre, coop, rating, subgenres, tags, similar_games_summary } = game;
@@ -69,7 +73,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           <X size={20} />
         </button>
 
-        {/* HERO */}
         <div 
           className="modal-hero" 
           style={{ backgroundImage: `url(${image})` }}
@@ -87,19 +90,19 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                   className="meta-badge" 
                   style={{ backgroundColor: `${genreInfo.color}33`, color: '#e2e8f0', borderColor: genreInfo.color }}
                 >
-                  {genreInfo.icon} {genre}
+                  <span style={{marginRight:6, display:'flex'}}>{genreInfo.icon}</span> {genre}
                 </span>
 
                 <span 
                   className="meta-badge"
                   style={{ backgroundColor: `${coopInfo.color}33`, color: '#e2e8f0', borderColor: coopInfo.color }}
                 >
-                   {coopInfo.icon} {coopInfo.label}
+                   <span style={{marginRight:6, display:'flex'}}>{coopInfo.icon}</span> {coopInfo.label}
                 </span>
 
                 {rating && (
                   <span className="meta-badge rating-badge">
-                    <Star size={14} fill="currentColor" /> {rating}
+                    <Star size={16} fill="currentColor" /> {rating}
                   </span>
                 )}
               </div>
@@ -118,7 +121,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           </div>
         </div>
 
-        {/* BODY */}
         <div className="modal-body custom-scrollbar" ref={modalRef}>
           
           <div className="modal-section">
