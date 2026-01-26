@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { 
   X, Star, Play, Tag, FileText, 
   Gamepad2, Users, Globe, Monitor, User,
-  Sword, Scroll, Brain, Pickaxe, Ghost, 
+  Sword, Scroll, Brain, Hammer, Ghost,  // <--- Hammer вместо Pickaxe
   Trophy, Car, Rocket, Puzzle, Coffee 
 } from 'lucide-react';
 import { ProcessedGame } from '../types';
@@ -35,7 +35,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     if (modalRef.current) modalRef.current.scrollTop = 0;
   }, [game.id]);
 
-  // --- ЛОГИКА ЦВЕТОВ И ИКОНОК (Дублируется для консистентности) ---
+  // --- ЛОГИКА ЦВЕТОВ ---
   const getCoopDetails = (coop: string) => {
     const lower = (coop || '').toLowerCase();
     if (lower.includes('single')) return { color: '#64748b', icon: <User size={14} />, label: 'Single' };
@@ -49,7 +49,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     if (g.includes('action') || g.includes('shooter')) return { color: '#ef4444', icon: <Sword size={14} /> };
     if (g.includes('rpg') || g.includes('adventure')) return { color: '#10b981', icon: <Scroll size={14} /> };
     if (g.includes('strategy') || g.includes('card')) return { color: '#3b82f6', icon: <Brain size={14} /> };
-    if (g.includes('sim') || g.includes('craft')) return { color: '#eab308', icon: <Pickaxe size={14} /> };
+    if (g.includes('sim') || g.includes('craft')) return { color: '#eab308', icon: <Hammer size={14} /> }; // <--- Hammer
     if (g.includes('horror')) return { color: '#be123c', icon: <Ghost size={14} /> };
     if (g.includes('sport')) return { color: '#8b5cf6', icon: <Trophy size={14} /> };
     if (g.includes('racing')) return { color: '#f97316', icon: <Car size={14} /> };
@@ -83,7 +83,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
               <h2 className="game-title">{name}</h2>
               
               <div className="meta-row">
-                {/* Жанр (с цветом фона) */}
                 <span 
                   className="meta-badge" 
                   style={{ backgroundColor: `${genreInfo.color}33`, color: '#e2e8f0', borderColor: genreInfo.color }}
@@ -91,7 +90,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                   {genreInfo.icon} {genre}
                 </span>
 
-                {/* Кооп (с цветом фона) */}
                 <span 
                   className="meta-badge"
                   style={{ backgroundColor: `${coopInfo.color}33`, color: '#e2e8f0', borderColor: coopInfo.color }}
