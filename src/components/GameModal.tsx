@@ -1,73 +1,133 @@
-import React, { useEffect } from 'react';
-import { X, ExternalLink, Gamepad2 } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { X, Star, Download, Play, Tag, Users, LayoutGrid } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameModal.css';
 
 interface GameModalProps {
-  game: ProcessedGame | null;
+  game: ProcessedGame | null; 
   onClose: () => void;
 }
 
 const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
   if (!game) return null;
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    const handleEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', handleEsc);
-    return () => { 
-      document.body.style.overflow = 'unset'; 
-      window.removeEventListener('keydown', handleEsc);
+    return () => { document.body.style.overflow = 'unset'; };
+  }, []);
+
+  // Закрытие по ESC
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
     };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
+
+  // Скролл вверх при открытии новой игры
+  useEffect(() => {
+    if (modalRef.current) {
+      modalRef.current.scrollTop = 0;
+    }
+  }, [game.id]);
+
+  const { name, image, genre, coop, tags, subgenres, rating, similar_games } = game;
+  const description = game.sanitizedDescription || game.description;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <button className="modal-close-btn" onClick={onClose}><X size={24} /></button>
+      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+        
+        <button className="close-btn" onClick={onClose} aria-label="Close">
+          <X size={24} />
+        </button>
 
-        <div className="modal-header">
-          <img src={game.image} alt={game.name} className="modal-cover" onError={(e) => (e.currentTarget.src = '/fallback-game.jpg')} />
-          <div className="modal-title-overlay">
-            <h1>{game.name}</h1>
-            <div className="modal-badges">
-              <span className="modal-badge">{game.genre}</span>
-              <span className="modal-badge">{game.coop}</span>
+        {/* --- Hero Section --- */}
+        <div 
+          className="modal-hero" 
+          style={{ backgroundImage: `url(${image})` }}
+        >
+          <div className="hero-overlay"></div>
+          <div className="hero-content">
+            <img src={image} alt={name} className="hero-poster" />
+            <div className="hero-info">
+              <h2 className="game-title">{name}</h2>
+              
+              <div className="meta-row">
+                <span className="meta-badge">
+                  <Tag size={14} /> {genre}
+                </span>
+                <span className="meta-badge">
+                   <Users size={14} /> {coop}
+                </span>
+                {rating && (
+                  <span className="meta-badge rating-badge">
+                    <Star size={14} fill="currentColor" /> {rating}
+                  </span>
+                )}
+              </div>
+
+              <div className="action-buttons">
+                {/* Если в JSON есть appid, можно сделать ссылку на запуск: steam://run/{id} */}
+                <a 
+                  href={game.steam_url} 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="btn-primary" 
+                  style={{textDecoration: 'none'}}
+                >
+                  <Play size={18} fill="currentColor" /> Play / Steam
+                </a>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="modal-body-scroll">
-          {game.steam_url && (
-            <a href={game.steam_url} target="_blank" rel="noreferrer" className="steam-link-btn">
-              <Gamepad2 size={18} /> Open in Steam
-            </a>
-          )}
+        {/* --- Body Section --- */}
+        <div className="modal-body custom-scrollbar" ref={modalRef}>
+          
+          <div className="modal-section">
+            <h3>About</h3>
+            <div 
+              className="description-text"
+              dangerouslySetInnerHTML={{ __html: description }} 
+            />
+          </div>
 
-          <div className="modal-desc" dangerouslySetInnerHTML={{ __html: game.sanitizedDescription || game.description }} />
-
-          <div className="modal-tags-block">
-            <h3>Tags</h3>
-            <div className="modal-tags-list">
-              {game.subgenres.map(s => <span key={s} className="tag sub">{s}</span>)}
-              {game.tags.map(t => <span key={t} className="tag">{t}</span>)}
+          <div className="modal-section">
+            <h3>Tags & Genres</h3>
+            <div className="tags-cloud">
+              {subgenres.map((sg, i) => (
+                <span key={`sub-${i}`} className="tag-pill subgenre">{sg}</span>
+              ))}
+              {tags.slice(0, 15).map((tag, i) => (
+                <span key={`tag-${i}`} className="tag-pill">
+                   <Tag size={12} /> {tag}
+                </span>
+              ))}
             </div>
           </div>
 
-          {/* НОВАЯ СЕКЦИЯ ПОХОЖИХ ИГР */}
-          {game.similar_games && game.similar_games.length > 0 && (
-            <div className="similar-games-section">
-              <h3>Similar Games</h3>
-              <div className="similar-grid">
-                {game.similar_games.map((sim, i) => (
-                  <a key={i} href={sim.url} target="_blank" rel="noreferrer" className="similar-card">
-                    <img src={sim.image} alt={sim.name} onError={(e) => (e.currentTarget.src = '/fallback-game.jpg')} />
-                    <span>{sim.name}</span>
-                  </a>
+          {/* --- НОВАЯ СЕКЦИЯ: ПОХОЖИЕ ИГРЫ --- */}
+          {similar_games && similar_games.length > 0 && (
+            <div className="modal-section">
+              <h3><LayoutGrid size={16} style={{display:'inline', marginRight: 8}}/>Similar Games</h3>
+              <div className="similar-games-grid">
+                {similar_games.slice(0, 5).map((sim) => (
+                  <div key={sim.id} className="similar-game-card">
+                    <div className="similar-image-wrap">
+                      <img src={sim.image} alt={sim.name} loading="lazy" />
+                    </div>
+                    <span className="similar-name">{sim.name}</span>
+                  </div>
                 ))}
               </div>
             </div>
           )}
+
         </div>
       </div>
     </div>
