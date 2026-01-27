@@ -43,18 +43,74 @@
   flex-shrink: 0;
 }
 
-/* Стандартное поведение (для Steam): заполняем рамку */
 .game-card-image img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover; 
+  object-fit: cover; /* Для Steam (идеально вписывается) */
   object-position: center;
   display: block;
   transition: transform 0.3s ease;
 }
 
+/* --- ФИКС: ПРИНУДИТЕЛЬНОЕ РАСТЯГИВАНИЕ ДЛЯ НЕ-STEAM --- */
+.game-card-image img:not([src*="steamstatic"]) {
+  /* Искажаем пропорции, чтобы заполнить рамку целиком */
+  object-fit: fill !important; 
+}
+
 .game-card-inner:hover .game-card-image img {
   transform: scale(1.05);
+}
+
+/* --- БЕЙДЖИ --- */
+.card-badges {
+  position: absolute;
+  top: 8px; left: 8px; right: 8px;
+  display: flex; justify-content: space-between;
+  pointer-events: none; z-index: 5;
+}
+
+.badge {
+  padding: 4px 8px; border-radius: 4px;
+  font-size: 0.75rem; font-weight: 700; color: white;
+  background: rgba(0, 0, 0, 0.7); 
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  display: flex; align-items: center;
+}
+.badge-icon { margin-right: 5px; display: flex; align-items: center; }
+
+/* --- КОНТЕНТ --- */
+.card-content {
+  padding: 12px 14px;
+  display: flex; flex-direction: column;
+  flex: 1; justify-content: space-between;
+  min-height: 0;
+}
+
+.card-header-row {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; margin-bottom: 8px; flex-shrink: 0;
+}
+
+.card-title {
+  margin: 0; font-size: 1rem; font-weight: 600; color: #f1f5f9;
+  line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; flex: 1; padding-right: 8px;
+}
+
+.steam-icon-link {
+  color: #64748b; transition: color 0.2s; margin-top: 2px; flex-shrink: 0;
+}
+.steam-icon-link:hover { color: #3b82f6; }
+
+.card-description-static {
+  font-size: 0.85rem; line-height: 1.4; color: #94a3b8;
+  margin-bottom: 12px;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  overflow: hidden; flex-grow: 1;
 }
 
 /* --- ПОХОЖИЕ ИГРЫ --- */
@@ -74,7 +130,6 @@
 
 .card-similar-item {
   width: 100%;
-  /* ТОЧНЫЕ ПРОПОРЦИИ STEAM */
   aspect-ratio: 460 / 215; 
   border-radius: 4px; overflow: hidden; position: relative;
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -91,17 +146,15 @@
 
 .card-similar-item img {
   width: 100%; height: 100%; 
-  object-fit: cover; /* Стандарт */
+  object-fit: cover; 
 }
 
-/* --- AMBILIGHT (РАЗМЫТЫЙ ФОН ДЛЯ НЕ-STEAM) --- */
-/* Этот класс добавляется React-ом, если картинка не steamstatic */
-.dynamic-bg {
-  background-position: center;
-  background-size: cover;
+/* --- ФИКС SIMILAR: ПРИНУДИТЕЛЬНОЕ РАСТЯГИВАНИЕ --- */
+.card-similar-item img:not([src*="steamstatic"]) {
+  object-fit: fill !important; 
 }
 
-/* Размытый слой позади */
+.no-similar { font-size: 0.75rem; color: #475569; font-style: italic; }
 .dynamic-bg::before {
   content: "";
   position: absolute; inset: 0;
