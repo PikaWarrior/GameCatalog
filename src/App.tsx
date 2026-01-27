@@ -8,6 +8,7 @@ import { useDebounce } from '@hooks/useDebounce';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import { sanitizeGameData } from '@utils/sanitize';
 import { Game, ProcessedGame, FilterState, RawGame } from './types';
+import { Heart } from 'lucide-react'; // Импорт иконки
 import '@styles/App.css';
 import '@styles/improvements.css';
 
@@ -20,6 +21,7 @@ interface ExtendedFilterState extends Omit<FilterState, 'selectedGenre'> {
   excludedTags: string[];
   selectedGenres: string[];
   excludedGenres: string[];
+  showFavorites: boolean; // Новый фильтр
 }
 
 function App() {
@@ -31,8 +33,11 @@ function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
-  // СБРОС КЭША НА v14
-  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v14_ICONS', {
+  // Хранилище избранного (массив ID)
+  const [favorites, setFavorites] = useLocalStorage<string[]>('favoriteGames_v1', []);
+
+  // СБРОС КЭША НА v15 (обновил версию для чистоты)
+  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v15_FAV', {
     searchQuery: '',
     selectedTags: [],
     excludedTags: [],
@@ -40,6 +45,7 @@ function App() {
     excludedGenres: [],
     selectedCoop: 'All',
     sortBy: 'name',
+    showFavorites: false,
   });
 
   const debouncedSearch = useDebounce(filterState.searchQuery, 300);
@@ -73,6 +79,16 @@ function App() {
     });
   }, [games]);
 
+  // --- ЛОГИКА ИЗБРАННОГО ---
+  const handleToggleFavorite = useCallback((gameId: string) => {
+    setFavorites(prev => {
+      if (prev.includes(gameId)) {
+        return prev.filter(id => id !== gameId);
+      }
+      return [...prev, gameId];
+    });
+  }, [setFavorites]);
+
   const allSubgenres = useMemo(() => {
     const subSet = new Set<string>();
     games.forEach(game => game.subgenres.forEach(sub => subSet.add(sub)));
@@ -104,13 +120,16 @@ function App() {
     const { 
       selectedTags, excludedTags, 
       selectedGenres, excludedGenres, 
-      selectedCoop, sortBy 
+      selectedCoop, sortBy, showFavorites 
     } = filterState;
     
     const searchLower = debouncedSearch.toLowerCase();
 
     return processedGames
       .filter(game => {
+        // Фильтр избранного
+        if (showFavorites && !favorites.includes(game.id)) return false;
+
         if (searchLower && !game.searchableText.includes(searchLower)) return false;
 
         const gameTags = new Set([...game.tags, ...game.subgenres]);
@@ -166,6 +185,8 @@ function App() {
         return true;
       })
       .sort((a, b) => {
+        // Если сортировка по избранному (опционально, можно добавить в селект)
+        // пока оставим стандартную логику
         switch (sortBy) {
           case 'name': return a.name.localeCompare(b.name);
           case 'genre': return a.genre.localeCompare(b.genre);
@@ -173,7 +194,7 @@ function App() {
           default: return 0;
         }
       });
-  }, [processedGames, filterState, debouncedSearch]);
+  }, [processedGames, filterState, debouncedSearch, favorites]);
 
   const handleOpenModal = useCallback((game: ProcessedGame) => setSelectedGame(game), []);
   const handleCloseModal = useCallback(() => setSelectedGame(null), []);
@@ -223,6 +244,7 @@ function App() {
 
   const handleCoopChange = useCallback((coop: string) => setFilterState(p => ({ ...p, selectedCoop: coop })), [setFilterState]);
   const handleSortChange = useCallback((sortBy: any) => setFilterState(p => ({ ...p, sortBy })), [setFilterState]);
+  const handleFavoritesToggle = useCallback(() => setFilterState(p => ({ ...p, showFavorites: !p.showFavorites })), [setFilterState]);
   
   const handleResetFilters = useCallback(() => {
     setFilterState({
@@ -233,6 +255,7 @@ function App() {
       excludedGenres: [],
       selectedCoop: 'All',
       sortBy: 'name',
+      showFavorites: false,
     });
   }, [setFilterState]);
 
@@ -256,6 +279,19 @@ function App() {
         <aside className={`filters-sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
           <div className="filters-sticky">
             
+            {/* КНОПКА ФИЛЬТРА ИЗБРАННОГО */}
+            <button 
+              className={`favorite-filter-btn ${filterState.showFavorites ? 'active' : ''}`}
+              onClick={handleFavoritesToggle}
+            >
+              <Heart 
+                size={18} 
+                fill={filterState.showFavorites ? "currentColor" : "none"} 
+                style={{marginRight: 8}}
+              />
+              {filterState.showFavorites ? 'Showing Favorites' : 'Show Favorites Only'}
+            </button>
+
             <div className="filter-group">
               <label>Game Mode:</label>
               <select
@@ -304,7 +340,13 @@ function App() {
         <section className="games-grid-section">
           <Suspense fallback={<LoadingSkeleton />}>
             {filteredGames.length > 0 ? (
-              <GameGrid games={filteredGames} onOpenModal={handleOpenModal} />
+              <GameGrid 
+                games={filteredGames} 
+                onOpenModal={handleOpenModal}
+                /* ВАЖНО: Вы должны прокинуть эти пропсы в GameGrid -> GameCard */
+                favorites={favorites} 
+                onToggleFavorite={handleToggleFavorite}
+              />
             ) : (
               <div className="no-results">
                 <h3>No games found</h3>
@@ -315,7 +357,14 @@ function App() {
         </section>
       </main>
 
-      {selectedGame && <GameModal game={selectedGame} onClose={handleCloseModal} />}
+      {selectedGame && (
+        <GameModal 
+          game={selectedGame} 
+          onClose={handleCloseModal}
+          isFavorite={favorites.includes(selectedGame.id)}
+          onToggleFavorite={() => handleToggleFavorite(selectedGame.id)}
+        />
+      )}
     </div>
   );
 }
