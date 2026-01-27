@@ -4,7 +4,8 @@ import {
   Gamepad2, Users, Globe, Monitor, User,
   Sword, Scroll, Brain, Hammer, Ghost,
   Trophy, Car, Rocket, Puzzle, Coffee,
-  Skull, Crosshair, Map, Dna, Music
+  Skull, Crosshair, Map, Dna, Music,
+  Heart // Импорт
 } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameModal.css';
@@ -12,9 +13,16 @@ import '../styles/GameModal.css';
 interface GameModalProps {
   game: ProcessedGame | null; 
   onClose: () => void;
+  isFavorite?: boolean; // Новый пропс
+  onToggleFavorite?: () => void; // Новый пропс
 }
 
-const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
+const GameModal: React.FC<GameModalProps> = ({ 
+  game, 
+  onClose,
+  isFavorite = false,
+  onToggleFavorite
+}) => {
   const modalRef = useRef<HTMLDivElement>(null);
   
   const ICON_SIZE = 16;
@@ -120,7 +128,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                 )}
               </div>
 
-              <div className="action-buttons">
+              <div className="action-buttons" style={{display: 'flex', gap: 12}}>
                 <a 
                   href={game.steam_url} 
                   target="_blank" 
@@ -129,6 +137,21 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                 >
                   <Play size={16} fill="currentColor" /> Open Steam
                 </a>
+
+                {/* КНОПКА ИЗБРАННОГО В МОДАЛКЕ */}
+                {onToggleFavorite && (
+                  <button 
+                    className={`btn-primary ${isFavorite ? 'is-fav' : ''}`}
+                    onClick={onToggleFavorite}
+                    style={{
+                      background: isFavorite ? '#ef4444' : 'rgba(255,255,255,0.1)',
+                      borderColor: isFavorite ? '#ef4444' : 'rgba(255,255,255,0.2)',
+                    }}
+                  >
+                    <Heart size={16} fill={isFavorite ? "currentColor" : "none"} /> 
+                    {isFavorite ? 'Favorited' : 'Favorite'}
+                  </button>
+                )}
               </div>
             </div>
           </div>
