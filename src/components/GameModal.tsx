@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { 
-  X, Star, Play, FileText, Tag, // Tag возвращен
+  X, Star, Play, FileText, Tag, 
   Gamepad2, Users, Globe, Monitor, User,
   Sword, Scroll, Brain, Hammer, Ghost,
   Trophy, Car, Rocket, Puzzle, Coffee,
@@ -83,19 +83,24 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           <X size={20} />
         </button>
 
-        <div 
-          className="modal-hero" 
-          style={{ backgroundImage: `url(${image})` }}
-        >
+        {/* HERO SECTION */}
+        <div className="modal-hero">
+          {/* Слой 1: Фоновая картинка (для blur эффектов в CSS) */}
+          <img src={image} alt="" className="hero-backdrop-img" />
+          
+          {/* Слой 2: Затемнение */}
           <div className="hero-overlay"></div>
           
+          {/* Слой 3: Контент */}
           <div className="hero-content">
+            {/* Постер (используем ту же картинку, если нет отдельной обложки) */}
             <img src={image} alt={name} className="hero-poster" />
             
             <div className="hero-info">
               <h2 className="game-title">{name}</h2>
               
               <div className="meta-row">
+                {/* Genre Badge */}
                 <span 
                   className="meta-badge" 
                   style={{ backgroundColor: `${genreInfo.color}40`, color: '#f1f5f9', borderColor: genreInfo.color }}
@@ -103,6 +108,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                   <span style={{marginRight:6, display:'flex'}}>{genreInfo.icon}</span> {genre}
                 </span>
 
+                {/* Coop Badge */}
                 <span 
                   className="meta-badge"
                   style={{ backgroundColor: `${coopInfo.color}40`, color: '#f1f5f9', borderColor: coopInfo.color }}
@@ -110,6 +116,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                    <span style={{marginRight:6, display:'flex'}}>{coopInfo.icon}</span> {coopInfo.label}
                 </span>
 
+                {/* Rating Badge */}
                 {rating && (
                   <span className="meta-badge rating-badge">
                     <Star size={16} fill="currentColor" /> {rating}
@@ -131,47 +138,57 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           </div>
         </div>
 
+        {/* BODY SECTION (Scrollable) */}
         <div className="modal-body custom-scrollbar" ref={modalRef}>
-          
-          <div className="modal-section">
-            <h3>About</h3>
-            <div 
-              className="description-text"
-              dangerouslySetInnerHTML={{ __html: game.sanitizedDescription || game.description }} 
-            />
-          </div>
+          <div className="modal-columns">
+            
+            {/* LEFT COLUMN: Description & Tags */}
+            <div className="main-column">
+              <div className="modal-section">
+                <h3>About</h3>
+                <div 
+                  className="description-text"
+                  dangerouslySetInnerHTML={{ __html: game.sanitizedDescription || game.description }} 
+                />
+              </div>
 
-          <div className="modal-section">
-            <h3>Tags & Subgenres</h3>
-            <div className="tags-cloud">
-              {subgenres.map((sg, i) => (
-                <span key={`sub-${i}`} className="tag-pill subgenre">{sg}</span>
-              ))}
-              {tags.map((tag, i) => (
-                <span key={`tag-${i}`} className="tag-pill">
-                   <Tag size={12} /> {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {similar_games_summary && similar_games_summary.length > 0 && (
-            <div className="modal-section">
-              <h3>
-                <FileText size={16} style={{ marginRight: 8 }}/>
-                Similar Games
-              </h3>
-              <div className="summary-list">
-                {similar_games_summary.map((text, i) => (
-                  <div key={i} className="summary-item">
-                    {text}
-                  </div>
-                ))}
+              <div className="modal-section">
+                <h3>Tags & Subgenres</h3>
+                <div className="tags-cloud">
+                  {subgenres.map((sg, i) => (
+                    <span key={`sub-${i}`} className="tag-pill subgenre">{sg}</span>
+                  ))}
+                  {tags.map((tag, i) => (
+                    <span key={`tag-${i}`} className="tag-pill">
+                       <Tag size={12} style={{marginRight: 4}} /> {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
-          )}
 
+            {/* RIGHT COLUMN: Similar Games Summary */}
+            <div className="side-column">
+              {similar_games_summary && similar_games_summary.length > 0 && (
+                <div className="modal-section">
+                  <h3>
+                    <FileText size={16} style={{ marginRight: 8 }}/>
+                    Similar Games
+                  </h3>
+                  <div className="summary-list">
+                    {similar_games_summary.map((text, i) => (
+                      <div key={i} className="summary-item">
+                        {text}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+          </div>
         </div>
+
       </div>
     </div>
   );
