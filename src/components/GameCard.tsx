@@ -3,7 +3,8 @@ import {
   Gamepad2, Users, Globe, Monitor, User, 
   Sword, Scroll, Brain, Hammer, Ghost, 
   Trophy, Car, Rocket, Puzzle, Coffee,
-  Skull, Crosshair, Map, Dna, Music
+  Skull, Crosshair, Map, Dna, Music,
+  Heart // Импортируем сердце
 } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameCard.css';
@@ -12,9 +13,17 @@ interface GameCardProps {
   game: ProcessedGame;
   style?: React.CSSProperties;
   onOpenModal?: (game: ProcessedGame) => void;
+  isFavorite?: boolean; // Новый пропс
+  onToggleFavorite?: (id: string) => void; // Новый пропс
 }
 
-const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) => {
+const GameCard: React.FC<GameCardProps> = memo(({ 
+  game, 
+  style, 
+  onOpenModal,
+  isFavorite = false,
+  onToggleFavorite 
+}) => {
   
   const ICON_SIZE = 16;
   const ICON_STROKE = 2;
@@ -110,6 +119,26 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
               <span>{coopInfo.label}</span>
             </span>
           </div>
+
+          {/* КНОПКА ИЗБРАННОГО */}
+          {onToggleFavorite && (
+            <button 
+              className={`card-favorite-btn ${isFavorite ? 'active' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation(); // Чтобы не открывалась модалка
+                onToggleFavorite(game.id);
+              }}
+              title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+            >
+              <Heart 
+                size={18} 
+                fill={isFavorite ? "#ef4444" : "rgba(0,0,0,0.5)"} 
+                stroke={isFavorite ? "#ef4444" : "white"}
+                strokeWidth={2.5}
+              />
+            </button>
+          )}
+
         </div>
 
         {/* КОНТЕНТ */}
@@ -118,7 +147,6 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             <h3 className="card-title" title={game.name}>
               {game.name}
             </h3>
-            {/* ИКОНКА STEAM В ЗАГОЛОВКЕ (ВЕРНУЛИ) */}
             <a 
               href={game.steam_url} 
               target="_blank" 
@@ -131,12 +159,10 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             </a>
           </div>
 
-          {/* ОПИСАНИЕ (НОВЫЙ СТИЛЬ OVERLAY) */}
           <div className="card-description-overlay">
             {cleanDesc}
           </div>
 
-          {/* ПОХОЖИЕ ИГРЫ */}
           <div className="card-similar-section">
             <div className="similar-label">Similar Games:</div>
             
@@ -168,4 +194,3 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
 });
 
 export default GameCard;
-              
