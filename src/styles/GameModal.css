@@ -30,7 +30,7 @@
 .modal-hero {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9; /* Киношный формат для общего фона */
+  aspect-ratio: 16 / 9;
   background-color: #0f172a;
   overflow: hidden;
   display: flex;
@@ -38,7 +38,7 @@
   flex-shrink: 0;
 }
 
-/* ФОН: IMG для полного заполнения */
+/* ФОН */
 .hero-backdrop-img {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
@@ -57,15 +57,15 @@
   gap: 24px; padding: 30px; width: 100%;
 }
 
-/* --- ПОСТЕР: ФИКС --- */
+/* --- ПОСТЕР: SMART CROP --- */
 .hero-poster {
   width: 40%; 
   min-width: 240px;
   
-  /* ИДЕАЛЬНАЯ ПРОПОРЦИЯ STEAM (460x215) */
+  /* Идеальная пропорция Steam (460/215) */
   aspect-ratio: 460 / 215; 
   
-  /* По умолчанию cover (для Steam) */
+  /* По умолчанию (Steam): просто заполняем */
   object-fit: cover; 
   object-position: center;
   
@@ -75,11 +75,10 @@
   flex-shrink: 0;
 }
 
-/* ФИКС ДЛЯ НЕ-STEAM КАРТИНОК В МОДАЛКЕ */
-/* contain = показать целиком. background = слить с фоном шапки */
+/* ДЛЯ НЕ-STEAM КАРТИНОК: Прижимаем к верху, обрезаем низ */
 .hero-poster:not([src*="steamstatic"]) {
-  object-fit: contain;
-  background-color: #0f172a; 
+  object-fit: cover;
+  object-position: top center; /* <--- ГЛАВНЫЙ ФИКС */
 }
 
 .hero-info { flex: 1; display: flex; flex-direction: column; gap: 12px; padding-bottom: 5px; }
@@ -102,6 +101,18 @@
 .tag-pill { padding: 6px 14px; border-radius: 6px; background: #1e293b; color: #94a3b8; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.05); }
 .tag-pill.subgenre { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border-color: rgba(59, 130, 246, 0.2); }
 .summary-list { display: flex; flex-direction: column; gap: 10px; }
+.summary-item { background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; border-left: 3px solid #3b82f6; color: #e2e8f0; font-size: 0.95rem; line-height: 1.5; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+@media (max-width: 768px) {
+  .modal-columns { grid-template-columns: 1fr; }
+  .modal-hero { height: auto; aspect-ratio: unset; padding-bottom: 20px; }
+  .hero-content { flex-direction: column; align-items: center; text-align: center; padding-top: 50px; }
+  .hero-poster { width: 90%; max-width: 340px; margin-bottom: 16px; aspect-ratio: 460 / 215; } 
+  .hero-info { align-items: center; }
+  .meta-row { justify-content: center; }
+}
 .summary-item { background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; border-left: 3px solid #3b82f6; color: #e2e8f0; font-size: 0.95rem; line-height: 1.5; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
