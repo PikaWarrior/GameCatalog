@@ -18,20 +18,25 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
   cursor: pointer;
+  position: relative; /* Для позиционирования бейджей */
 }
 
+/* Ховер и Фокус */
 .game-card-inner:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.5);
   border-color: rgba(255, 255, 255, 0.2);
 }
+.game-card-inner:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
 
-/* --- КАРТИНКА (ФИКС) --- */
+/* --- КАРТИНКА 16:9 --- */
 .game-card-image {
   position: relative;
   width: 100%;
-  /* Принудительно 16:9, чтобы контейнер держал форму */
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 9; /* ГЛАВНЫЙ ФИКС: Все картинки одинаково горизонтальные */
   overflow: hidden;
   background: #0f172a;
   flex-shrink: 0;
@@ -40,37 +45,100 @@
 .game-card-image img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important; /* Обрезает лишнее, сохраняя пропорции */
-  object-position: center top;
+  object-fit: cover !important; /* Заполняет 16:9 без искажений */
+  object-position: center;
   display: block;
   transition: transform 0.3s ease;
 }
 
 .game-card-inner:hover .game-card-image img {
-  transform: scale(1.05);
+  transform: scale(1.05); /* Легкий зум при наведении */
 }
 
-/* Остальные стили без изменений */
+/* --- БЕЙДЖИ --- */
 .card-badges {
-  position: absolute; top: 8px; left: 8px; right: 8px;
-  display: flex; justify-content: space-between; pointer-events: none; z-index: 5;
+  position: absolute;
+  top: 8px; left: 8px; right: 8px;
+  display: flex; justify-content: space-between;
+  pointer-events: none; z-index: 5;
 }
+
 .badge {
-  padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: white;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.8); box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-  display: flex; align-items: center; border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(4px);
+  padding: 4px 8px; border-radius: 4px;
+  font-size: 0.75rem; font-weight: 700; color: white;
+  /* Улучшенный контраст: более темный фон */
+  background: rgba(0, 0, 0, 0.7); 
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  display: flex; align-items: center;
 }
 .badge-icon { margin-right: 5px; display: flex; align-items: center; }
-.card-content { padding: 12px 14px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; min-height: 0; }
-.card-header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-shrink: 0; }
-.card-title { margin: 0; font-size: 1rem; font-weight: 600; color: #f1f5f9; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1; padding-right: 8px; }
-.steam-icon-link { color: #64748b; transition: color 0.2s; margin-top: 2px; flex-shrink: 0; }
+
+/* --- КОНТЕНТ КАРТОЧКИ --- */
+.card-content {
+  padding: 12px 14px;
+  display: flex; flex-direction: column;
+  flex: 1; justify-content: space-between;
+  min-height: 0;
+}
+
+.card-header-row {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; margin-bottom: 8px; flex-shrink: 0;
+}
+
+.card-title {
+  margin: 0; font-size: 1rem; font-weight: 600; color: #f1f5f9;
+  line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; flex: 1; padding-right: 8px;
+}
+
+.steam-icon-link {
+  color: #64748b; transition: color 0.2s; margin-top: 2px; flex-shrink: 0;
+}
 .steam-icon-link:hover { color: #3b82f6; }
-.card-description-static { font-size: 0.85rem; line-height: 1.4; color: #94a3b8; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex-grow: 1; }
-.card-similar-section { margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.05); flex-shrink: 0; }
-.similar-label { font-size: 0.7rem; text-transform: uppercase; color: #64748b; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.5px; }
-.card-similar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; }
-.card-similar-item { width: 100%; aspect-ratio: 16 / 9; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid rgba(255, 255, 255, 0.15); transition: transform 0.2s, border-color 0.2s, z-index 0s; background: #0f172a; display: block; }
-.card-similar-item:hover { transform: scale(1.15); border-color: #3b82f6; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.8); }
-.card-similar-item img { width: 100%; height: 100%; object-fit: cover; }
+
+.card-description-static {
+  font-size: 0.85rem; line-height: 1.4; color: #94a3b8;
+  margin-bottom: 12px;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  overflow: hidden; flex-grow: 1;
+}
+
+/* --- ПОХОЖИЕ ИГРЫ --- */
+.card-similar-section {
+  margin-top: auto; padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+.similar-label {
+  font-size: 0.7rem; text-transform: uppercase;
+  color: #64748b; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.5px;
+}
+
+.card-similar-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%;
+}
+
+.card-similar-item {
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Тоже 16:9 для консистентности */
+  border-radius: 4px; overflow: hidden; position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 0.2s, border-color 0.2s;
+  background: #0f172a; display: block;
+}
+
+.card-similar-item:hover {
+  /* Уменьшил зум до 1.1, чтобы не сильно резалось краями карточки */
+  transform: scale(1.1); 
+  border-color: #3b82f6;
+  z-index: 10;
+}
+
+.card-similar-item img {
+  width: 100%; height: 100%; object-fit: cover;
+}
 .no-similar { font-size: 0.75rem; color: #475569; font-style: italic; }
