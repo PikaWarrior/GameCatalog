@@ -32,13 +32,11 @@
   outline-offset: 2px;
 }
 
-/* --- ОСНОВНАЯ КАРТИНКА --- */
+/* --- ОСНОВНАЯ КАРТИНКА (2.15:1) --- */
 .game-card-image {
   position: relative;
   width: 100%;
-  /* ФИНАЛЬНЫЙ ФИКС: Пропорция Steam Capsule (2.15:1). 
-     Рамка становится чуть шире (ниже), идеально под размер картинки. */
-  aspect-ratio: 2.15 / 1; 
+  aspect-ratio: 2.15 / 1; /* Правильный формат Steam */
   overflow: hidden;
   background: #0f172a;
   flex-shrink: 0;
@@ -47,8 +45,7 @@
 .game-card-image img {
   width: 100% !important;
   height: 100% !important;
-  /* Картинка заполняет рамку. Так как рамка теперь 2.15:1, обрезки по краям не будет */
-  object-fit: cover !important; 
+  object-fit: cover !important;
   object-position: center;
   display: block;
   transition: transform 0.3s ease;
@@ -102,6 +99,53 @@
 }
 .steam-icon-link:hover { color: #3b82f6; }
 
+.card-description-static {
+  font-size: 0.85rem; line-height: 1.4; color: #94a3b8;
+  margin-bottom: 12px;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  overflow: hidden; flex-grow: 1;
+}
+
+/* --- ПОХОЖИЕ ИГРЫ --- */
+.card-similar-section {
+  margin-top: auto; padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+.similar-label {
+  font-size: 0.7rem; text-transform: uppercase;
+  color: #64748b; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.5px;
+}
+
+.card-similar-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%;
+}
+
+.card-similar-item {
+  width: 100%;
+  
+  /* ФИКС: Меняем 16/9 на 2.15/1, чтобы края не обрезались */
+  aspect-ratio: 2.15 / 1; 
+  
+  border-radius: 4px; overflow: hidden; position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 0.2s, border-color 0.2s, z-index 0s;
+  background: #0f172a; display: block;
+}
+
+.card-similar-item:hover {
+  transform: scale(1.15); 
+  border-color: #3b82f6;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+}
+
+.card-similar-item img {
+  width: 100%; height: 100%; 
+  object-fit: cover; /* Теперь cover заполнит рамку идеально ровно */
+}
+
+.no-similar { font-size: 0.75rem; color: #475569; font-style: italic; }
 .card-description-static {
   font-size: 0.85rem; line-height: 1.4; color: #94a3b8;
   margin-bottom: 12px;
