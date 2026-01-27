@@ -166,3 +166,4 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
 });
 
 export default GameCard;
+                      
