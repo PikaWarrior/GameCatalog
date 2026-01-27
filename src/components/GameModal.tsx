@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { 
-  X, Star, Play, FileText, Tag,
+  X, Star, Play, FileText, Tag, // Tag возвращен
   Gamepad2, Users, Globe, Monitor, User,
   Sword, Scroll, Brain, Hammer, Ghost,
   Trophy, Car, Rocket, Puzzle, Coffee,
@@ -17,7 +17,6 @@ interface GameModalProps {
 const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   
-  // Для модалки иконки еще чуть крупнее
   const ICON_SIZE = 16;
   const ICON_STROKE = 2.5;
 
@@ -40,7 +39,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     if (modalRef.current) modalRef.current.scrollTop = 0;
   }, [game.id]);
 
-  // --- 1. КООП ЛОГИКА ---
+  // --- КООП ЛОГИКА ---
   const getCoopDetails = (coop: string) => {
     const lower = (coop || '').toLowerCase();
     if (lower.includes('single')) return { color: '#64748b', icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Single' };
@@ -49,7 +48,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     return { color: '#059669', icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Co-op' };
   };
 
-  // --- 2. ЖАНР ЛОГИКА ---
+  // --- ЖАНР ЛОГИКА ---
   const getGenreDetails = (genre: string) => {
     const g = (genre || '').toLowerCase();
     
