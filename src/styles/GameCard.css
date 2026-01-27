@@ -36,14 +36,12 @@
 .game-card-image {
   position: relative;
   width: 100%;
-  /* ТОЧНЫЙ РАЗМЕР БАННЕРА STEAM */
   aspect-ratio: 460 / 215; 
   overflow: hidden;
   background: #0f172a;
   flex-shrink: 0;
 }
 
-/* 1. По умолчанию (Steam): cover */
 .game-card-image img {
   width: 100% !important;
   height: 100% !important;
@@ -53,7 +51,6 @@
   transition: transform 0.3s ease;
 }
 
-/* 2. Для НЕ-Steam: растягиваем (fill) */
 .game-card-image img:not([src*="steamstatic"]) {
   object-fit: fill !important;
 }
@@ -65,9 +62,10 @@
 /* --- БЕЙДЖИ --- */
 .card-badges {
   position: absolute;
-  top: 8px; left: 8px; right: 8px;
-  display: flex; justify-content: space-between;
+  top: 8px; left: 8px; right: 40px; /* Отступ справа под сердечко */
+  display: flex; justify-content: flex-start; gap: 6px;
   pointer-events: none; z-index: 5;
+  flex-wrap: wrap;
 }
 
 .badge {
@@ -80,6 +78,37 @@
   display: flex; align-items: center;
 }
 .badge-icon { margin-right: 5px; display: flex; align-items: center; }
+
+/* --- КНОПКА ИЗБРАННОГО НА КАРТОЧКЕ --- */
+.card-favorite-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  color: white;
+}
+
+.card-favorite-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.card-favorite-btn.active {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #ef4444;
+}
 
 /* --- КОНТЕНТ --- */
 .card-content {
@@ -114,7 +143,6 @@
   padding-right: 8px;
 }
 
-/* Иконка Steam в заголовке */
 .steam-icon-link {
   color: #64748b;
   transition: color 0.2s;
@@ -125,7 +153,6 @@
   color: #3b82f6;
 }
 
-/* --- НОВОЕ: ЗАТЕНЕННОЕ ОПИСАНИЕ (OVERLAY) --- */
 .card-description-overlay {
   position: relative;
   font-size: 0.85rem; 
@@ -133,20 +160,18 @@
   color: #94a3b8;
   margin-bottom: 12px;
   padding: 12px;
-  /* Градиентный фон */
   background: linear-gradient(135deg, rgba(30,41,59,0.5) 0%, rgba(15,23,42,0.8) 100%);
   border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.05);
   backdrop-filter: blur(4px);
   display: -webkit-box; 
-  -webkit-line-clamp: 4; /* Показываем 4 строки */
+  -webkit-line-clamp: 4; 
   -webkit-box-orient: vertical;
   overflow: hidden; 
   flex-grow: 1;
   box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
 }
 
-/* --- ПОХОЖИЕ ИГРЫ --- */
 .card-similar-section {
   margin-top: auto; 
   padding-top: 10px;
@@ -186,109 +211,3 @@
 }
 
 .no-similar { font-size: 0.75rem; color: #475569; font-style: italic; }
-  font-size: 1rem;
-  font-weight: 600;
-  color: #f1f5f9;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  flex: 1;
-}
-
-/* --- НОВОЕ: ЗАТЕНЕННОЕ ОПИСАНИЕ --- */
-.card-description-overlay {
-  position: relative;
-  font-size: 0.85rem; 
-  line-height: 1.4; 
-  color: #94a3b8;
-  margin-bottom: 12px;
-  padding: 12px;
-  /* Градиентный фон для выделения */
-  background: linear-gradient(135deg, rgba(30,41,59,0.5) 0%, rgba(15,23,42,0.8) 100%);
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.05);
-  /* backdrop-filter может не работать внутри некоторых контейнеров без z-index, но оставим */
-  backdrop-filter: blur(4px);
-  display: -webkit-box; 
-  -webkit-line-clamp: 4; /* Показываем 4 строки */
-  -webkit-box-orient: vertical;
-  overflow: hidden; 
-  flex-grow: 1;
-  box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
-}
-
-/* --- ПОХОЖИЕ ИГРЫ --- */
-.card-similar-section {
-  margin-top: auto; 
-  padding-top: 10px;
-  /* Убрал border-top, так как теперь есть кнопка ниже */
-  flex-shrink: 0;
-}
-.similar-label {
-  font-size: 0.7rem; text-transform: uppercase;
-  color: #64748b; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.5px;
-}
-
-.card-similar-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%;
-}
-
-.card-similar-item {
-  width: 100%;
-  aspect-ratio: 460 / 215; 
-  border-radius: 4px; overflow: hidden; position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: transform 0.2s, border-color 0.2s;
-  background: #0f172a; display: block;
-}
-
-.card-similar-item:hover {
-  transform: scale(1.05); 
-  border-color: #3b82f6;
-  z-index: 10;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.8);
-}
-
-.card-similar-item img {
-  width: 100%; height: 100%; 
-  object-fit: cover; 
-}
-.card-similar-item img:not([src*="steamstatic"]) {
-  object-fit: fill !important;
-}
-
-.no-similar { font-size: 0.75rem; color: #475569; font-style: italic; }
-
-/* --- НОВОЕ: КНОПКА STEAM ВНИЗУ --- */
-.steam-button-section {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  flex-shrink: 0;
-}
-
-.steam-button-link {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Центрируем текст */
-  gap: 8px;
-  padding: 8px 12px;
-  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-  border: 1px solid rgba(59,130,246,0.3);
-  border-radius: 6px;
-  color: #94a3b8;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.steam-button-link:hover {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  color: white;
-  border-color: #3b82f6;
-  transform: translateY(-2px); /* Чуть вверх при наведении */
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-  }
