@@ -1,16 +1,28 @@
-.game-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 25px;
-  padding: 10px;
+/* Обертка для AutoSizer должна иметь явную высоту */
+.game-grid-wrapper {
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* Важно для предотвращения двойных скроллов */
+  position: relative;
 }
 
+/* Стили для скролл-контейнера react-window */
+.game-grid-scroll {
+  outline: none; /* Убираем фокусную рамку при клике */
+}
+
+/* Стили для состояния "Нет результатов" */
 .no-results {
   text-align: center;
   padding: 60px 20px;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 20px;
   border: 2px dashed rgba(255, 255, 255, 0.1);
+  margin: 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .no-results-icon {
@@ -20,16 +32,23 @@
 }
 
 .no-results h3 {
-  color: var(--text-color);
+  color: #f8fafc; /* Используем hex, если переменная не определена глобально */
   margin-bottom: 10px;
   font-size: 1.5rem;
 }
 
 .no-results p {
-  color: var(--text-secondary);
+  color: #94a3b8;
   font-size: 1rem;
 }
 
+/* ВАЖНО:
+  Медиа-запросы ниже (max-width) в исходном файле относились к CSS Grid.
+  Так как мы используем react-window (JS Grid), количество колонок рассчитывается
+  в JS (GameGrid.tsx -> MIN_COLUMN_WIDTH). 
+  Эти стили больше не влияют на сетку, но я оставлю их для совместимости,
+  если вы решите вернуться к обычному CSS Grid.
+*/
 @media (max-width: 1200px) {
   .game-grid {
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
