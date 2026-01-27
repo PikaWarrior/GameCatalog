@@ -17,14 +17,14 @@ interface GameCardProps {
 const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) => {
   
   // НАСТРОЙКИ ИКОНОК
-  const ICON_SIZE = 15;      // Чуть крупнее
-  const ICON_STROKE = 2.5;   // Жирные линии для "сочности"
+  const ICON_SIZE = 15;
+  const ICON_STROKE = 2.5;
 
-  // --- 1. ЛОГИКА КООП-РЕЖИМОВ (Уникальные цвета и иконки) ---
+  // --- 1. ЛОГИКА КООП-РЕЖИМОВ ---
   const getCoopDetails = (coop: string) => {
     const lower = (coop || '').toLowerCase();
     
-    // Singleplayer -> Серый + Человек
+    // Single
     if (lower.includes('single')) {
       return { 
         color: '#64748b', 
@@ -33,111 +33,60 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
         label: 'Single' 
       };
     }
-    // Split Screen / Local -> Оранжевый + Монитор
+    // Split Screen
     if (lower.includes('split') || lower.includes('shared') || lower.includes('local')) {
       return { 
-        color: '#ea580c', // Orange-600
+        color: '#ea580c', 
         borderColor: '#fb923c',
         icon: <Monitor size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 
         label: 'Split Screen' 
       };
     }
-    // Online Multiplayer -> Фиолетовый + Глобус
+    // Multiplayer
     if (lower.includes('online') || lower.includes('mmo') || lower.includes('multi')) {
       return { 
-        color: '#7c3aed', // Violet-600
+        color: '#7c3aed', 
         borderColor: '#a78bfa',
         icon: <Globe size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 
         label: 'Multiplayer' 
       };
     }
-    // Co-op (General) -> Изумрудный + Группа
+    // Co-op
     return { 
-      color: '#059669', // Emerald-600
+      color: '#059669', 
       borderColor: '#34d399',
       icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 
       label: 'Co-op' 
     };
   };
 
-  // --- 2. ЛОГИКА ЖАНРОВ (ДЕТАЛЬНАЯ ПРОВЕРКА) ---
+  // --- 2. ЛОГИКА ЖАНРОВ ---
   const getGenreDetails = (genre: string) => {
     const g = (genre || '').toLowerCase();
 
-    // Action / Fighting / Hack & Slash -> Красный + Меч
-    if (g.includes('action') || g.includes('hack') || g.includes('fighting') || g.includes('beat')) {
-      return { color: '#dc2626', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
+    if (g.includes('action') || g.includes('hack') || g.includes('fighting') || g.includes('beat')) return { color: '#dc2626', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('shooter') || g.includes('fps') || g.includes('tps') || g.includes('gun')) return { color: '#b91c1c', icon: <Crosshair size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     
-    // Shooter / FPS / TPS -> Темно-Красный + Прицел
-    if (g.includes('shooter') || g.includes('fps') || g.includes('tps') || g.includes('gun')) {
-      return { color: '#b91c1c', icon: <Crosshair size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-
-    // RPG / Adventure -> Зеленый + Карта/Свиток
-    if (g.includes('adventure') || g.includes('quest')) {
-      return { color: '#059669', icon: <Map size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-    if (g.includes('rpg') || g.includes('role')) {
-      return { color: '#16a34a', icon: <Scroll size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-
-    // Roguelike / Dungeon -> Оранжевый + Череп
-    if (g.includes('rogue') || g.includes('dungeon') || g.includes('souls')) {
-      return { color: '#d97706', icon: <Skull size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-
-    // Metroidvania / Platformer -> Розовый + ДНК (или Пазл)
-    if (g.includes('metroidvania') || g.includes('platformer')) {
-      return { color: '#db2777', icon: <Dna size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-
-    // Strategy / Card -> Синий + Мозг
-    if (g.includes('strategy') || g.includes('rts') || g.includes('card') || g.includes('turn') || g.includes('tactical')) {
-      return { color: '#2563eb', icon: <Brain size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-
-    // Simulation / Build -> Желтый/Янтарный + Молоток
-    if (g.includes('sim') || g.includes('build') || g.includes('craft') || g.includes('sandbox') || g.includes('farm') || g.includes('city')) {
-      return { color: '#d97706', icon: <Hammer size={ICON_SIZE} strokeWidth={ICON_STROKE} /> }; 
-    }
-
-    // Horror -> Бордовый + Призрак
-    if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) {
-      return { color: '#9f1239', icon: <Ghost size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-
-    // Sports -> Фиолетовый + Кубок
-    if (g.includes('sport')) {
-      return { color: '#7c3aed', icon: <Trophy size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-
-    // Racing -> Оранжевый яркий + Машина
-    if (g.includes('racing') || g.includes('drive') || g.includes('automotive')) {
-      return { color: '#ea580c', icon: <Car size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-
-    // Sci-Fi / Cyberpunk -> Индиго + Ракета
-    if (g.includes('space') || g.includes('sci-fi') || g.includes('cyberpunk')) {
-      return { color: '#4f46e5', icon: <Rocket size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-
-    // Puzzle -> Фуксия + Пазл
-    if (g.includes('puzzle') || g.includes('logic')) {
-      return { color: '#c026d3', icon: <Puzzle size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
+    if (g.includes('adventure') || g.includes('quest')) return { color: '#059669', icon: <Map size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('rpg') || g.includes('role')) return { color: '#16a34a', icon: <Scroll size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     
-    // Rhythm / Music -> Лайм + Музыка
-    if (g.includes('music') || g.includes('rhythm')) {
-      return { color: '#65a30d', icon: <Music size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
+    if (g.includes('rogue') || g.includes('dungeon') || g.includes('souls')) return { color: '#d97706', icon: <Skull size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('metroidvania') || g.includes('platformer')) return { color: '#db2777', icon: <Dna size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    
+    if (g.includes('strategy') || g.includes('rts') || g.includes('card') || g.includes('tactical')) return { color: '#2563eb', icon: <Brain size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('sim') || g.includes('build') || g.includes('craft') || g.includes('sandbox') || g.includes('farm')) return { color: '#d97706', icon: <Hammer size={ICON_SIZE} strokeWidth={ICON_STROKE} /> }; 
+    
+    if (g.includes('horror') || g.includes('survival') || g.includes('zombie')) return { color: '#9f1239', icon: <Ghost size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    
+    if (g.includes('sport')) return { color: '#7c3aed', icon: <Trophy size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('racing') || g.includes('drive')) return { color: '#ea580c', icon: <Car size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    
+    if (g.includes('space') || g.includes('sci-fi') || g.includes('cyberpunk')) return { color: '#4f46e5', icon: <Rocket size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('puzzle') || g.includes('logic')) return { color: '#c026d3', icon: <Puzzle size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('music') || g.includes('rhythm')) return { color: '#65a30d', icon: <Music size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    
+    if (g.includes('casual') || g.includes('indie') || g.includes('novel')) return { color: '#0891b2', icon: <Coffee size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
 
-    // Casual / Indie / Visual Novel -> Голубой + Кофе
-    if (g.includes('casual') || g.includes('indie') || g.includes('novel')) {
-      return { color: '#0891b2', icon: <Coffee size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    }
-
-    // Default -> Slate + Gamepad
     return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   };
 
@@ -205,7 +154,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             {cleanDesc}
           </div>
 
-          {/* ПОХОЖИЕ ИГРЫ (МАСШТАБИРУЕМЫЕ) */}
+          {/* ПОХОЖИЕ ИГРЫ */}
           <div className="card-similar-section">
             <div className="similar-label">Similar Games:</div>
             
