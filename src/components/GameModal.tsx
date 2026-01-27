@@ -71,7 +71,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   };
 
-  const { name, image, genre, coop, rating, subgenres, tags, similar_games_summary } = game;
+  const { name, image, genre, rating, subgenres, tags, similar_games_summary } = game;
   const genreInfo = getGenreDetails(genre);
   const coopInfo = getCoopDetails(game.normalizedCoop);
 
@@ -83,24 +83,21 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           <X size={20} />
         </button>
 
-        {/* HERO SECTION */}
+        {/* HERO */}
         <div className="modal-hero">
-          {/* Слой 1: Фоновая картинка (для blur эффектов в CSS) */}
+          {/* фон для варианта A/B — управляется через CSS */}
           <img src={image} alt="" className="hero-backdrop-img" />
-          
-          {/* Слой 2: Затемнение */}
-          <div className="hero-overlay"></div>
-          
-          {/* Слой 3: Контент */}
+
+          <div className="hero-overlay" />
+
           <div className="hero-content">
-            {/* Постер (используем ту же картинку, если нет отдельной обложки) */}
+            {/* маленький постер слева — та самая область из второго скрина */}
             <img src={image} alt={name} className="hero-poster" />
-            
+
             <div className="hero-info">
               <h2 className="game-title">{name}</h2>
-              
+
               <div className="meta-row">
-                {/* Genre Badge */}
                 <span 
                   className="meta-badge" 
                   style={{ backgroundColor: `${genreInfo.color}40`, color: '#f1f5f9', borderColor: genreInfo.color }}
@@ -108,7 +105,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                   <span style={{marginRight:6, display:'flex'}}>{genreInfo.icon}</span> {genre}
                 </span>
 
-                {/* Coop Badge */}
                 <span 
                   className="meta-badge"
                   style={{ backgroundColor: `${coopInfo.color}40`, color: '#f1f5f9', borderColor: coopInfo.color }}
@@ -116,7 +112,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                    <span style={{marginRight:6, display:'flex'}}>{coopInfo.icon}</span> {coopInfo.label}
                 </span>
 
-                {/* Rating Badge */}
                 {rating && (
                   <span className="meta-badge rating-badge">
                     <Star size={16} fill="currentColor" /> {rating}
@@ -138,11 +133,10 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           </div>
         </div>
 
-        {/* BODY SECTION (Scrollable) */}
+        {/* BODY */}
         <div className="modal-body custom-scrollbar" ref={modalRef}>
           <div className="modal-columns">
-            
-            {/* LEFT COLUMN: Description & Tags */}
+            {/* ЛЕВАЯ КОЛОНКА */}
             <div className="main-column">
               <div className="modal-section">
                 <h3>About</h3>
@@ -153,21 +147,21 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
               </div>
 
               <div className="modal-section">
-                <h3>Tags & Subgenres</h3>
+                <h3>Tags &amp; Subgenres</h3>
                 <div className="tags-cloud">
                   {subgenres.map((sg, i) => (
                     <span key={`sub-${i}`} className="tag-pill subgenre">{sg}</span>
                   ))}
                   {tags.map((tag, i) => (
                     <span key={`tag-${i}`} className="tag-pill">
-                       <Tag size={12} style={{marginRight: 4}} /> {tag}
+                      <Tag size={12} style={{ marginRight: 4 }} /> {tag}
                     </span>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Similar Games Summary */}
+            {/* ПРАВАЯ КОЛОНКА */}
             <div className="side-column">
               {similar_games_summary && similar_games_summary.length > 0 && (
                 <div className="modal-section">
@@ -185,7 +179,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                 </div>
               )}
             </div>
-
           </div>
         </div>
 
