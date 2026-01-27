@@ -16,7 +16,6 @@ interface GameModalProps {
 
 const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  
   const ICON_SIZE = 16;
   const ICON_STROKE = 2.5;
 
@@ -74,24 +73,21 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        
-        <button className="close-btn" onClick={onClose} aria-label="Close">
-          <X size={20} />
-        </button>
+        <button className="close-btn" onClick={onClose} aria-label="Close"> <X size={20} /> </button>
 
-        {/* HERO БЛОК (ИСПРАВЛЕН: ИСПОЛЬЗУЕМ IMG ВМЕСТО DIV STYLE) */}
+        {/* HERO SECTION */}
         <div className="modal-hero">
+          {/* СЛОЙ 1: ФОНОВАЯ КАРТИНКА (ТЕПЕРЬ IMG) */}
           <img src={image} alt="" className="hero-backdrop-img" />
           
           <div className="hero-overlay"></div>
           
           <div className="hero-content">
-            {/* ПОСТЕР */}
+            {/* СЛОЙ 2: ПОСТЕР (СЛЕВА) */}
             <img src={image} alt={name} className="hero-poster" />
             
             <div className="hero-info">
               <h2 className="game-title">{name}</h2>
-              
               <div className="meta-row">
                 <span className="meta-badge" style={{ backgroundColor: `${genreInfo.color}40`, color: '#f1f5f9', borderColor: genreInfo.color }}>
                   <span style={{marginRight:6, display:'flex'}}>{genreInfo.icon}</span> {genre}
@@ -99,10 +95,47 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
                 <span className="meta-badge" style={{ backgroundColor: `${coopInfo.color}40`, color: '#f1f5f9', borderColor: coopInfo.color }}>
                    <span style={{marginRight:6, display:'flex'}}>{coopInfo.icon}</span> {coopInfo.label}
                 </span>
-                {rating && (
-                  <span className="meta-badge rating-badge">
-                    <Star size={16} fill="currentColor" /> {rating}
-                  </span>
+                {rating && ( <span className="meta-badge rating-badge"> <Star size={16} fill="currentColor" /> {rating} </span> )}
+              </div>
+              <div className="action-buttons">
+                <a href={game.steam_url} target="_blank" rel="noreferrer" className="btn-primary"> <Play size={16} fill="currentColor" /> Open Steam </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="modal-body custom-scrollbar" ref={modalRef}>
+          <div className="modal-columns">
+            <div className="main-column">
+              <div className="modal-section">
+                <h3>About</h3>
+                <div className="description-text" dangerouslySetInnerHTML={{ __html: game.sanitizedDescription || game.description }} />
+              </div>
+              <div className="modal-section">
+                <h3>Tags & Subgenres</h3>
+                <div className="tags-cloud">
+                  {subgenres.map((sg, i) => <span key={`sub-${i}`} className="tag-pill subgenre">{sg}</span>)}
+                  {tags.map((tag, i) => <span key={`tag-${i}`} className="tag-pill"><Tag size={12} style={{marginRight:4}} /> {tag}</span>)}
+                </div>
+              </div>
+            </div>
+            <div className="side-column">
+              {similar_games_summary && similar_games_summary.length > 0 && (
+                <div className="modal-section">
+                  <h3><FileText size={16} style={{ marginRight: 8 }}/> Similar Games</h3>
+                  <div className="summary-list">
+                    {similar_games_summary.map((text, i) => <div key={i} className="summary-item">{text}</div>)}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+export default GameModal;                  </span>
                 )}
               </div>
 
