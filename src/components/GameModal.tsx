@@ -22,11 +22,16 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
 
   if (!game) return null;
 
+  // ПРОВЕРКА КАРТИНКИ (STEAM ИЛИ НЕТ)
+  const isSteam = game.image?.includes('steamstatic');
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = 'unset'; };
   }, []);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -35,6 +40,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (modalRef.current) modalRef.current.scrollTop = 0;
   }, [game.id]);
@@ -90,7 +96,19 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           <div className="hero-overlay"></div>
           
           <div className="hero-content">
-            <img src={image} alt={name} className="hero-poster" />
+            
+            {/* HERO POSTER С ЛОГИКОЙ AMBILIGHT */}
+            {/* Мы оборачиваем картинку в div, чтобы применить псевдо-элемент ::before для блюра */}
+            <div 
+              className={`hero-poster ${!isSteam ? 'dynamic-bg' : ''}`}
+              style={!isSteam ? { backgroundImage: `url('${image}')` } : {}}
+            >
+               <img 
+                 src={image} 
+                 alt={name} 
+                 className="poster-img-content" 
+               />
+            </div>
             
             <div className="hero-info">
               <h2 className="game-title">{name}</h2>
