@@ -30,7 +30,7 @@
 .modal-hero {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9; /* Общий фон оставляем высоким для "киношности" */
+  aspect-ratio: 16 / 9; /* Киношный формат для общего фона */
   background-color: #0f172a;
   overflow: hidden;
   display: flex;
@@ -71,13 +71,15 @@
   
   border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.6);
   border: 1px solid rgba(255,255,255,0.2); 
-  background: #000; /* Черный фон для contain изображений */
+  background: #0f172a; 
   flex-shrink: 0;
 }
 
-/* ЛОГИКА ДЛЯ НЕ-STEAM КАРТИНОК В МОДАЛКЕ */
+/* ФИКС ДЛЯ НЕ-STEAM КАРТИНОК В МОДАЛКЕ */
+/* contain = показать целиком. background = слить с фоном шапки */
 .hero-poster:not([src*="steamstatic"]) {
   object-fit: contain;
+  background-color: #0f172a; 
 }
 
 .hero-info { flex: 1; display: flex; flex-direction: column; gap: 12px; padding-bottom: 5px; }
@@ -108,8 +110,6 @@
   .modal-columns { grid-template-columns: 1fr; }
   .modal-hero { height: auto; aspect-ratio: unset; padding-bottom: 20px; }
   .hero-content { flex-direction: column; align-items: center; text-align: center; padding-top: 50px; }
-  
-  /* Мобильный постер тоже 460/215 */
   .hero-poster { width: 90%; max-width: 340px; margin-bottom: 16px; aspect-ratio: 460 / 215; } 
   .hero-info { align-items: center; }
   .meta-row { justify-content: center; }
