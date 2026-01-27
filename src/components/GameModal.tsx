@@ -39,6 +39,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     if (modalRef.current) modalRef.current.scrollTop = 0;
   }, [game.id]);
 
+  // --- КООП ЛОГИКА ---
   const getCoopDetails = (coop: string) => {
     const lower = (coop || '').toLowerCase();
     if (lower.includes('single')) return { color: '#64748b', icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Single' };
@@ -47,11 +48,12 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
     return { color: '#059669', icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Co-op' };
   };
 
+  // --- ЖАНР ЛОГИКА ---
   const getGenreDetails = (genre: string) => {
     const g = (genre || '').toLowerCase();
     if (g.includes('action') || g.includes('hack') || g.includes('fighting')) return { color: '#dc2626', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     if (g.includes('shooter') || g.includes('fps')) return { color: '#b91c1c', icon: <Crosshair size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    if (g.includes('adventure') || g.includes('quest')) return { color: '#059669', icon: <Map size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('adventure')) return { color: '#059669', icon: <Map size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     if (g.includes('rpg')) return { color: '#16a34a', icon: <Scroll size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     if (g.includes('rogue') || g.includes('dungeon')) return { color: '#d97706', icon: <Skull size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     if (g.includes('metroidvania') || g.includes('platformer')) return { color: '#db2777', icon: <Dna size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
@@ -79,7 +81,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
           <X size={20} />
         </button>
 
-        {/* HERO БЛОК (ИЗМЕНЁН: IMG ВМЕСТО DIV STYLE) */}
+        {/* HERO SECTION (ИЗМЕНЕНО: вместо div style используется img для правильного fit) */}
         <div className="modal-hero">
           <img src={image} alt="" className="hero-backdrop-img" />
           
@@ -115,79 +117,11 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose }) => {
             </div>
           </div>
         </div>
-        {/* КОНЕЦ HERO БЛОКА */}
 
         <div className="modal-body custom-scrollbar" ref={modalRef}>
           
+          {/* COLUMNS LAYOUT (ИЗМЕНЕНО: Добавлена сетка для разделения контента) */}
           <div className="modal-columns">
-            <div className="main-column">
-              <div className="modal-section">
-                <h3>About</h3>
-                <div className="description-text" dangerouslySetInnerHTML={{ __html: game.sanitizedDescription || game.description }} />
-              </div>
-
-              <div className="modal-section">
-                <h3>Tags & Subgenres</h3>
-                <div className="tags-cloud">
-                  {subgenres.map((sg, i) => <span key={`sub-${i}`} className="tag-pill subgenre">{sg}</span>)}
-                  {tags.map((tag, i) => <span key={`tag-${i}`} className="tag-pill"><Tag size={12} style={{marginRight:4}} /> {tag}</span>)}
-                </div>
-              </div>
-            </div>
-
-            <div className="side-column">
-              {similar_games_summary && similar_games_summary.length > 0 && (
-                <div className="modal-section">
-                  <h3><FileText size={16} style={{ marginRight: 8 }}/> Similar Games</h3>
-                  <div className="summary-list">
-                    {similar_games_summary.map((text, i) => <div key={i} className="summary-item">{text}</div>)}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default GameModal;                  <span style={{marginRight:6, display:'flex'}}>{genreInfo.icon}</span> {genre}
-                </span>
-
-                <span 
-                  className="meta-badge"
-                  style={{ backgroundColor: `${coopInfo.color}40`, color: '#f1f5f9', borderColor: coopInfo.color }}
-                >
-                   <span style={{marginRight:6, display:'flex'}}>{coopInfo.icon}</span> {coopInfo.label}
-                </span>
-
-                {rating && (
-                  <span className="meta-badge rating-badge">
-                    <Star size={16} fill="currentColor" /> {rating}
-                  </span>
-                )}
-              </div>
-
-              <div className="action-buttons">
-                <a 
-                  href={game.steam_url} 
-                  target="_blank" 
-                  rel="noreferrer"
-                  className="btn-primary"
-                >
-                  <Play size={16} fill="currentColor" /> Open Steam
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* BODY */}
-        <div className="modal-body custom-scrollbar" ref={modalRef}>
-          <div className="modal-columns">
-            {/* ЛЕВАЯ КОЛОНКА */}
             <div className="main-column">
               <div className="modal-section">
                 <h3>About</h3>
@@ -198,21 +132,20 @@ export default GameModal;                  <span style={{marginRight:6, display:
               </div>
 
               <div className="modal-section">
-                <h3>Tags &amp; Subgenres</h3>
+                <h3>Tags & Subgenres</h3>
                 <div className="tags-cloud">
                   {subgenres.map((sg, i) => (
                     <span key={`sub-${i}`} className="tag-pill subgenre">{sg}</span>
                   ))}
                   {tags.map((tag, i) => (
                     <span key={`tag-${i}`} className="tag-pill">
-                      <Tag size={12} style={{ marginRight: 4 }} /> {tag}
+                      <Tag size={12} style={{marginRight: 4}} /> {tag}
                     </span>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* ПРАВАЯ КОЛОНКА */}
             <div className="side-column">
               {similar_games_summary && similar_games_summary.length > 0 && (
                 <div className="modal-section">
@@ -231,8 +164,8 @@ export default GameModal;                  <span style={{marginRight:6, display:
               )}
             </div>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
   );
