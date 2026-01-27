@@ -32,24 +32,25 @@
   outline-offset: 2px;
 }
 
-/* --- КАРТИНКА 16:9 c ФИКСОМ CONTAIN --- */
+/* --- КАРТИНКА: ИСПРАВЛЕНИЕ ПОЛОС И ОБРЕЗКИ --- */
 .game-card-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9; /* Жестко держим размер рамки */
+  /* МЕНЯЕМ ФОРМАТ НА 2:1 (Широкий баннер). 
+     Это убирает черные полосы, так как рамка теперь подходит под картинку. */
+  aspect-ratio: 2 / 1; 
   overflow: hidden;
-  background: #0f172a; /* Темный фон для "полос" сверху и снизу */
+  background: #0f172a;
   flex-shrink: 0;
 }
 
 .game-card-image img {
   width: 100% !important;
   height: 100% !important;
-  
-  /* ГЛАВНЫЙ ФИКС: Вмещаем картинку целиком, не обрезая края */
-  object-fit: contain !important; 
+  /* ВОЗВРАЩАЕМ COVER: Картинка заполняет всё пространство. 
+     Так как aspect-ratio теперь 2:1, обрезка по краям будет минимальной. */
+  object-fit: cover !important; 
   object-position: center;
-  
   display: block;
   transition: transform 0.3s ease;
 }
@@ -126,7 +127,7 @@
 
 .card-similar-item {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 9; /* Здесь оставляем 16:9 для миниатюр */
   border-radius: 4px; overflow: hidden; position: relative;
   border: 1px solid rgba(255, 255, 255, 0.15);
   transition: transform 0.2s, border-color 0.2s;
@@ -139,10 +140,10 @@
   z-index: 10;
 }
 
-/* Здесь тоже можно использовать contain, если и тут режутся края,
-   но для маленьких превью cover обычно смотрится лучше. 
-   Если хотите contain и здесь - поменяйте cover на contain ниже. */
+/* ФИКС SIMILAR GAMES: Возвращаем cover, чтобы не было полос на миниатюрах */
 .card-similar-item img {
-  width: 100%; height: 100%; object-fit: cover;
+  width: 100%; height: 100%; 
+  object-fit: cover; 
 }
+
 .no-similar { font-size: 0.75rem; color: #475569; font-style: italic; }
