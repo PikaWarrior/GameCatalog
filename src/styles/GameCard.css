@@ -26,12 +26,12 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* --- КАРТИНКА ГЛАВНАЯ (МАСШТАБИРУЕМАЯ) --- */
+/* --- ГЛАВНАЯ КАРТИНКА --- */
 .game-card-image {
   position: relative;
   width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9; /* Стандарт 16:9 */
+  /* Задаем жесткую форму контейнера 16:9 */
+  aspect-ratio: 16 / 9; 
   overflow: hidden;
   background: #0f172a;
   flex-shrink: 0;
@@ -40,8 +40,13 @@
 .game-card-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  
+  /* !!! ИСПРАВЛЕНИЕ РАСТЯНУТОСТИ !!! */
+  object-fit: cover;      /* Обрезает лишнее, сохраняя пропорции */
+  object-position: center; /* Центрирует картинку */
+  
   transition: transform 0.3s ease;
+  display: block; /* Убирает нижний отступ у inline-картинок */
 }
 
 .game-card-inner:hover .game-card-image img {
@@ -57,7 +62,7 @@
   display: flex;
   justify-content: space-between;
   pointer-events: none;
-  z-index: 5; /* Подняли выше */
+  z-index: 5;
 }
 
 .badge {
@@ -136,7 +141,7 @@
   flex-grow: 1;
 }
 
-/* --- СЕКЦИЯ ПОХОЖИХ ИГР (Сетка GRID) --- */
+/* --- СЕКЦИЯ ПОХОЖИХ ИГР --- */
 .card-similar-section {
   margin-top: auto;
   padding-top: 10px;
@@ -153,18 +158,19 @@
   letter-spacing: 0.5px;
 }
 
-/* GRID Сетка: 3 равные колонки */
+/* Используем GRID вместо FLEX, чтобы картинки не плющило */
 .card-similar-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Ровно 3 колонки */
+  grid-template-columns: repeat(3, 1fr); /* Ровно 3 колонки одинаковой ширины */
   gap: 8px;
   width: 100%;
 }
 
 .card-similar-item {
-  width: 100%; /* Растягиваем на всю ширину ячейки грида */
-  height: auto;
-  aspect-ratio: 16 / 9; /* Строгая пропорция */
+  width: 100%;
+  
+  /* Здесь задаем форму превьюшки. 16/9 = стандарт, 21/9 = широкоформат */
+  aspect-ratio: 16 / 9; 
   
   border-radius: 4px;
   overflow: hidden;
@@ -185,7 +191,12 @@
 .card-similar-item img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Заполняем блок без искажений */
+  
+  /* !!! ИСПРАВЛЕНИЕ СПЛЮСНУТОСТИ !!! */
+  object-fit: cover;       /* Заполнить блок, обрезав края */
+  object-position: center; /* Центр */
+  
+  display: block;
 }
 
 .no-similar {
