@@ -13,6 +13,7 @@ box-sizing: border-box;
 --text-primary: #f8fafc;
 --text-secondary: #94a3b8;
 --border-color: rgba(255, 255, 255, 0.08);
+--heart-color: #ef4444; /* Новый цвет для сердечка */
 }
 
 /* Красивый скроллбар для всего сайта */
@@ -41,15 +42,12 @@ overflow: hidden;
 }
 
 /* --- ЗАЩИТА ОТ ФАНТОМНЫХ ИКОНОК --- */
-/* Если лупа сделана через псевдо-элемент на body или app-container */
 body::before, body::after,
 .app-container::before, .app-container::after {
 content: none !important;
 display: none !important;
 }
 
-/* Жесткий хак: скрываем любые "бродячие" SVG в начале хедера, которые НЕ внутри кнопки */
-/* Это уберет лупу, если она "прибита" прямым SVG в шапке */
 .header > svg {
 display: none !important;
 }
@@ -90,14 +88,41 @@ width: 0;
 padding: 0;
 opacity: 0;
 border: none;
-margin-left: -1px; /* Прячем границу */
+margin-left: -1px; 
 }
 
 .filters-sticky {
 display: flex;
 flex-direction: column;
 gap: 20px;
-min-width: 260px; /* Чтобы контент не сжимался при анимации */
+min-width: 260px; 
+}
+
+/* --- КНОПКА ФИЛЬТРА ИЗБРАННОГО --- */
+.favorite-filter-btn {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.favorite-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.favorite-filter-btn.active {
+  background: rgba(239, 68, 68, 0.15); /* Красноватый фон */
+  color: var(--heart-color);
+  border-color: rgba(239, 68, 68, 0.3);
 }
 
 /* --- Стили контролов фильтров --- */
@@ -141,7 +166,7 @@ background-color: var(--secondary-bg);
 .reset-btn {
 width: 100%;
 padding: 12px;
-background: rgba(239, 68, 68, 0.1); /* Красный полупрозрачный */
+background: rgba(239, 68, 68, 0.1); 
 color: #fca5a5;
 border: 1px solid rgba(239, 68, 68, 0.2);
 border-radius: 8px;
