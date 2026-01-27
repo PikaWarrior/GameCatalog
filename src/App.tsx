@@ -24,7 +24,6 @@ interface ExtendedFilterState extends Omit<FilterState, 'selectedGenre'> {
 
 function App() {
   const games: Game[] = useMemo(() => {
-    // Безопасное приведение и маппинг
     const data = Array.isArray(rawGamesData) ? rawGamesData : (rawGamesData as any).games || [];
     return (data as RawGame[]).map(game => sanitizeGameData(game));
   }, []);
@@ -32,8 +31,8 @@ function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
-  // !!! Ключ изменен на 'v12_FINAL' для сброса кеша
-  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v13_FIXED', {
+  // СБРОС КЭША НА v14
+  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v14_ICONS', {
     searchQuery: '',
     selectedTags: [],
     excludedTags: [],
