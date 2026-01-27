@@ -81,6 +81,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
 
   const genreInfo = getGenreDetails(game.genre);
   const coopInfo = getCoopDetails(game.normalizedCoop);
+  // Защита от undefined и очистка тегов
   const cleanDesc = (game.description || "No description available.").replace(/<[^>]*>?/gm, '');
 
   // ПРОВЕРКА КАРТИНКИ (STEAM ИЛИ НЕТ)
@@ -148,7 +149,11 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             {game.similar_games && game.similar_games.length > 0 ? (
               <div className="card-similar-grid">
                 {game.similar_games.slice(0, 3).map((sim, i) => {
+                  // ВОТ ЗДЕСЬ БЫЛА ОШИБКА. 
+                  // Используем фигурные скобки {}, чтобы объявить переменную
                   const isSimSteam = sim.image?.includes('steamstatic');
+                  
+                  // И явный return (...)
                   return (
                     <a 
                       key={sim.id || i}
@@ -164,157 +169,6 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
                     </a>
                   );
                 })}
-              </div>
-            ) : (
-              <div className="no-similar">No similar games found</div>
-            )}
-          </div>
-
-        </div>
-      </div>
-    </div>
-  );
-});
-
-export default GameCard;
-            alt={game.name} 
-            loading="lazy"
-            onError={(e) => { (e.target as HTMLImageElement).src = '/fallback-game.jpg'; }}
-          />
-          
-          <div className="card-badges">
-            <span className="badge" style={genreInfo.style}>
-              <span className="badge-icon">{genreInfo.icon}</span>
-              <span>{game.genre}</span>
-            </span>
-            <span className="badge" style={coopInfo.style}>
-              <span className="badge-icon">{coopInfo.icon}</span>
-              <span>{coopInfo.label}</span>
-            </span>
-          </div>
-        </div>
-
-        {/* КОНТЕНТ */}
-        <div className="card-content">
-          <div className="card-header-row">
-            <h3 className="card-title" title={game.name}>
-              {game.name}
-            </h3>
-            <a 
-              href={game.steam_url} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="steam-icon-link"
-              onClick={(e) => e.stopPropagation()}
-              title="Open in Steam"
-            >
-              <Gamepad2 size={18} />
-            </a>
-          </div>
-
-          <div className="card-description-static">
-            {cleanDesc}
-          </div>
-
-          {/* ПОХОЖИЕ ИГРЫ */}
-          <div className="card-similar-section">
-            <div className="similar-label">Similar Games:</div>
-            
-            {game.similar_games && game.similar_games.length > 0 ? (
-              <div className="card-similar-grid">
-                {game.similar_games.slice(0, 3).map((sim, i) => {
-                  const isSimSteam = sim.image?.includes('steamstatic');
-                  return (
-                    <a 
-                      key={sim.id || i}
-                      href={sim.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={`card-similar-item ${!isSimSteam ? 'dynamic-bg' : ''}`}
-                      style={!isSimSteam ? { backgroundImage: `url('${sim.image}')` } : {}}
-                      title={sim.name}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <img src={sim.image} alt={sim.name} loading="lazy" />
-                    </a>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="no-similar">No similar games found</div>
-            )}
-          </div>
-
-        </div>
-      </div>
-    </div>
-  );
-});
-
-export default GameCard;
-            src={game.image} 
-            alt={game.name} 
-            loading="lazy"
-            onError={(e) => { (e.target as HTMLImageElement).src = '/fallback-game.jpg'; }}
-          />
-          
-          <div className="card-badges">
-            {/* ЖАНР */}
-            <span className="badge" style={genreInfo.style}>
-              <span className="badge-icon">{genreInfo.icon}</span>
-              <span>{game.genre}</span>
-            </span>
-            
-            {/* РЕЖИМ */}
-            <span className="badge" style={coopInfo.style}>
-              <span className="badge-icon">{coopInfo.icon}</span>
-              <span>{coopInfo.label}</span>
-            </span>
-          </div>
-        </div>
-
-        {/* КОНТЕНТ */}
-        <div className="card-content">
-          <div className="card-header-row">
-            <h3 className="card-title" title={game.name}>
-              {game.name}
-            </h3>
-            <a 
-              href={game.steam_url} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="steam-icon-link"
-              onClick={(e) => e.stopPropagation()}
-              title="Open in Steam"
-            >
-              <Gamepad2 size={18} />
-            </a>
-          </div>
-
-          {/* ОПИСАНИЕ */}
-          <div className="card-description-static">
-            {cleanDesc}
-          </div>
-
-          {/* ПОХОЖИЕ ИГРЫ */}
-          <div className="card-similar-section">
-            <div className="similar-label">Similar Games:</div>
-            
-            {game.similar_games && game.similar_games.length > 0 ? (
-              <div className="card-similar-grid">
-                {game.similar_games.slice(0, 3).map((sim, i) => (
-                  <a 
-                    key={sim.id || i}
-                    href={sim.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="card-similar-item"
-                    title={sim.name}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <img src={sim.image} alt={sim.name} loading="lazy" />
-                  </a>
-                ))}
               </div>
             ) : (
               <div className="no-similar">No similar games found</div>
