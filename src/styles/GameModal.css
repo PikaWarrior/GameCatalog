@@ -1,84 +1,89 @@
+/* --- ОСНОВА МОДАЛКИ --- */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92); z-index: 1000;
-  display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.15s ease-out;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 9999; /* Подняли выше, чтобы перекрыть всё */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.15s ease-out;
 }
+
 .modal-container {
-  background: #1e293b; width: 100%; max-width: 900px; max-height: 90vh;
-  border-radius: 12px; overflow: hidden; position: relative; display: flex; flex-direction: column;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #1e293b;
+  width: 100%;
+  max-width: 960px; /* Чуть шире для кинематографичности */
+  max-height: 90vh;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   animation: slideUp 0.2s ease-out;
 }
 
-/* HERO: Шапка */
+/* --- HERO (ШАПКА) --- */
 .modal-hero {
-  position: relative; width: 100%;
-  aspect-ratio: 16 / 9; /* Пропорции шапки 16:9 */
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Киношный формат шапки */
   background-color: #0f172a;
-  overflow: hidden; display: flex; align-items: flex-end;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  flex-shrink: 0; /* Чтобы шапка не сжималась при нехватке места */
 }
 
-/* ФОН: IMG для полного заполнения */
+/* ФОН: Размытая картинка на заднем плане */
 .hero-backdrop-img {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
-  object-fit: cover; /* Заполняет весь фон */
-  object-position: center top;
-}
-
-.hero-overlay {
-  position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(to bottom, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.8) 60%, rgba(15,23,42,1) 100%);
-}
-.hero-content {
-  position: relative; z-index: 2; display: flex; align-items: flex-end;
-  gap: 24px; padding: 30px; width: 100%;
-}
-
-/* !!! ФИКС ПОСТЕРА !!! */
-.hero-poster {
-  width: 25%; /* Чуть шире, так как теперь он горизонтальный */
-  min-width: 180px;
-  
-  /* ИЗМЕНЕНО: СТАВИМ 16/9 ВМЕСТО 2/3, ЧТОБЫ ВЛЕЗАЛИ ГОРИЗОНТАЛЬНЫЕ КАРТИНКИ */
-  aspect-ratio: 16 / 9; 
-  
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
   object-fit: cover;
   object-position: center top;
-  border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,255,255,0.15); background: #0f172a; flex-shrink: 0;
+  filter: brightness(0.7); /* Немного затемняем исходник */
 }
 
-.hero-info { flex: 1; display: flex; flex-direction: column; gap: 12px; padding-bottom: 5px; }
-.game-title { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; color: #fff; line-height: 1.1; margin: 0; text-shadow: 0 4px 15px rgba(0,0,0,0.6); }
-.meta-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
-.meta-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(4px); }
-.rating-badge { color: #facc15; background: rgba(234,179,8,0.15); border-color: rgba(234,179,8,0.2); }
-.action-buttons { margin-top: 12px; }
-.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: #3b82f6; color: white; border: none; padding: 10px 24px; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.15s; text-decoration: none; box-shadow: 0 4px 12px rgba(59,130,246,0.3); }
-.btn-primary:hover { background: #2563eb; transform: translateY(-2px); }
-.close-btn { position: absolute; top: 16px; right: 16px; z-index: 10; background: rgba(0,0,0,0.5); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s; backdrop-filter: blur(4px); }
-.close-btn:hover { background: rgba(255,255,255,0.2); }
-.modal-body { padding: 30px; overflow-y: auto; flex: 1; background: #0f172a; }
-.modal-columns { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
-.main-column, .side-column { display: flex; flex-direction: column; gap: 24px; }
-.modal-section h3 { font-size: 1.1rem; color: #94a3b8; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; }
-.description-text { font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; }
-.tags-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
-.tag-pill { padding: 6px 14px; border-radius: 6px; background: #1e293b; color: #94a3b8; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.05); }
-.tag-pill.subgenre { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border-color: rgba(59, 130, 246, 0.2); }
-.summary-list { display: flex; flex-direction: column; gap: 10px; }
-.summary-item { background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; border-left: 3px solid #3b82f6; color: #e2e8f0; font-size: 0.95rem; line-height: 1.5; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-@media (max-width: 768px) {
-  .modal-columns { grid-template-columns: 1fr; }
-  .hero-content { flex-direction: column; align-items: center; text-align: center; padding-top: 40px; }
-  .hero-poster { width: 140px; }
-  .hero-info { align-items: center; }
-  .modal-hero { height: auto; aspect-ratio: unset; padding-bottom: 20px;}
-  }  flex-shrink: 0;
+/* Градиент для читаемости текста */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.8) 60%, rgba(15,23,42,1) 100%);
 }
 
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 30px;
+  width: 100%;
+}
+
+/* --- ПОСТЕР (ГОРИЗОНТАЛЬНЫЙ) --- */
+.hero-poster {
+  width: 35%; /* Шире, так как теперь он горизонтальный */
+  min-width: 220px;
+  aspect-ratio: 16 / 9; /* ГЛАВНЫЙ ФИКС: Горизонтальный формат */
+  object-fit: cover;
+  object-position: center;
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.2);
+  background: #0f172a;
+  flex-shrink: 0;
+}
+
+/* Текстовая инфо в шапке */
 .hero-info {
   flex: 1;
   display: flex;
@@ -88,189 +93,101 @@
 }
 
 .game-title {
-  font-size: clamp(1.8rem, 4vw, 3rem); /* Адаптивный шрифт */
+  font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 800;
   color: #fff;
   line-height: 1.1;
   margin: 0;
-  text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+  text-shadow: 0 4px 15px rgba(0,0,0,0.8);
 }
 
-.meta-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
+.meta-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
 
 .meta-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #e2e8f0;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 6px;
+  font-size: 0.9rem; font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.5); /* Темнее фон для контраста */
   backdrop-filter: blur(4px);
+  color: #e2e8f0;
 }
 
 .rating-badge {
   color: #facc15;
-  background: rgba(234, 179, 8, 0.15);
-  border-color: rgba(234, 179, 8, 0.2);
+  background: rgba(234,179,8,0.2);
+  border-color: rgba(234,179,8,0.3);
 }
 
-.action-buttons {
-  margin-top: 12px;
-}
+.action-buttons { margin-top: 12px; }
 
 .btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s;
-  text-decoration: none;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #3b82f6; color: white; border: none;
+  padding: 10px 24px; border-radius: 6px;
+  font-size: 1rem; font-weight: 600; cursor: pointer;
+  transition: all 0.15s; text-decoration: none;
+  box-shadow: 0 4px 12px rgba(59,130,246,0.3);
 }
-
-.btn-primary:hover {
-  background: #2563eb;
-  transform: translateY(-2px);
-}
+.btn-primary:hover { background: #2563eb; transform: translateY(-2px); }
 
 .close-btn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.5);
-  border: none;
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.15s;
+  position: absolute; top: 16px; right: 16px; z-index: 10;
+  background: rgba(0,0,0,0.5); border: none; color: white;
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.15s;
   backdrop-filter: blur(4px);
 }
+.close-btn:hover { background: rgba(255,255,255,0.2); }
 
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* BODY */
+/* --- ТЕЛО МОДАЛКИ --- */
 .modal-body {
   padding: 30px;
   overflow-y: auto;
   flex: 1;
   background: #0f172a;
 }
-
-/* --- НОВОЕ: КОЛОНКИ --- */
-.modal-columns {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 30px;
-}
-
-.main-column, .side-column {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
+.modal-columns { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+.main-column, .side-column { display: flex; flex-direction: column; gap: 24px; }
 
 .modal-section h3 {
-  font-size: 1.1rem;
-  color: #94a3b8;
-  margin-bottom: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: flex;
-  align-items: center;
+  font-size: 1.1rem; color: #94a3b8; margin-bottom: 12px;
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
 }
+.description-text { font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; }
 
-.description-text {
-  font-size: 1.05rem;
-  line-height: 1.7;
-  color: #cbd5e1;
-}
-
-.tags-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
+.tags-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
 .tag-pill {
-  padding: 6px 14px;
-  border-radius: 6px;
-  background: #1e293b;
-  color: #94a3b8;
-  font-size: 0.9rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 6px 14px; border-radius: 6px;
+  background: #1e293b; color: #94a3b8;
+  font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.05);
 }
-
 .tag-pill.subgenre {
   background: rgba(59, 130, 246, 0.1);
   color: #60a5fa;
   border-color: rgba(59, 130, 246, 0.2);
 }
 
-/* --- СЕКЦИЯ ПОХОЖИХ ИГР (СПИСОК) --- */
-.summary-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
+.summary-list { display: flex; flex-direction: column; gap: 10px; }
 .summary-item {
-  background: rgba(255, 255, 255, 0.03);
-  padding: 12px 16px;
-  border-radius: 8px;
-  border-left: 3px solid #3b82f6;
-  color: #e2e8f0;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  background: rgba(255,255,255,0.03); padding: 12px 16px;
+  border-radius: 8px; border-left: 3px solid #3b82f6;
+  color: #e2e8f0; font-size: 0.95rem; line-height: 1.5;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+/* АНИМАЦИИ */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
+/* МОБИЛЬНАЯ ВЕРСИЯ */
 @media (max-width: 768px) {
-  .modal-columns {
-    grid-template-columns: 1fr;
-  }
-  .hero-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding-top: 40px;
-  }
-  .hero-poster { 
-    width: 140px; 
-  }
+  .modal-columns { grid-template-columns: 1fr; }
+  .modal-hero { height: auto; aspect-ratio: unset; padding-bottom: 20px; }
+  .hero-content { flex-direction: column; align-items: center; text-align: center; padding-top: 50px; }
+  
+  /* На мобильном постер делаем чуть меньше, но сохраняем 16:9 */
+  .hero-poster { width: 80%; max-width: 300px; margin-bottom: 16px; } 
   .hero-info { align-items: center; }
-  .modal-hero { height: auto; aspect-ratio: unset; padding-bottom: 20px;}
+  .meta-row { justify-content: center; }
 }
