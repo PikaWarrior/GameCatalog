@@ -37,8 +37,7 @@
   position: relative;
   width: 100%;
   
-  /* ИДЕАЛЬНАЯ ПРОПОРЦИЯ (460x215) 
-     Используем точные размеры Steam-баннеров, чтобы рамка совпадала с картинкой. */
+  /* МАТЕМАТИЧЕСКИ ТОЧНЫЙ РАЗМЕР БАННЕРА STEAM */
   aspect-ratio: 460 / 215; 
   
   overflow: hidden;
@@ -49,11 +48,19 @@
 .game-card-image img {
   width: 100% !important;
   height: 100% !important;
-  /* cover сработает идеально, так как контейнер имеет те же пропорции, что и картинка */
+  
+  /* По умолчанию (для Steam): заполняем рамку */
   object-fit: cover !important; 
   object-position: center;
+  
   display: block;
   transition: transform 0.3s ease;
+}
+
+/* УМНОЕ ПЕРЕКЛЮЧЕНИЕ: Если это НЕ Steam, используем contain */
+.game-card-image img:not([src*="steamstatic"]) {
+  object-fit: contain !important;
+  background-color: #000; /* Черный фон для полос */
 }
 
 .game-card-inner:hover .game-card-image img {
@@ -111,7 +118,7 @@
   overflow: hidden; flex-grow: 1;
 }
 
-/* --- ПОХОЖИЕ ИГРЫ (ФИНАЛЬНЫЙ ФИКС) --- */
+/* --- ПОХОЖИЕ ИГРЫ --- */
 .card-similar-section {
   margin-top: auto; padding-top: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -129,8 +136,7 @@
 .card-similar-item {
   width: 100%;
   
-  /* ФИКС: Точная пропорция Steam-картинки (460/215). 
-     Гарантирует, что вся ширина картинки влезает без обрезки. */
+  /* И ТУТ ТОЖЕ ТОЧНЫЕ ПРОПОРЦИИ STEAM */
   aspect-ratio: 460 / 215; 
   
   border-radius: 4px; overflow: hidden; position: relative;
@@ -148,8 +154,13 @@
 
 .card-similar-item img {
   width: 100%; height: 100%; 
-  /* Cover теперь безопасен, так как пропорции контейнера и картинки идентичны */
-  object-fit: cover; 
+  object-fit: cover; /* Для Steam: идеально вписывается */
+}
+
+/* ДЛЯ НЕ-STEAM В SIMILAR GAMES */
+.card-similar-item img:not([src*="steamstatic"]) {
+  object-fit: contain; /* Показываем целиком */
+  background-color: #000;
 }
 
 .no-similar { font-size: 0.75rem; color: #475569; font-style: italic; }
