@@ -16,15 +16,13 @@ interface GameCardProps {
 
 const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) => {
   
-  // УВЕЛИЧЕННЫЕ ИКОНКИ (было 11, стало 16)
   const ICON_SIZE = 16;
-  const ICON_STROKE = 2; // Чуть жирнее
+  const ICON_STROKE = 2;
 
   // --- ЛОГИКА КООП-РЕЖИМОВ ---
   const getCoopDetails = (coop: string) => {
     const lower = (coop || '').toLowerCase();
     
-    // Single
     if (lower.includes('single')) {
       return { 
         style: { backgroundColor: '#64748b', borderColor: 'rgba(255,255,255,0.2)' },
@@ -32,7 +30,6 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
         label: 'Single' 
       };
     }
-    // Split Screen
     if (lower.includes('split') || lower.includes('shared') || lower.includes('local')) {
       return { 
         style: { backgroundColor: '#ea580c', borderColor: '#fb923c' },
@@ -40,7 +37,6 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
         label: 'Split Screen' 
       };
     }
-    // Multiplayer
     if (lower.includes('online') || lower.includes('mmo') || lower.includes('multi')) {
       return { 
         style: { backgroundColor: '#7c3aed', borderColor: '#a78bfa' },
@@ -48,7 +44,6 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
         label: 'Multiplayer' 
       };
     }
-    // Co-op
     return { 
       style: { backgroundColor: '#059669', borderColor: '#34d399' },
       icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 
@@ -59,8 +54,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
   // --- ЛОГИКА ЖАНРОВ ---
   const getGenreDetails = (genre: string) => {
     const g = (genre || '').toLowerCase();
-
-    let color = '#475569'; // Default Slate
+    let color = '#475569';
     let icon = <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE} />;
 
     if (g.includes('action') || g.includes('hack') || g.includes('fighting') || g.includes('beat')) { color = '#dc2626'; icon = <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE} />; }
@@ -87,9 +81,10 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
 
   const genreInfo = getGenreDetails(game.genre);
   const coopInfo = getCoopDetails(game.normalizedCoop);
-  
-  // Очистка описания
   const cleanDesc = (game.description || "No description available.").replace(/<[^>]*>?/gm, '');
+
+  // ПРОВЕРКА КАРТИНКИ (STEAM ИЛИ НЕТ)
+  const isSteam = game.image?.includes('steamstatic');
 
   return (
     <div 
@@ -99,9 +94,89 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
     >
       <div className="game-card-inner">
         
-        {/* КАРТИНКА */}
-        <div className="game-card-image">
+        {/* КАРТИНКА С УМНЫМ ФОНОМ */}
+        <div 
+          className={`game-card-image ${!isSteam ? 'dynamic-bg' : ''}`}
+          // Если не Steam, добавляем картинку в inline-стиль для наследования в CSS ::before
+          style={!isSteam ? { backgroundImage: `url('${game.image}')` } : {}}
+        >
           <img 
+            src={game.image} 
+            alt={game.name} 
+            loading="lazy"
+            onError={(e) => { (e.target as HTMLImageElement).src = '/fallback-game.jpg'; }}
+          />
+          
+          <div className="card-badges">
+            <span className="badge" style={genreInfo.style}>
+              <span className="badge-icon">{genreInfo.icon}</span>
+              <span>{game.genre}</span>
+            </span>
+            <span className="badge" style={coopInfo.style}>
+              <span className="badge-icon">{coopInfo.icon}</span>
+              <span>{coopInfo.label}</span>
+            </span>
+          </div>
+        </div>
+
+        {/* КОНТЕНТ */}
+        <div className="card-content">
+          <div className="card-header-row">
+            <h3 className="card-title" title={game.name}>
+              {game.name}
+            </h3>
+            <a 
+              href={game.steam_url} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="steam-icon-link"
+              onClick={(e) => e.stopPropagation()}
+              title="Open in Steam"
+            >
+              <Gamepad2 size={18} />
+            </a>
+          </div>
+
+          <div className="card-description-static">
+            {cleanDesc}
+          </div>
+
+          {/* ПОХОЖИЕ ИГРЫ */}
+          <div className="card-similar-section">
+            <div className="similar-label">Similar Games:</div>
+            
+            {game.similar_games && game.similar_games.length > 0 ? (
+              <div className="card-similar-grid">
+                {game.similar_games.slice(0, 3).map((sim, i) => {
+                  const isSimSteam = sim.image?.includes('steamstatic');
+                  return (
+                    <a 
+                      key={sim.id || i}
+                      href={sim.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`card-similar-item ${!isSimSteam ? 'dynamic-bg' : ''}`}
+                      style={!isSimSteam ? { backgroundImage: `url('${sim.image}')` } : {}}
+                      title={sim.name}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <img src={sim.image} alt={sim.name} loading="lazy" />
+                    </a>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="no-similar">No similar games found</div>
+            )}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+});
+
+export default GameCard;
             src={game.image} 
             alt={game.name} 
             loading="lazy"
