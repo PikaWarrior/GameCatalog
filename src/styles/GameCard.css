@@ -32,13 +32,13 @@
   outline-offset: 2px;
 }
 
-/* --- КАРТИНКА: ИСПРАВЛЕНИЕ ПОЛОС И ОБРЕЗКИ --- */
+/* --- ОСНОВНАЯ КАРТИНКА --- */
 .game-card-image {
   position: relative;
   width: 100%;
-  /* МЕНЯЕМ ФОРМАТ НА 2:1 (Широкий баннер). 
-     Это убирает черные полосы, так как рамка теперь подходит под картинку. */
-  aspect-ratio: 2 / 1; 
+  /* ФИНАЛЬНЫЙ ФИКС: Пропорция Steam Capsule (2.15:1). 
+     Рамка становится чуть шире (ниже), идеально под размер картинки. */
+  aspect-ratio: 2.15 / 1; 
   overflow: hidden;
   background: #0f172a;
   flex-shrink: 0;
@@ -47,8 +47,7 @@
 .game-card-image img {
   width: 100% !important;
   height: 100% !important;
-  /* ВОЗВРАЩАЕМ COVER: Картинка заполняет всё пространство. 
-     Так как aspect-ratio теперь 2:1, обрезка по краям будет минимальной. */
+  /* Картинка заполняет рамку. Так как рамка теперь 2.15:1, обрезки по краям не будет */
   object-fit: cover !important; 
   object-position: center;
   display: block;
@@ -110,7 +109,7 @@
   overflow: hidden; flex-grow: 1;
 }
 
-/* --- ПОХОЖИЕ ИГРЫ --- */
+/* --- ПОХОЖИЕ ИГРЫ (ОТКАТ К ОРИГИНАЛУ) --- */
 .card-similar-section {
   margin-top: auto; padding-top: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -127,23 +126,24 @@
 
 .card-similar-item {
   width: 100%;
-  aspect-ratio: 16 / 9; /* Здесь оставляем 16:9 для миниатюр */
+  aspect-ratio: 16 / 9; /* Оставляем 16:9 как в оригинале */
   border-radius: 4px; overflow: hidden; position: relative;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: transform 0.2s, border-color 0.2s;
+  transition: transform 0.2s, border-color 0.2s, z-index 0s;
   background: #0f172a; display: block;
 }
 
+/* Возвращаем оригинальный масштаб 1.15 и z-index */
 .card-similar-item:hover {
-  transform: scale(1.1);
+  transform: scale(1.15); 
   border-color: #3b82f6;
   z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.8);
 }
 
-/* ФИКС SIMILAR GAMES: Возвращаем cover, чтобы не было полос на миниатюрах */
 .card-similar-item img {
   width: 100%; height: 100%; 
-  object-fit: cover; 
+  object-fit: cover; /* Возвращаем cover, чтобы превью были красивыми */
 }
 
 .no-similar { font-size: 0.75rem; color: #475569; font-style: italic; }
