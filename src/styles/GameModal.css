@@ -1,191 +1,82 @@
 /* --- ОСНОВА МОДАЛКИ --- */
 .modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.92);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  animation: fadeIn 0.15s ease-out;
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92); z-index: 9999;
+  display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.15s ease-out;
 }
-
 .modal-container {
-  background: #1e293b;
-  width: 100%;
-  max-width: 960px;
-  max-height: 90vh;
-  border-radius: 12px;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #1e293b; width: 100%; max-width: 960px; max-height: 90vh;
+  border-radius: 12px; overflow: hidden; position: relative; display: flex; flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
   animation: slideUp 0.2s ease-out;
 }
 
-/* --- HERO (ШАПКА) --- */
+/* HERO: Шапка */
 .modal-hero {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9; /* Общий фон шапки оставляем кинематографичным */
+  position: relative; width: 100%;
+  aspect-ratio: 16 / 9; /* Общий фон оставляем высоким для красоты */
   background-color: #0f172a;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  flex-shrink: 0;
+  overflow: hidden; display: flex; align-items: flex-end; flex-shrink: 0;
 }
 
-/* ФОН: IMG для полного заполнения */
 .hero-backdrop-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  object-fit: cover; /* Заполняет весь фон */
-  object-position: center top;
-  filter: brightness(0.7) blur(2px); /* Затемнение и размытие фона */
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+  object-fit: cover; object-position: center top; filter: brightness(0.7) blur(2px);
 }
 
 .hero-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
+  position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(to bottom, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.8) 60%, rgba(15,23,42,1) 100%);
 }
-
 .hero-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: flex-end;
-  gap: 24px;
-  padding: 30px;
-  width: 100%;
+  position: relative; z-index: 2; display: flex; align-items: flex-end;
+  gap: 24px; padding: 30px; width: 100%;
 }
 
-/* --- ПОСТЕР: ФИКС --- */
+/* --- ПОСТЕР: ФИКС ПОД STEAM CAPSULE --- */
 .hero-poster {
-  width: 35%; 
-  min-width: 220px;
+  width: 40%; /* Делаем пошире */
+  min-width: 240px;
   
-  /* ИЗМЕНЕНО: Формат 2:1 (как у карточек), чтобы влезал широкий арт */
-  aspect-ratio: 2 / 1; 
+  /* ИДЕАЛЬНАЯ ПРОПОРЦИЯ: 2.15 к 1 (460x215px) - формат Steam */
+  aspect-ratio: 2.15 / 1;
   
-  /* ИЗМЕНЕНО: cover заполняет рамку без черных полос */
-  object-fit: cover; 
+  object-fit: cover; /* Теперь cover не обрежет важное, так как рамка совпадает с картинкой */
   object-position: center;
   
-  border-radius: 8px; 
-  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,255,255,0.2); 
-  background: #0f172a; 
-  flex-shrink: 0;
+  border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.2); background: #0f172a; flex-shrink: 0;
 }
 
 .hero-info { flex: 1; display: flex; flex-direction: column; gap: 12px; padding-bottom: 5px; }
-
-.game-title { 
-  font-size: clamp(1.8rem, 4vw, 3rem); 
-  font-weight: 800; color: #fff; line-height: 1.1; margin: 0; 
-  text-shadow: 0 4px 15px rgba(0,0,0,0.8); 
-}
-
+.game-title { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; color: #fff; line-height: 1.1; margin: 0; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
 .meta-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
-
-.meta-badge { 
-  display: inline-flex; align-items: center; gap: 6px; 
-  padding: 6px 12px; border-radius: 6px; 
-  font-size: 0.9rem; font-weight: 600; 
-  border: 1px solid rgba(255,255,255,0.1); 
-  background: rgba(0,0,0,0.5); 
-  backdrop-filter: blur(4px); 
-  color: #e2e8f0; 
-}
-
-.rating-badge { 
-  color: #facc15; 
-  background: rgba(234,179,8,0.2); 
-  border-color: rgba(234,179,8,0.3); 
-}
-
+.meta-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); color: #e2e8f0; }
+.rating-badge { color: #facc15; background: rgba(234,179,8,0.2); border-color: rgba(234,179,8,0.3); }
 .action-buttons { margin-top: 12px; }
-
-.btn-primary { 
-  display: inline-flex; align-items: center; gap: 8px; 
-  background: #3b82f6; color: white; border: none; 
-  padding: 10px 24px; border-radius: 6px; 
-  font-size: 1rem; font-weight: 600; cursor: pointer; 
-  transition: all 0.15s; text-decoration: none; 
-  box-shadow: 0 4px 12px rgba(59,130,246,0.3); 
-}
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: #3b82f6; color: white; border: none; padding: 10px 24px; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.15s; text-decoration: none; box-shadow: 0 4px 12px rgba(59,130,246,0.3); }
 .btn-primary:hover { background: #2563eb; transform: translateY(-2px); }
-
-.close-btn { 
-  position: absolute; top: 16px; right: 16px; z-index: 10; 
-  background: rgba(0,0,0,0.5); border: none; color: white; 
-  width: 40px; height: 40px; border-radius: 50%; 
-  display: flex; align-items: center; justify-content: center; 
-  cursor: pointer; transition: background 0.15s; 
-  backdrop-filter: blur(4px); 
-}
+.close-btn { position: absolute; top: 16px; right: 16px; z-index: 10; background: rgba(0,0,0,0.5); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s; backdrop-filter: blur(4px); }
 .close-btn:hover { background: rgba(255,255,255,0.2); }
 
-/* --- ТЕЛО МОДАЛКИ --- */
-.modal-body { 
-  padding: 30px; 
-  overflow-y: auto; 
-  flex: 1; 
-  background: #0f172a; 
-}
-
+.modal-body { padding: 30px; overflow-y: auto; flex: 1; background: #0f172a; }
 .modal-columns { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
 .main-column, .side-column { display: flex; flex-direction: column; gap: 24px; }
-
-.modal-section h3 { 
-  font-size: 1.1rem; color: #94a3b8; margin-bottom: 12px; 
-  font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; 
-}
-
+.modal-section h3 { font-size: 1.1rem; color: #94a3b8; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 .description-text { font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; }
-
 .tags-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
-
-.tag-pill { 
-  padding: 6px 14px; border-radius: 6px; 
-  background: #1e293b; color: #94a3b8; 
-  font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.05); 
-}
-.tag-pill.subgenre { 
-  background: rgba(59, 130, 246, 0.1); 
-  color: #60a5fa; 
-  border-color: rgba(59, 130, 246, 0.2); 
-}
-
+.tag-pill { padding: 6px 14px; border-radius: 6px; background: #1e293b; color: #94a3b8; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.05); }
+.tag-pill.subgenre { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border-color: rgba(59, 130, 246, 0.2); }
 .summary-list { display: flex; flex-direction: column; gap: 10px; }
-.summary-item { 
-  background: rgba(255,255,255,0.03); padding: 12px 16px; 
-  border-radius: 8px; border-left: 3px solid #3b82f6; 
-  color: #e2e8f0; font-size: 0.95rem; line-height: 1.5; 
-}
-
-/* АНИМАЦИИ */
+.summary-item { background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; border-left: 3px solid #3b82f6; color: #e2e8f0; font-size: 0.95rem; line-height: 1.5; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-/* МОБИЛЬНАЯ ВЕРСИЯ */
 @media (max-width: 768px) {
   .modal-columns { grid-template-columns: 1fr; }
   .modal-hero { height: auto; aspect-ratio: unset; padding-bottom: 20px; }
   .hero-content { flex-direction: column; align-items: center; text-align: center; padding-top: 50px; }
-  
-  /* Адаптация постера под мобильные (тоже сохраняем 2:1 или 16:9, как удобнее, здесь 2:1) */
-  .hero-poster { width: 80%; max-width: 300px; margin-bottom: 16px; aspect-ratio: 2 / 1; } 
-  
+  /* На мобильном тоже держим пропорцию Steam */
+  .hero-poster { width: 90%; max-width: 340px; margin-bottom: 16px; aspect-ratio: 2.15 / 1; } 
   .hero-info { align-items: center; }
   .meta-row { justify-content: center; }
 }
