@@ -73,4 +73,5 @@
   .hero-poster { width: 90%; max-width: 340px; margin-bottom: 16px; aspect-ratio: 460 / 215; } 
   .hero-info { align-items: center; }
   .meta-row { justify-content: center; }
-}
+                  }
+               
