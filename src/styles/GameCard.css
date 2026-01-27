@@ -18,41 +18,44 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
   cursor: pointer;
-  position: relative; /* Для позиционирования бейджей */
+  position: relative;
 }
 
-/* Ховер и Фокус */
 .game-card-inner:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.5);
   border-color: rgba(255, 255, 255, 0.2);
 }
+
 .game-card-inner:focus-visible {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
 
-/* --- КАРТИНКА 16:9 --- */
+/* --- КАРТИНКА 16:9 c ФИКСОМ CONTAIN --- */
 .game-card-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9; /* ГЛАВНЫЙ ФИКС: Все картинки одинаково горизонтальные */
+  aspect-ratio: 16 / 9; /* Жестко держим размер рамки */
   overflow: hidden;
-  background: #0f172a;
+  background: #0f172a; /* Темный фон для "полос" сверху и снизу */
   flex-shrink: 0;
 }
 
 .game-card-image img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important; /* Заполняет 16:9 без искажений */
+  
+  /* ГЛАВНЫЙ ФИКС: Вмещаем картинку целиком, не обрезая края */
+  object-fit: contain !important; 
   object-position: center;
+  
   display: block;
   transition: transform 0.3s ease;
 }
 
 .game-card-inner:hover .game-card-image img {
-  transform: scale(1.05); /* Легкий зум при наведении */
+  transform: scale(1.05);
 }
 
 /* --- БЕЙДЖИ --- */
@@ -66,7 +69,6 @@
 .badge {
   padding: 4px 8px; border-radius: 4px;
   font-size: 0.75rem; font-weight: 700; color: white;
-  /* Улучшенный контраст: более темный фон */
   background: rgba(0, 0, 0, 0.7); 
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -75,7 +77,7 @@
 }
 .badge-icon { margin-right: 5px; display: flex; align-items: center; }
 
-/* --- КОНТЕНТ КАРТОЧКИ --- */
+/* --- КОНТЕНТ --- */
 .card-content {
   padding: 12px 14px;
   display: flex; flex-direction: column;
@@ -124,7 +126,7 @@
 
 .card-similar-item {
   width: 100%;
-  aspect-ratio: 16 / 9; /* Тоже 16:9 для консистентности */
+  aspect-ratio: 16 / 9;
   border-radius: 4px; overflow: hidden; position: relative;
   border: 1px solid rgba(255, 255, 255, 0.15);
   transition: transform 0.2s, border-color 0.2s;
@@ -132,12 +134,14 @@
 }
 
 .card-similar-item:hover {
-  /* Уменьшил зум до 1.1, чтобы не сильно резалось краями карточки */
-  transform: scale(1.1); 
+  transform: scale(1.1);
   border-color: #3b82f6;
   z-index: 10;
 }
 
+/* Здесь тоже можно использовать contain, если и тут режутся края,
+   но для маленьких превью cover обычно смотрится лучше. 
+   Если хотите contain и здесь - поменяйте cover на contain ниже. */
 .card-similar-item img {
   width: 100%; height: 100%; object-fit: cover;
 }
