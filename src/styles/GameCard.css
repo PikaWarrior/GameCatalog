@@ -20,9 +20,6 @@
 .game-card-wrapper {
   padding: 0;
   box-sizing: border-box;
-  /* Важно: заставляем обертку занимать все место в ячейке грида */
-  width: 100%;
-  height: 100%; 
 }
 
 .game-card-inner {
@@ -43,31 +40,24 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* --- ГЛАВНАЯ КАРТИНКА (МАСШТАБИРУЕМАЯ) --- */
+/* --- КАРТИНКА (МАСШТАБИРУЕМАЯ 16:9) --- */
 .game-card-image {
   position: relative;
-  
-  /* МАГИЯ МАСШТАБИРОВАНИЯ: */
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9; /* Жестко держим формат 16:9 */
-  
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #0f172a;
   flex-shrink: 0;
-  display: block;
 }
 
 .game-card-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Заполняет весь блок без искажений */
-  object-position: center top; /* Фокус на верхней части (лица/логотипы обычно там) */
+  object-fit: cover;
   transition: transform 0.3s ease;
-  display: block; /* Убирает паразитные отступы снизу */
 }
 
-/* Зум при наведении на всю карточку */
 .game-card-inner:hover .game-card-image img {
   transform: scale(1.05);
 }
@@ -100,8 +90,7 @@
 
 .badge-icon {
   margin-right: 5px;
-  display: flex;
-  align-items: center;
+  display: block;
 }
 
 /* --- КОНТЕНТ --- */
@@ -109,7 +98,7 @@
   padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  flex: 1; /* Занимает все оставшееся место */
+  flex: 1;
   justify-content: space-between;
   min-height: 0;
 }
@@ -153,12 +142,10 @@
   line-height: 1.4;
   color: #94a3b8;
   margin-bottom: 12px;
-  
   display: -webkit-box;
   -webkit-line-clamp: 2; 
   -webkit-box-orient: vertical;
   overflow: hidden;
-  
   flex-grow: 1;
 }
 
@@ -186,12 +173,11 @@
 }
 
 .card-similar-item {
-  flex: 1; /* Растягивает элемент по ширине */
-  
-  /* Используем 21:9 для похожих игр (более узкие) */
-  aspect-ratio: 21 / 9; 
+  flex: 1;
   width: 100%;
   height: auto;
+  /* Используем 21:9 для широких Steam-капсул */
+  aspect-ratio: 21 / 9; 
   
   border-radius: 4px;
   overflow: hidden;
