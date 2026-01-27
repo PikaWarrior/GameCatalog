@@ -82,6 +82,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
   const genreInfo = getGenreDetails(game.genre);
   const coopInfo = getCoopDetails(game.normalizedCoop);
   const cleanDesc = (game.description || "No description available.").replace(/<[^>]*>?/gm, '');
+  const isSteam = game.image?.includes('steamstatic');
 
   return (
     <div 
@@ -92,7 +93,10 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
       <div className="game-card-inner">
         
         {/* КАРТИНКА */}
-        <div className="game-card-image">
+        <div 
+          className={`game-card-image ${!isSteam ? 'dynamic-bg' : ''}`}
+          style={!isSteam ? { backgroundImage: `url('${game.image}')` } : {}}
+        >
           <img 
             src={game.image} 
             alt={game.name} 
@@ -118,19 +122,9 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             <h3 className="card-title" title={game.name}>
               {game.name}
             </h3>
-            <a 
-              href={game.steam_url} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="steam-icon-link"
-              onClick={(e) => e.stopPropagation()}
-              title="Open in Steam"
-            >
-              <Gamepad2 size={18} />
-            </a>
           </div>
 
-          <div className="card-description-static">
+          <div className="card-description-overlay">
             {cleanDesc}
           </div>
 
@@ -140,25 +134,45 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
             
             {game.similar_games && game.similar_games.length > 0 ? (
               <div className="card-similar-grid">
-                {game.similar_games.slice(0, 3).map((sim, i) => (
-                  <a 
-                    key={sim.id || i}
-                    href={sim.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="card-similar-item"
-                    title={sim.name}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <img src={sim.image} alt={sim.name} loading="lazy" />
-                  </a>
-                ))}
+                {game.similar_games.slice(0, 3).map((sim, i) => {
+                  const isSimSteam = sim.image?.includes('steamstatic');
+                  return (
+                    <a 
+                      key={sim.id || i}
+                      href={sim.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`card-similar-item ${!isSimSteam ? 'dynamic-bg' : ''}`}
+                      style={!isSimSteam ? { backgroundImage: `url('${sim.image}')` } : {}}
+                      title={sim.name}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <img src={sim.image} alt={sim.name} loading="lazy" />
+                    </a>
+                  );
+                })}
               </div>
             ) : (
               <div className="no-similar">No similar games found</div>
             )}
           </div>
 
+          {/* КНОПКА STEAM ПОД SIMILAR */}
+          {game.steam_url && (
+            <div className="steam-button-section">
+              <a 
+                href={game.steam_url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="steam-button-link"
+                onClick={(e) => e.stopPropagation()}
+                title="Open in Steam"
+              >
+                <Gamepad2 size={20} />
+                <span>Steam</span>
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -166,4 +180,3 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, style, onOpenModal }) =>
 });
 
 export default GameCard;
-                      
