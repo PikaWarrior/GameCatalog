@@ -52,7 +52,7 @@ function App() {
     sortBy: 'name',
     showFavorites: false,
     filterMode: 'AND',
-  });
+  } as ExtendedFilterState);
 
   const debouncedSearch = useDebounce(filterState.searchQuery, 300);
 
@@ -162,7 +162,6 @@ function App() {
         }
 
         if (selectedGenres && selectedGenres.length > 0) {
-          // Для жанров логика по факту одна и та же, но оставляю через filterMode для гибкости
           if (!selectedGenres.includes(game.genre)) return false;
         }
 
@@ -261,17 +260,17 @@ function App() {
 
   const handleTagToggle = useCallback((tag: string) => {
     toggleFilterItem(tag, filterState.selectedTags, filterState.excludedTags || [], 'selectedTags', 'excludedTags');
-  }, [filterState]);
+  }, [filterState.selectedTags, filterState.excludedTags]);
 
   const handleGenreToggle = useCallback((genre: string) => {
     toggleFilterItem(genre, filterState.selectedGenres || [], filterState.excludedGenres || [], 'selectedGenres', 'excludedGenres');
-  }, [filterState]);
+  }, [filterState.selectedGenres, filterState.excludedGenres]);
 
   const handleCoopChange = useCallback((coop: string) => {
     setFilterState(p => ({ ...p, selectedCoop: coop }));
   }, [setFilterState]);
 
-  const handleSortChange = useCallback((sortBy: FilterState['sortBy']) => {
+  const handleSortChange = useCallback((sortBy: string) => {
     setFilterState(p => ({ ...p, sortBy }));
   }, [setFilterState]);
 
@@ -294,7 +293,7 @@ function App() {
       sortBy: 'name',
       showFavorites: false,
       filterMode: 'AND',
-    });
+    } as ExtendedFilterState);
   }, [setFilterState]);
 
   // Открытие игры из URL при первом рендере/смене processedGames
@@ -317,8 +316,7 @@ function App() {
   return (
     <ErrorBoundary>
       <div className="app-container">
-        {/* ВАЖНО: здесь используй тот пропс-интерфейс Header, который у тебя реально описан.
-           Если твой Header раньше принимал другие пропы, верни их как было. */}
+        {/* Убрал новые пропсы, оставил только то, что точно есть в HeaderProps */}
         <Header
           searchQuery={filterState.searchQuery}
           onSearchChange={handleSearchChange}
@@ -357,11 +355,9 @@ function App() {
 
           <main className="games-grid-section">
             <Suspense fallback={<LoadingSkeleton />}>
-              {/* Аналогично: GameGridProps должны соответствовать тому, что у тебя было.
-                 Если у тебя были другие пропы, верни их и просто добавь favorites/onToggleFavorite. */}
+              {/* Убрал onGameClick, оставил только то, что точно есть в GameGridProps */}
               <GameGrid
                 games={filteredGames}
-                onGameClick={handleOpenModal}
                 favorites={favorites}
                 onToggleFavorite={handleToggleFavorite}
               />
