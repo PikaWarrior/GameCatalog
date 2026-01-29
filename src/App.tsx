@@ -17,7 +17,6 @@ import rawGamesData from './data/FinalGameLib_WithSimilar.json';
 
 const GameGrid = lazy(() => import('@components/GameGrid'));
 
-// Расширяем интерфейс состояния фильтров
 interface ExtendedFilterState extends Omit<FilterState, 'selectedTags'> {
   selectedTags: string[];
   excludedTags: string[];
@@ -36,10 +35,7 @@ function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
-  // Хранилище избранного
   const [favorites, setFavorites] = useLocalStorage<string[]>('favoriteGames_v1', []);
-
-  // Хранилище фильтров (v17 - чтобы сбросить старые несовместимые стейты)
   const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v17_FIX', {
     searchQuery: '',
     selectedTags: [],
@@ -60,11 +56,8 @@ function App() {
       let displayCoop = game.coop.split(' / ')[0];
 
       if (displayCoop === 'Single' && (
-        coopLower.includes('multiplayer') ||
-        coopLower.includes('co-op') ||
-        coopLower.includes('online') ||
-        coopLower.includes('shared') ||
-        coopLower.includes('split')
+        coopLower.includes('multiplayer') || coopLower.includes('co-op') || 
+        coopLower.includes('online') || coopLower.includes('shared') || coopLower.includes('split')
       )) {
         if (coopLower.includes('multiplayer')) displayCoop = 'Multiplayer';
         else if (coopLower.includes('co-op')) displayCoop = 'Co-op';
@@ -83,24 +76,18 @@ function App() {
     });
   }, [games]);
 
-  // Deep Linking (открытие по ссылке)
   useEffect(() => {
     if (processedGames.length === 0) return;
     const hash = window.location.hash;
     if (hash.startsWith('#game=')) {
       const gameName = decodeURIComponent(hash.replace('#game=', ''));
       const foundGame = processedGames.find(g => g.name === gameName);
-      if (foundGame) {
-        setSelectedGame(foundGame);
-      }
+      if (foundGame) setSelectedGame(foundGame);
     }
   }, [processedGames]);
 
   const handleToggleFavorite = useCallback((gameId: string) => {
-    setFavorites(prev => {
-      if (prev.includes(gameId)) return prev.filter(id => id !== gameId);
-      return [...prev, gameId];
-    });
+    setFavorites(prev => prev.includes(gameId) ? prev.filter(id => id !== gameId) : [...prev, gameId]);
   }, [setFavorites]);
 
   const allSubgenres = useMemo(() => {
@@ -121,19 +108,10 @@ function App() {
     return Array.from(genres).sort();
   }, [games]);
 
-  const allCoopModes = [
-    'All', 'Single', 'Multiplayer', 'Split Screen',
-    'Co-op & Multiplayer', 'Co-op & Multiplayer & Split Screen'
-  ];
+  const allCoopModes = ['All', 'Single', 'Multiplayer', 'Split Screen', 'Co-op & Multiplayer', 'Co-op & Multiplayer & Split Screen'];
 
   const filteredGames = useMemo(() => {
-    const {
-      selectedTags, excludedTags,
-      selectedGenres, excludedGenres,
-      selectedCoop, sortBy, showFavorites,
-      filterMode
-    } = filterState;
-
+    const { selectedTags, excludedTags, selectedGenres, excludedGenres, selectedCoop, sortBy, showFavorites, filterMode } = filterState;
     const searchLower = debouncedSearch.toLowerCase();
 
     return processedGames
@@ -143,11 +121,9 @@ function App() {
 
         const gameTags = new Set([...game.tags, ...game.subgenres]);
 
-        // Исключение (всегда строгое)
         if (excludedTags.some(tag => gameTags.has(tag))) return false;
         if (excludedGenres.includes(game.normalizedGenre)) return false;
 
-        // Включение (зависит от filterMode)
         if (selectedTags.length > 0) {
           if (filterMode === 'AND') {
              if (!selectedTags.every(tag => gameTags.has(tag))) return false;
@@ -169,7 +145,6 @@ function App() {
            } else if (target === 'split screen') {
              if (!gameModes.includes('split')) return false;
            } else {
-             // Простое сравнение normalizedCoop для Single/Multiplayer
              if (game.normalizedCoop !== selectedCoop && !gameModes.includes(target)) return false; 
            }
         }
@@ -179,7 +154,6 @@ function App() {
         const key = sortBy as string;
         if (key === 'name') return a.name.localeCompare(b.name);
         if (key === 'genre') return a.genre.localeCompare(b.genre);
-        // Рейтинг и Год пока убраны, чтобы не ломать типы, если их нет в интерфейсе
         return 0;
       });
   }, [processedGames, filterState, debouncedSearch, favorites]);
@@ -224,13 +198,7 @@ function App() {
 
   const handleClearFilters = () => {
     setFilterState(prev => ({
-      ...prev,
-      searchQuery: '',
-      selectedTags: [],
-      excludedTags: [],
-      selectedGenres: [],
-      excludedGenres: [],
-      selectedCoop: 'All'
+      ...prev, searchQuery: '', selectedTags: [], excludedTags: [], selectedGenres: [], excludedGenres: [], selectedCoop: 'All'
     }));
   };
 
@@ -249,8 +217,11 @@ function App() {
       <Header 
         isSidebarOpen={isSidebarOpen} 
         onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} 
-        // Исправлено: onSearch и приведение типа
+        // ИСПРАВЛЕННЫЕ ПРОПСЫ
+        searchTerm={filterState.searchQuery}
         onSearch={(val: string) => setFilterState(prev => ({ ...prev, searchQuery: val }))}
+        totalGames={games.length}
+        visibleGames={filteredGames.length}
       />
       
       <main className="main-content">
@@ -321,7 +292,6 @@ function App() {
             <Suspense fallback={<LoadingSkeleton />}>
                <GameGrid 
                  games={filteredGames} 
-                 // Исправлено: использование правильного пропса для клика (обычно onOpenModal)
                  onOpenModal={handleGameClick}
                  favorites={favorites}
                  onToggleFavorite={handleToggleFavorite}
