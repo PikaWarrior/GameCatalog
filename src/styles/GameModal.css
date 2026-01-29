@@ -1,83 +1,217 @@
 /* --- ОСНОВА МОДАЛКИ --- */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92); z-index: 9999;
-  display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.15s ease-out;
+    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92); z-index: 9999;
+    display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.15s ease-out;
 }
+  
 .modal-container {
-  background: #1e293b; width: 100%; max-width: 960px; max-height: 90vh;
-  border-radius: 12px; overflow: hidden; position: relative; display: flex; flex-direction: column;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
-  animation: slideUp 0.2s ease-out;
+    background: #1e293b; width: 100%; max-width: 960px; max-height: 90vh;
+    border-radius: 12px; overflow: hidden; position: relative; display: flex; flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideUp 0.2s ease-out;
 }
-
+  
 /* --- HERO (ШАПКА) --- */
 .modal-hero {
-  position: relative; width: 100%; aspect-ratio: 16 / 9;
-  background-color: #0f172a; overflow: hidden; display: flex; align-items: flex-end; flex-shrink: 0;
+    position: relative; width: 100%; aspect-ratio: 16 / 9;
+    background-color: #0f172a; overflow: hidden; display: flex; align-items: flex-end; flex-shrink: 0;
 }
+  
 .hero-backdrop-img {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
-  object-fit: cover; object-position: center top; filter: brightness(0.7) blur(2px);
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+    object-fit: cover; object-position: center top; filter: brightness(0.7) blur(2px);
 }
+  
 .hero-overlay {
-  position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(to bottom, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.8) 60%, rgba(15,23,42,1) 100%);
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to bottom, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.8) 60%, rgba(15,23,42,1) 100%);
 }
+  
 .hero-content {
-  position: relative; z-index: 2; display: flex; align-items: flex-end;
-  gap: 24px; padding: 30px; width: 100%;
+    position: relative; z-index: 2; display: flex; align-items: flex-end;
+    gap: 24px; padding: 30px; width: 100%;
 }
-
+  
 /* --- ПОСТЕР --- */
 .hero-poster {
-  width: 40%; min-width: 240px;
-  /* ПРОПОРЦИЯ STEAM */
-  aspect-ratio: 460 / 215; 
-  /* Стандарт: cover */
-  object-fit: cover; object-position: center;
-  border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,255,255,0.2); background: #0f172a; flex-shrink: 0;
+    width: 40%; min-width: 240px;
+    /* ПРОПОРЦИЯ STEAM */
+    aspect-ratio: 460 / 215;
+    /* Стандарт: cover */
+    object-fit: cover; object-position: center;
+    border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.2); background: #0f172a; flex-shrink: 0;
 }
-
+  
 /* --- ФИКС: РАСТЯГИВАНИЕ НЕ-STEAM --- */
 .hero-poster:not([src*="steamstatic"]) {
-  object-fit: fill !important;
+    object-fit: fill !important;
 }
-
+  
 .hero-info { flex: 1; display: flex; flex-direction: column; gap: 12px; padding-bottom: 5px; }
+  
 .game-title { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; color: #fff; line-height: 1.1; margin: 0; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
+  
 .meta-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+  
 .meta-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); color: #e2e8f0; }
+  
 .rating-badge { color: #facc15; background: rgba(234,179,8,0.2); border-color: rgba(234,179,8,0.3); }
+  
+/* Блок с кнопками действий */
+.modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 30px;
+    background: #1e293b;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+  
+/* Старая обертка кнопок в hero, если она еще используется, оставляем для совместимости */
 .action-buttons { margin-top: 12px; }
+  
 .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: #3b82f6; color: white; border: 1px solid transparent; padding: 10px 24px; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.15s; text-decoration: none; box-shadow: 0 4px 12px rgba(59,130,246,0.3); }
+  
 .btn-primary:hover { background: #2563eb; transform: translateY(-2px); }
-
+  
 /* Стиль для кнопки если она не активна (обычная кнопка favorite) */
 .btn-primary:not(.is-fav):not([href]):hover {
-  background: rgba(255,255,255,0.2) !important;
+    background: rgba(255,255,255,0.2) !important;
 }
-
+  
+/* Кнопка "В избранное" (вторичный стиль) */
+.btn-favorite {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+  
+.btn-favorite:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+  
+.btn-favorite.active {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+  
+/* --- НОВАЯ КНОПКА: Share --- */
+.btn-share {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: auto; /* Сдвигает кнопку вправо, если она последняя в flex-контейнере */
+}
+  
+.btn-share:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+    color: white;
+}
+  
 .close-btn { position: absolute; top: 16px; right: 16px; z-index: 10; background: rgba(0,0,0,0.5); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s; backdrop-filter: blur(4px); }
+  
 .close-btn:hover { background: rgba(255,255,255,0.2); }
+  
+/* Кнопка закрытия модалки (старый стиль, для совместимости) */
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 50;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    backdrop-filter: blur(4px);
+}
+.modal-close:hover { background: rgba(255, 255, 255, 0.2); }
+  
 .modal-body { padding: 30px; overflow-y: auto; flex: 1; background: #0f172a; }
+  
 .modal-columns { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+  
 .main-column, .side-column { display: flex; flex-direction: column; gap: 24px; }
+  
+/* Левая и правая части контента (для новой верстки) */
+.modal-left { flex: 2; display: flex; flex-direction: column; gap: 24px; }
+.modal-sidebar { flex: 1; display: flex; flex-direction: column; gap: 24px; min-width: 250px; }
+  
 .modal-section h3 { font-size: 1.1rem; color: #94a3b8; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-.description-text { font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; }
-.tags-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
-.tag-pill { padding: 6px 14px; border-radius: 6px; background: #1e293b; color: #94a3b8; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.05); }
-.tag-pill.subgenre { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border-color: rgba(59, 130, 246, 0.2); }
-.summary-list { display: flex; flex-direction: column; gap: 10px; }
-.summary-item { background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; border-left: 3px solid #3b82f6; color: #e2e8f0; font-size: 0.95rem; line-height: 1.5; }
+  
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    color: #e2e8f0;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+  
+.description-text, .modal-description { font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; }
+  
+.tags-cloud, .modal-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  
+.tag-pill, .tag { padding: 6px 14px; border-radius: 6px; background: #1e293b; color: #94a3b8; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.05); }
+  
+.tag-pill.subgenre, .tag.subgenre { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border-color: rgba(59, 130, 246, 0.2); }
+  
+.summary-list, .similar-games-list { display: flex; flex-direction: column; gap: 10px; list-style: none; padding: 0; }
+  
+.summary-item, .similar-games-list li { background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; border-left: 3px solid #3b82f6; color: #e2e8f0; font-size: 0.95rem; line-height: 1.5; }
+  
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  
 @media (max-width: 768px) {
-  .modal-columns { grid-template-columns: 1fr; }
-  .modal-hero { height: auto; aspect-ratio: unset; padding-bottom: 20px; }
-  .hero-content { flex-direction: column; align-items: center; text-align: center; padding-top: 50px; }
-  .hero-poster { width: 90%; max-width: 340px; margin-bottom: 16px; aspect-ratio: 460 / 215; } 
-  .hero-info { align-items: center; }
-  .meta-row { justify-content: center; }
-  .action-buttons { justify-content: center; }
+    .modal-columns { grid-template-columns: 1fr; }
+    .modal-hero { height: auto; aspect-ratio: unset; padding-bottom: 20px; }
+    .hero-content { flex-direction: column; align-items: center; text-align: center; padding-top: 50px; }
+    .hero-poster { width: 90%; max-width: 340px; margin-bottom: 16px; aspect-ratio: 460 / 215; }
+    .hero-info { align-items: center; }
+    .meta-row { justify-content: center; }
+    .action-buttons { justify-content: center; }
+    
+    .modal-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .btn-share {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
 }
