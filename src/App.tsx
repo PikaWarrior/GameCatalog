@@ -3,7 +3,7 @@ import { ErrorBoundary } from '@components/ErrorBoundary';
 import Header from '@components/Header';
 import TagFilter from '@components/TagFilter';
 import GameModal from '@components/GameModal';
-import { GameGrid } from '@components/GameGrid/GameGrid'; // ПРЯМОЙ ИМПОРТ (проверь путь!)
+import GameGrid from '@components/GameGrid';
 import { useDebounce } from '@hooks/useDebounce';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import { sanitizeGameData } from '@utils/sanitize';
