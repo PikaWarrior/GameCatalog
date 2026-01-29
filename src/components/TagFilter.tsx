@@ -1,55 +1,47 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Search, Check, Ban, ListFilter, Hash, Gamepad, Settings2 } from 'lucide-react';
-import { useLocalStorage } from '../hooks/useLocalStorage'; // Убедись в пути к хуку
+import { ChevronDown, ChevronUp, Search, Check, Ban, ListFilter, Hash, Gamepad } from 'lucide-react';
 import '../styles/TagFilter.css';
 
 interface TagFilterProps {
+  // Пропсы для Жанров
   allGenres: string[];
   selectedGenres: string[];
   excludedGenres: string[];
   onGenreToggle: (genre: string) => void;
 
+  // Пропсы для Тегов и Поджанров
   allTags: string[];
   allSubgenres: string[];
   selectedTags: string[];
   excludedTags: string[];
   onTagToggle: (tag: string) => void;
 
-  // НОВЫЕ ПРОПСЫ
+  // НОВЫЕ ПРОПСЫ для режима фильтрации
   filterMode: 'AND' | 'OR';
-  onToggleMode: () => void;
+  onFilterModeToggle: () => void;
 }
 
-interface SectionsState {
-  genres: boolean;
-  subgenres: boolean;
-  tags: boolean;
-}
-
-const TagFilter: React.FC<TagFilterProps> = ({ 
+const TagFilter: React.FC<TagFilterProps> = ({
   allGenres, selectedGenres, excludedGenres, onGenreToggle,
   allTags, allSubgenres, selectedTags, excludedTags, onTagToggle,
-  filterMode, onToggleMode
+  filterMode, onFilterModeToggle
 }) => {
-  // ИСПОЛЬЗУЕМ LOCAL STORAGE для состояния секций
-  const [sectionsState, setSectionsState] = useLocalStorage<SectionsState>('tagFilterSections_v1', {
-    genres: true,
-    subgenres: true,
-    tags: false
-  });
+  // Состояния открытия секций
+  const [isGenresOpen, setGenresOpen] = useState(true);
+  const [isSubgenresOpen, setSubgenresOpen] = useState(true);
+  const [isTagsOpen, setTagsOpen] = useState(false);
 
+  // Состояния поиска
   const [genreSearch, setGenreSearch] = useState('');
   const [subgenreSearch, setSubgenreSearch] = useState('');
   const [tagSearch, setTagSearch] = useState('');
 
-  const toggleSection = (section: keyof SectionsState) => {
-    setSectionsState(prev => ({ ...prev, [section]: !prev[section] }));
-  };
-
+  // Универсальная функция рендера секции
   const renderSection = (
     title: string,
     items: string[],
-    sectionKey: keyof SectionsState,
+    isOpen: boolean,
+    toggleOpen: () => void,
     searchValue: string,
     setSearchValue: (val: string) => void,
     selectedList: string[],
@@ -57,64 +49,76 @@ const TagFilter: React.FC<TagFilterProps> = ({
     onToggle: (item: string) => void,
     icon: React.ReactNode
   ) => {
-    const isOpen = sectionsState[sectionKey];
-    const filteredItems = items.filter(item => 
+    const filteredItems = items.filter(item =>
       item.toLowerCase().includes(searchValue.toLowerCase())
     );
 
     return (
       <div className="filter-section">
-        <div className="filter-header" onClick={() => toggleSection(sectionKey)}>
-           <div className="filter-title">
-             {icon}
-             <span>{title}</span>
-             <span className="count-badge">{items.length}</span>
-           </div>
-           {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        <div className="filter-header" onClick={toggleOpen}>
+          {icon}
+          <span className="filter-title">{title}</span>
+          <span className="filter-count">{items.length}</span>
+          {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
         </div>
-        
+
         {isOpen && (
-          <div className="filter-body">
-            <div className="filter-search">
-              <Search size={14} />
-              <input 
-                type="text" 
-                placeholder={`Find ${title}...`}
+          <div className="filter-content">
+            {/* Поле поиска */}
+            <div className="search-wrapper">
+              <Search size={14} className="search-icon" />
+              <input
+                type="text"
+                placeholder={`Search ${title.toLowerCase()}...`}
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 onClick={(e) => e.stopPropagation()}
+                className="search-input"
               />
               {searchValue && (
-                <button className="clear-search" onClick={(e) => { e.stopPropagation(); setSearchValue(''); }}>×</button>
+                <button
+                  className="clear-search"
+                  onClick={(e) => { e.stopPropagation(); setSearchValue(''); }}
+                  title="Clear search"
+                >
+                  ×
+                </button>
               )}
             </div>
 
-            <div className="tags-cloud">
+            {/* Облако кнопок */}
+            <div className="filter-tags">
               {filteredItems.length > 0 ? (
                 filteredItems.map(item => {
                   const isSelected = selectedList.includes(item);
                   const isExcluded = excludedList.includes(item);
-                  
+
                   let btnClass = "filter-tag";
                   if (isSelected) btnClass += " active";
                   else if (isExcluded) btnClass += " excluded";
 
-                  let titleText = isSelected ? "Click to exclude (Red)" : (isExcluded ? "Click to reset" : "Click to include (Green)");
+                  // Текст подсказки
+                  let titleText = "Click to include (Green)";
+                  if (isSelected) titleText = "Click to exclude (Red)";
+                  if (isExcluded) titleText = "Click to reset";
 
                   return (
-                    <button 
-                      key={item} 
+                    <button
+                      key={item}
                       className={btnClass}
                       onClick={() => onToggle(item)}
                       title={titleText}
                     >
+                      {/* Иконки статуса */}
                       {isSelected && <Check size={12} strokeWidth={3} />}
-                      {isExcluded && <Ban size={12} strokeWidth={3} />}
+                      {isExcluded && <Ban size={12} strokeWidth={2.5} />}
                       {item}
                     </button>
                   );
                 })
-              ) : <div className="no-results">No matches found</div>}
+              ) : (
+                <div className="no-results">No matches found</div>
+              )}
             </div>
           </div>
         )}
@@ -123,42 +127,65 @@ const TagFilter: React.FC<TagFilterProps> = ({
   };
 
   return (
-    <div className="tag-filter-container">
-      {/* ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМА ПОИСКА */}
-      <div className="filter-mode-control" style={{ padding: '0 10px 15px', borderBottom: '1px solid var(--border-color)', marginBottom: '10px' }}>
-         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', fontSize: '0.85rem', color: '#888' }}>
-            <Settings2 size={14} />
-            <span>Search Logic (Tags & Subgenres)</span>
-         </div>
-         <div style={{ display: 'flex', background: '#1a1a1a', borderRadius: '6px', padding: '2px' }}>
-            <button 
-              onClick={onToggleMode}
-              style={{ 
-                flex: 1, padding: '6px', 
-                background: filterMode === 'AND' ? '#3b82f6' : 'transparent',
-                color: filterMode === 'AND' ? 'white' : '#666',
-                border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600', transition: 'all 0.2s'
-              }}
-            >
-              Strict (AND)
-            </button>
-            <button 
-               onClick={onToggleMode}
-               style={{ 
-                flex: 1, padding: '6px', 
-                background: filterMode === 'OR' ? '#3b82f6' : 'transparent',
-                color: filterMode === 'OR' ? 'white' : '#666',
-                border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600', transition: 'all 0.2s'
-              }}
-            >
-              Flexible (OR)
-            </button>
-         </div>
+    <div className="tag-filter">
+      {/* НОВЫЙ БЛОК: Переключатель режима фильтрации */}
+      <div className="filter-mode-toggle">
+        <button
+          className={`mode-btn ${filterMode === 'AND' ? 'active' : ''}`}
+          onClick={onFilterModeToggle}
+          title={filterMode === 'AND' ? 'Current: Show games with ALL selected tags' : 'Current: Show games with ANY selected tag'}
+        >
+          <ListFilter size={16} />
+          <span>Mode: {filterMode}</span>
+        </button>
+        <div className="mode-description">
+          {filterMode === 'AND' 
+            ? 'Games must have ALL selected tags' 
+            : 'Games must have AT LEAST ONE selected tag'}
+        </div>
       </div>
 
-      {renderSection("Genres", allGenres, 'genres', genreSearch, setGenreSearch, selectedGenres, excludedGenres, onGenreToggle, <Gamepad size={18} />)}
-      {renderSection("Subgenres", allSubgenres, 'subgenres', subgenreSearch, setSubgenreSearch, selectedTags, excludedTags, onTagToggle, <ListFilter size={18} />)}
-      {renderSection("Tags", allTags, 'tags', tagSearch, setTagSearch, selectedTags, excludedTags, onTagToggle, <Hash size={18} />)}
+      {/* 1. Секция Жанров */}
+      {renderSection(
+        "Genres",
+        allGenres,
+        isGenresOpen,
+        () => setGenresOpen(!isGenresOpen),
+        genreSearch,
+        setGenreSearch,
+        selectedGenres,
+        excludedGenres,
+        onGenreToggle,
+        <Gamepad size={18} />
+      )}
+
+      {/* 2. Секция Поджанров */}
+      {renderSection(
+        "Subgenres",
+        allSubgenres,
+        isSubgenresOpen,
+        () => setSubgenresOpen(!isSubgenresOpen),
+        subgenreSearch,
+        setSubgenreSearch,
+        selectedTags,
+        excludedTags,
+        onTagToggle,
+        <ListFilter size={18} />
+      )}
+
+      {/* 3. Секция Тегов */}
+      {renderSection(
+        "Tags",
+        allTags,
+        isTagsOpen,
+        () => setTagsOpen(!isTagsOpen),
+        tagSearch,
+        setTagSearch,
+        selectedTags,
+        excludedTags,
+        onTagToggle,
+        <Hash size={18} />
+      )}
     </div>
   );
 };
