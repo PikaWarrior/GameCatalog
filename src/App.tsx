@@ -1,9 +1,9 @@
-import React, { useMemo, useCallback, lazy, Suspense, useEffect, useState } from 'react';
+import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import { ErrorBoundary } from '@components/ErrorBoundary';
 import Header from '@components/Header';
 import TagFilter from '@components/TagFilter';
-import LoadingSkeleton from '@components/LoadingSkeleton';
 import GameModal from '@components/GameModal';
+import { GameGrid } from '@components/GameGrid/GameGrid'; // ПРЯМОЙ ИМПОРТ (проверь путь!)
 import { useDebounce } from '@hooks/useDebounce';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import { sanitizeGameData } from '@utils/sanitize';
@@ -15,7 +15,8 @@ import '@styles/improvements.css';
 // @ts-ignore
 import rawGamesData from './data/FinalGameLib_WithSimilar.json';
 
-const GameGrid = lazy(() => import('@components/GameGrid'));
+// УБРАЛИ LAZY LOADING:
+// const GameGrid = lazy(() => import('@components/GameGrid'));
 
 interface ExtendedFilterState extends Omit<FilterState, 'selectedTags'> {
   selectedTags: string[];
@@ -36,7 +37,7 @@ function App() {
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
   const [favorites, setFavorites] = useLocalStorage<string[]>('favoriteGames_v1', []);
-  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v17_FIX', {
+  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v18_NO_LAZY', {
     searchQuery: '',
     selectedTags: [],
     excludedTags: [],
@@ -217,7 +218,6 @@ function App() {
       <Header 
         isSidebarOpen={isSidebarOpen} 
         onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} 
-        // ИСПРАВЛЕННЫЕ ПРОПСЫ
         searchTerm={filterState.searchQuery}
         onSearch={(val: string) => setFilterState(prev => ({ ...prev, searchQuery: val }))}
         totalGames={games.length}
@@ -289,14 +289,13 @@ function App() {
 
         <section className="content">
           <ErrorBoundary>
-            <Suspense fallback={<LoadingSkeleton />}>
-               <GameGrid 
-                 games={filteredGames} 
-                 onOpenModal={handleGameClick}
-                 favorites={favorites}
-                 onToggleFavorite={handleToggleFavorite}
-               />
-            </Suspense>
+             {/* УБРАЛИ SUSPENSE и ЛИШНИЕ ПРОВЕРКИ */}
+             <GameGrid 
+               games={filteredGames} 
+               onOpenModal={handleGameClick}
+               favorites={favorites}
+               onToggleFavorite={handleToggleFavorite}
+             />
           </ErrorBoundary>
         </section>
       </main>
