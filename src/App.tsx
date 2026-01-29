@@ -8,7 +8,7 @@ import { useDebounce } from '@hooks/useDebounce';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import { sanitizeGameData } from '@utils/sanitize';
 import { Game, ProcessedGame, FilterState, RawGame } from './types';
-import { Heart } from 'lucide-react'; 
+import { Heart } from 'lucide-react';
 import '@styles/App.css';
 import '@styles/improvements.css';
 
@@ -17,13 +17,14 @@ import rawGamesData from './data/FinalGameLib_WithSimilar.json';
 
 const GameGrid = lazy(() => import('@components/GameGrid'));
 
+// Расширяем интерфейс состояния фильтров
 interface ExtendedFilterState extends Omit<FilterState, 'selectedTags'> {
   selectedTags: string[];
   excludedTags: string[];
   selectedGenres: string[];
   excludedGenres: string[];
   showFavorites: boolean;
-  filterMode: 'AND' | 'OR'; // НОВОЕ ПОЛЕ
+  filterMode: 'AND' | 'OR';
 }
 
 function App() {
@@ -35,11 +36,11 @@ function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<ProcessedGame | null>(null);
 
-  // Хранилище избранного (массив ID)
+  // Хранилище избранного
   const [favorites, setFavorites] = useLocalStorage<string[]>('favoriteGames_v1', []);
 
-  // ОБНОВИЛ ВЕРСИЮ ДО v16, ЧТОБЫ ПОДТЯНУЛОСЬ НОВОЕ ПОЛЕ filterMode
-  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v16_FAV', {
+  // Хранилище фильтров (v17 - чтобы сбросить старые несовместимые стейты)
+  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v17_FIX', {
     searchQuery: '',
     selectedTags: [],
     excludedTags: [],
@@ -48,7 +49,7 @@ function App() {
     selectedCoop: 'All',
     sortBy: 'name',
     showFavorites: false,
-    filterMode: 'AND', // По умолчанию строгий поиск
+    filterMode: 'AND',
   });
 
   const debouncedSearch = useDebounce(filterState.searchQuery, 300);
@@ -82,15 +83,12 @@ function App() {
     });
   }, [games]);
 
-  // --- НОВОЕ: DEEP LINKING (Открытие по ссылке) ---
+  // Deep Linking (открытие по ссылке)
   useEffect(() => {
     if (processedGames.length === 0) return;
-    
-    // Читаем хэш: #game=The%20Witcher%203
     const hash = window.location.hash;
     if (hash.startsWith('#game=')) {
       const gameName = decodeURIComponent(hash.replace('#game=', ''));
-      // Ищем точное совпадение по имени
       const foundGame = processedGames.find(g => g.name === gameName);
       if (foundGame) {
         setSelectedGame(foundGame);
@@ -98,12 +96,9 @@ function App() {
     }
   }, [processedGames]);
 
-  // --- ЛОГИКА ИЗБРАННОГО ---
   const handleToggleFavorite = useCallback((gameId: string) => {
     setFavorites(prev => {
-      if (prev.includes(gameId)) {
-        return prev.filter(id => id !== gameId);
-      }
+      if (prev.includes(gameId)) return prev.filter(id => id !== gameId);
       return [...prev, gameId];
     });
   }, [setFavorites]);
@@ -127,12 +122,8 @@ function App() {
   }, [games]);
 
   const allCoopModes = [
-    'All',
-    'Single',
-    'Multiplayer',
-    'Split Screen',
-    'Co-op & Multiplayer',
-    'Co-op & Multiplayer & Split Screen'
+    'All', 'Single', 'Multiplayer', 'Split Screen',
+    'Co-op & Multiplayer', 'Co-op & Multiplayer & Split Screen'
   ];
 
   const filteredGames = useMemo(() => {
@@ -140,71 +131,63 @@ function App() {
       selectedTags, excludedTags,
       selectedGenres, excludedGenres,
       selectedCoop, sortBy, showFavorites,
-      filterMode // Берем режим из стейта
+      filterMode
     } = filterState;
 
     const searchLower = debouncedSearch.toLowerCase();
 
     return processedGames
       .filter(game => {
-        // Фильтр избранного
         if (showFavorites && !favorites.includes(game.id)) return false;
-
-        // Поиск по тексту
         if (searchLower && !game.searchableText.includes(searchLower)) return false;
 
         const gameTags = new Set([...game.tags, ...game.subgenres]);
 
-        // 1. Логика ИСКЛЮЧЕНИЯ (всегда строгая: если есть запрещенный тег — скрываем)
+        // Исключение (всегда строгое)
         if (excludedTags.some(tag => gameTags.has(tag))) return false;
         if (excludedGenres.includes(game.normalizedGenre)) return false;
 
-        // 2. Логика ВКЛЮЧЕНИЯ (Tags + Subgenres) с учетом режима
+        // Включение (зависит от filterMode)
         if (selectedTags.length > 0) {
           if (filterMode === 'AND') {
-             // Строго: игра должна содержать ВСЕ выбранные теги
-             const hasAll = selectedTags.every(tag => gameTags.has(tag));
-             if (!hasAll) return false;
+             if (!selectedTags.every(tag => gameTags.has(tag))) return false;
           } else {
-             // Гибко: игра должна содержать ХОТЯ БЫ ОДИН выбранный тег
-             const hasAny = selectedTags.some(tag => gameTags.has(tag));
-             if (!hasAny) return false;
+             if (!selectedTags.some(tag => gameTags.has(tag))) return false;
           }
         }
 
-        // 3. Жанры (Обычно у игры один жанр, так что здесь логика OR естественна: 
-        // "покажи Action или RPG". Если выбрано несколько жанров, мы показываем игры, входящие в это множество)
-        if (selectedGenres.length > 0 && !selectedGenres.includes(game.normalizedGenre)) {
-           return false;
-        }
+        if (selectedGenres.length > 0 && !selectedGenres.includes(game.normalizedGenre)) return false;
 
-        // Фильтр Coop
         if (selectedCoop !== 'All') {
-           if (selectedCoop === 'Co-op & Multiplayer') {
-             if (game.normalizedCoop === 'Single' || game.normalizedCoop === 'Split Screen') return false;
-           } else if (selectedCoop === 'Co-op & Multiplayer & Split Screen') {
-             if (game.normalizedCoop === 'Single') return false;
+           const gameModes = game.coop.toLowerCase();
+           const target = selectedCoop.toLowerCase();
+           
+           if (target === 'co-op & multiplayer') {
+             if (!gameModes.includes('co-op') && !gameModes.includes('multiplayer')) return false;
+           } else if (target === 'co-op & multiplayer & split screen') {
+             if (!gameModes.includes('co-op') && !gameModes.includes('multiplayer') && !gameModes.includes('split')) return false;
+           } else if (target === 'split screen') {
+             if (!gameModes.includes('split')) return false;
            } else {
-             if (game.normalizedCoop !== selectedCoop) return false;
+             // Простое сравнение normalizedCoop для Single/Multiplayer
+             if (game.normalizedCoop !== selectedCoop && !gameModes.includes(target)) return false; 
            }
         }
-
         return true;
       })
       .sort((a, b) => {
-        if (sortBy === 'name') return a.name.localeCompare(b.name);
-        if (sortBy === 'rating') return (b.rating || 0) - (a.rating || 0);
-        if (sortBy === 'year') return (b.year || 0) - (a.year || 0);
+        const key = sortBy as string;
+        if (key === 'name') return a.name.localeCompare(b.name);
+        if (key === 'genre') return a.genre.localeCompare(b.genre);
+        // Рейтинг и Год пока убраны, чтобы не ломать типы, если их нет в интерфейсе
         return 0;
       });
   }, [processedGames, filterState, debouncedSearch, favorites]);
 
-  // Обработчики фильтров
   const handleTagToggle = (tag: string) => {
     setFilterState(prev => {
       const isSelected = prev.selectedTags.includes(tag);
       const isExcluded = prev.excludedTags.includes(tag);
-
       let newSelected = [...prev.selectedTags];
       let newExcluded = [...prev.excludedTags];
 
@@ -216,7 +199,6 @@ function App() {
       } else {
         newSelected.push(tag);
       }
-
       return { ...prev, selectedTags: newSelected, excludedTags: newExcluded };
     });
   };
@@ -225,7 +207,6 @@ function App() {
     setFilterState(prev => {
       const isSelected = prev.selectedGenres.includes(genre);
       const isExcluded = prev.excludedGenres.includes(genre);
-
       let newSelected = [...prev.selectedGenres];
       let newExcluded = [...prev.excludedGenres];
 
@@ -237,7 +218,6 @@ function App() {
       } else {
         newSelected.push(genre);
       }
-
       return { ...prev, selectedGenres: newSelected, excludedGenres: newExcluded };
     });
   };
@@ -254,17 +234,13 @@ function App() {
     }));
   };
 
-  // НОВОЕ: Обработка клика по игре (меняет URL)
   const handleGameClick = (game: ProcessedGame) => {
     setSelectedGame(game);
-    // Добавляем хэш в историю
     window.location.hash = `game=${encodeURIComponent(game.name)}`;
   };
 
-  // НОВОЕ: Закрытие модалки (очистка URL)
   const handleCloseModal = () => {
     setSelectedGame(null);
-    // Убираем хэш, не перезагружая страницу
     history.pushState("", document.title, window.location.pathname + window.location.search);
   };
 
@@ -273,14 +249,13 @@ function App() {
       <Header 
         isSidebarOpen={isSidebarOpen} 
         onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} 
-        searchValue={filterState.searchQuery}
-        onSearchChange={(val) => setFilterState(prev => ({ ...prev, searchQuery: val }))}
+        // Исправлено: onSearch и приведение типа
+        onSearch={(val: string) => setFilterState(prev => ({ ...prev, searchQuery: val }))}
       />
       
       <main className="main-content">
         <aside className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
           <div className="sidebar-content">
-             {/* Блок управления сортировкой и избранным */}
              <div className="filter-group">
                 <h3>Sort & View</h3>
                 <div className="controls-row">
@@ -290,8 +265,7 @@ function App() {
                     className="sort-select"
                   >
                     <option value="name">Name (A-Z)</option>
-                    <option value="rating">Rating</option>
-                    <option value="year">Year</option>
+                    <option value="genre">Genre</option>
                   </select>
                   
                   <button 
@@ -328,7 +302,6 @@ function App() {
               excludedTags={filterState.excludedTags}
               onTagToggle={handleTagToggle}
               
-              // НОВЫЕ ПРОПСЫ
               filterMode={filterState.filterMode}
               onToggleMode={() => setFilterState(prev => ({ ...prev, filterMode: prev.filterMode === 'AND' ? 'OR' : 'AND' }))}
             />
@@ -348,7 +321,8 @@ function App() {
             <Suspense fallback={<LoadingSkeleton />}>
                <GameGrid 
                  games={filteredGames} 
-                 onGameClick={handleGameClick}
+                 // Исправлено: использование правильного пропса для клика (обычно onOpenModal)
+                 onOpenModal={handleGameClick}
                  favorites={favorites}
                  onToggleFavorite={handleToggleFavorite}
                />
