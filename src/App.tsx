@@ -281,4 +281,11 @@ function App() {
           game={selectedGame} 
           onClose={handleCloseModal}
           isFavorite={favorites.includes(selectedGame.id)}
-          onToggleFavorite={() => handleToggleFavorite(selectedG
+          onToggleFavorite={() => handleToggleFavorite(selectedGame.id)}
+        />
+      )}
+    </div>
+  );
+}
+
+export default App;
