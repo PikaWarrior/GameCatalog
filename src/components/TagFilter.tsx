@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Search, Check, Ban, ListFilter, Hash, Gamepad, Settings2 } from 'lucide-react';
+import { useLocalStorage } from '../hooks/useLocalStorage'; // Убедись, что путь к хуку правильный
 import '../styles/TagFilter.css';
 
 interface TagFilterProps {
@@ -16,9 +17,16 @@ interface TagFilterProps {
   excludedTags: string[];
   onTagToggle: (tag: string) => void;
 
-  // НОВЫЕ ПРОПСЫ
+  // Режим поиска
   filterMode: 'AND' | 'OR';
   onToggleMode: () => void;
+}
+
+// Интерфейс для состояния секций (свернуто/развернуто)
+interface SectionsState {
+  genres: boolean;
+  subgenres: boolean;
+  tags: boolean;
 }
 
 const TagFilter: React.FC<TagFilterProps> = ({ 
@@ -26,22 +34,31 @@ const TagFilter: React.FC<TagFilterProps> = ({
   allTags, allSubgenres, selectedTags, excludedTags, onTagToggle,
   filterMode, onToggleMode
 }) => {
-  // Состояния открытия секций
-  const [isGenresOpen, setGenresOpen] = useState(true);
-  const [isSubgenresOpen, setSubgenresOpen] = useState(true);
-  const [isTagsOpen, setTagsOpen] = useState(false);
+  // ИСПОЛЬЗУЕМ LOCAL STORAGE ДЛЯ СОХРАНЕНИЯ СОСТОЯНИЯ СЕКЦИЙ
+  const [sectionsState, setSectionsState] = useLocalStorage<SectionsState>('tagFilterSections_v1', {
+    genres: true,     // По умолчанию открыто
+    subgenres: true,  // По умолчанию открыто
+    tags: false       // По умолчанию закрыто
+  });
 
-  // Состояния поиска
+  // Состояния поиска оставляем локальными (сбрасываются при перезагрузке)
   const [genreSearch, setGenreSearch] = useState('');
   const [subgenreSearch, setSubgenreSearch] = useState('');
   const [tagSearch, setTagSearch] = useState('');
+
+  // Функция переключения видимости секции
+  const toggleSection = (section: keyof SectionsState) => {
+    setSectionsState(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   // Универсальная функция рендера секции
   const renderSection = (
     title: string,
     items: string[],
-    isOpen: boolean,
-    toggleOpen: () => void,
+    sectionKey: keyof SectionsState, // Ключ секции для доступа к стейту
     searchValue: string,
     setSearchValue: (val: string) => void,
     selectedList: string[],
@@ -49,13 +66,15 @@ const TagFilter: React.FC<TagFilterProps> = ({
     onToggle: (item: string) => void,
     icon: React.ReactNode
   ) => {
+    const isOpen = sectionsState[sectionKey];
+    
     const filteredItems = items.filter(item => 
       item.toLowerCase().includes(searchValue.toLowerCase())
     );
 
     return (
       <div className="filter-section">
-        <div className="filter-header" onClick={toggleOpen}>
+        <div className="filter-header" onClick={() => toggleSection(sectionKey)}>
            <div className="filter-title">
              {icon}
              <span>{title}</span>
@@ -92,7 +111,6 @@ const TagFilter: React.FC<TagFilterProps> = ({
                   if (isSelected) btnClass += " active";
                   else if (isExcluded) btnClass += " excluded";
 
-                  // Текст подсказки
                   let titleText = "Click to include (Green)";
                   if (isSelected) titleText = "Click to exclude (Red)";
                   if (isExcluded) titleText = "Click to reset";
@@ -104,7 +122,6 @@ const TagFilter: React.FC<TagFilterProps> = ({
                       onClick={() => onToggle(item)}
                       title={titleText}
                     >
-                      {/* Иконки статуса */}
                       {isSelected && <Check size={12} strokeWidth={3} />}
                       {isExcluded && <Ban size={12} strokeWidth={3} />}
                       {item}
@@ -123,7 +140,7 @@ const TagFilter: React.FC<TagFilterProps> = ({
 
   return (
     <div className="tag-filter-container">
-      {/* НОВЫЙ БЛОК: Переключение режима поиска */}
+      {/* БЛОК ПЕРЕКЛЮЧЕНИЯ РЕЖИМА ПОИСКА */}
       <div className="filter-mode-control" style={{ padding: '0 10px 15px', borderBottom: '1px solid var(--border-color)', marginBottom: '10px' }}>
          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', fontSize: '0.85rem', color: '#888' }}>
             <Settings2 size={14} />
@@ -171,8 +188,7 @@ const TagFilter: React.FC<TagFilterProps> = ({
       {renderSection(
         "Genres",
         allGenres,
-        isGenresOpen,
-        () => setGenresOpen(!isGenresOpen),
+        'genres', // Ключ секции
         genreSearch,
         setGenreSearch,
         selectedGenres,
@@ -185,8 +201,7 @@ const TagFilter: React.FC<TagFilterProps> = ({
       {renderSection(
         "Subgenres",
         allSubgenres,
-        isSubgenresOpen,
-        () => setSubgenresOpen(!isSubgenresOpen),
+        'subgenres', // Ключ секции
         subgenreSearch,
         setSubgenreSearch,
         selectedTags,
@@ -199,8 +214,7 @@ const TagFilter: React.FC<TagFilterProps> = ({
       {renderSection(
         "Tags",
         allTags,
-        isTagsOpen,
-        () => setTagsOpen(!isTagsOpen),
+        'tags', // Ключ секции
         tagSearch,
         setTagSearch,
         selectedTags,
