@@ -13,7 +13,7 @@ import '@styles/App.css';
 import '@styles/improvements.css';
 
 // Прямой импорт GameGrid, чтобы избежать проблем с lazy loading
-import { GameGrid } from '@components/GameGrid'; 
+import GameGrid from "@components/GameGrid"; 
 // Если этот импорт не сработает (зависит от index.ts), попробуй:
 // import GameGrid from '@components/GameGrid/GameGrid';
 
