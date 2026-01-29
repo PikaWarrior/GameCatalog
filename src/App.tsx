@@ -8,7 +8,7 @@ import { useDebounce } from '@hooks/useDebounce';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import { sanitizeGameData } from '@utils/sanitize';
 import { Game, ProcessedGame, FilterState, RawGame } from './types';
-import { Heart } from 'lucide-react'; // Импорт иконки
+import { Heart } from 'lucide-react'; 
 import '@styles/App.css';
 import '@styles/improvements.css';
 
@@ -17,11 +17,13 @@ import rawGamesData from './data/FinalGameLib_WithSimilar.json';
 
 const GameGrid = lazy(() => import('@components/GameGrid'));
 
-interface ExtendedFilterState extends Omit<FilterState, 'selectedGenre'> {
+interface ExtendedFilterState extends Omit<FilterState, 'selectedTags'> {
+  selectedTags: string[];
   excludedTags: string[];
   selectedGenres: string[];
   excludedGenres: string[];
-  showFavorites: boolean; // Новый фильтр
+  showFavorites: boolean;
+  filterMode: 'AND' | 'OR'; // НОВОЕ ПОЛЕ
 }
 
 function App() {
@@ -36,8 +38,8 @@ function App() {
   // Хранилище избранного (массив ID)
   const [favorites, setFavorites] = useLocalStorage<string[]>('favoriteGames_v1', []);
 
-  // СБРОС КЭША НА v15 (обновил версию для чистоты)
-  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v15_FAV', {
+  // ОБНОВИЛ ВЕРСИЮ ДО v16, ЧТОБЫ ПОДТЯНУЛОСЬ НОВОЕ ПОЛЕ filterMode
+  const [filterState, setFilterState] = useLocalStorage<ExtendedFilterState>('gameFilters_v16_FAV', {
     searchQuery: '',
     selectedTags: [],
     excludedTags: [],
@@ -46,6 +48,7 @@ function App() {
     selectedCoop: 'All',
     sortBy: 'name',
     showFavorites: false,
+    filterMode: 'AND', // По умолчанию строгий поиск
   });
 
   const debouncedSearch = useDebounce(filterState.searchQuery, 300);
@@ -56,16 +59,16 @@ function App() {
       let displayCoop = game.coop.split(' / ')[0];
 
       if (displayCoop === 'Single' && (
-          coopLower.includes('multiplayer') || 
-          coopLower.includes('co-op') || 
-          coopLower.includes('online') || 
-          coopLower.includes('shared') || 
-          coopLower.includes('split')
+        coopLower.includes('multiplayer') ||
+        coopLower.includes('co-op') ||
+        coopLower.includes('online') ||
+        coopLower.includes('shared') ||
+        coopLower.includes('split')
       )) {
-          if (coopLower.includes('multiplayer')) displayCoop = 'Multiplayer';
-          else if (coopLower.includes('co-op')) displayCoop = 'Co-op';
-          else if (coopLower.includes('split')) displayCoop = 'Split Screen';
-          else if (coopLower.includes('online')) displayCoop = 'Online';
+        if (coopLower.includes('multiplayer')) displayCoop = 'Multiplayer';
+        else if (coopLower.includes('co-op')) displayCoop = 'Co-op';
+        else if (coopLower.includes('split')) displayCoop = 'Split Screen';
+        else if (coopLower.includes('online')) displayCoop = 'Online';
       }
 
       return {
@@ -78,6 +81,22 @@ function App() {
       };
     });
   }, [games]);
+
+  // --- НОВОЕ: DEEP LINKING (Открытие по ссылке) ---
+  useEffect(() => {
+    if (processedGames.length === 0) return;
+    
+    // Читаем хэш: #game=The%20Witcher%203
+    const hash = window.location.hash;
+    if (hash.startsWith('#game=')) {
+      const gameName = decodeURIComponent(hash.replace('#game=', ''));
+      // Ищем точное совпадение по имени
+      const foundGame = processedGames.find(g => g.name === gameName);
+      if (foundGame) {
+        setSelectedGame(foundGame);
+      }
+    }
+  }, [processedGames]);
 
   // --- ЛОГИКА ИЗБРАННОГО ---
   const handleToggleFavorite = useCallback((gameId: string) => {
@@ -108,21 +127,22 @@ function App() {
   }, [games]);
 
   const allCoopModes = [
-    'All', 
-    'Single', 
-    'Multiplayer', 
-    'Split Screen', 
+    'All',
+    'Single',
+    'Multiplayer',
+    'Split Screen',
     'Co-op & Multiplayer',
     'Co-op & Multiplayer & Split Screen'
   ];
 
   const filteredGames = useMemo(() => {
-    const { 
-      selectedTags, excludedTags, 
-      selectedGenres, excludedGenres, 
-      selectedCoop, sortBy, showFavorites 
+    const {
+      selectedTags, excludedTags,
+      selectedGenres, excludedGenres,
+      selectedCoop, sortBy, showFavorites,
+      filterMode // Берем режим из стейта
     } = filterState;
-    
+
     const searchLower = debouncedSearch.toLowerCase();
 
     return processedGames
@@ -130,230 +150,210 @@ function App() {
         // Фильтр избранного
         if (showFavorites && !favorites.includes(game.id)) return false;
 
+        // Поиск по тексту
         if (searchLower && !game.searchableText.includes(searchLower)) return false;
 
         const gameTags = new Set([...game.tags, ...game.subgenres]);
 
+        // 1. Логика ИСКЛЮЧЕНИЯ (всегда строгая: если есть запрещенный тег — скрываем)
+        if (excludedTags.some(tag => gameTags.has(tag))) return false;
+        if (excludedGenres.includes(game.normalizedGenre)) return false;
+
+        // 2. Логика ВКЛЮЧЕНИЯ (Tags + Subgenres) с учетом режима
         if (selectedTags.length > 0) {
-          if (!selectedTags.every(tag => gameTags.has(tag))) return false;
-        }
-        if (excludedTags && excludedTags.length > 0) {
-           if (excludedTags.some(tag => gameTags.has(tag))) return false;
-        }
-
-        if (excludedGenres && excludedGenres.length > 0) {
-          if (excludedGenres.includes(game.genre)) return false;
-        }
-        if (selectedGenres && selectedGenres.length > 0) {
-          if (!selectedGenres.includes(game.genre)) return false;
+          if (filterMode === 'AND') {
+             // Строго: игра должна содержать ВСЕ выбранные теги
+             const hasAll = selectedTags.every(tag => gameTags.has(tag));
+             if (!hasAll) return false;
+          } else {
+             // Гибко: игра должна содержать ХОТЯ БЫ ОДИН выбранный тег
+             const hasAny = selectedTags.some(tag => gameTags.has(tag));
+             if (!hasAny) return false;
+          }
         }
 
+        // 3. Жанры (Обычно у игры один жанр, так что здесь логика OR естественна: 
+        // "покажи Action или RPG". Если выбрано несколько жанров, мы показываем игры, входящие в это множество)
+        if (selectedGenres.length > 0 && !selectedGenres.includes(game.normalizedGenre)) {
+           return false;
+        }
+
+        // Фильтр Coop
         if (selectedCoop !== 'All') {
-          const gameModes = game.coop.toLowerCase();
-          const targetMode = selectedCoop.toLowerCase();
-
-          if (targetMode === 'single') {
-             const hasMultiplayer = 
-                gameModes.includes('multiplayer') || 
-                gameModes.includes('co-op') || 
-                gameModes.includes('online') || 
-                gameModes.includes('lan') ||
-                gameModes.includes('split') ||
-                gameModes.includes('shared');
-             if (hasMultiplayer) return false;
-          }
-          else if (targetMode === 'split screen') {
-             if (!gameModes.includes('split screen') && !gameModes.includes('splitscreen')) return false;
-          }
-          else if (targetMode === 'co-op & multiplayer') {
-             const hasCoop = gameModes.includes('co-op');
-             const hasMulti = gameModes.includes('multiplayer');
-             
-             if (!hasCoop && !hasMulti) return false;
-          }
-          else if (targetMode === 'co-op & multiplayer & split screen') {
-             const hasCoop = gameModes.includes('co-op');
-             const hasMulti = gameModes.includes('multiplayer');
-             const hasSplit = gameModes.includes('split screen') || gameModes.includes('splitscreen');
-             
-             if (!hasCoop && !hasMulti && !hasSplit) return false;
-          }
-          else {
-             if (!gameModes.includes(targetMode)) return false;
-          }
+           if (selectedCoop === 'Co-op & Multiplayer') {
+             if (game.normalizedCoop === 'Single' || game.normalizedCoop === 'Split Screen') return false;
+           } else if (selectedCoop === 'Co-op & Multiplayer & Split Screen') {
+             if (game.normalizedCoop === 'Single') return false;
+           } else {
+             if (game.normalizedCoop !== selectedCoop) return false;
+           }
         }
+
         return true;
       })
       .sort((a, b) => {
-        // Если сортировка по избранному (опционально, можно добавить в селект)
-        // пока оставим стандартную логику
-        switch (sortBy) {
-          case 'name': return a.name.localeCompare(b.name);
-          case 'genre': return a.genre.localeCompare(b.genre);
-          case 'coop': return a.normalizedCoop.localeCompare(b.normalizedCoop);
-          default: return 0;
-        }
+        if (sortBy === 'name') return a.name.localeCompare(b.name);
+        if (sortBy === 'rating') return (b.rating || 0) - (a.rating || 0);
+        if (sortBy === 'year') return (b.year || 0) - (a.year || 0);
+        return 0;
       });
   }, [processedGames, filterState, debouncedSearch, favorites]);
 
-  const handleOpenModal = useCallback((game: ProcessedGame) => setSelectedGame(game), []);
-  const handleCloseModal = useCallback(() => setSelectedGame(null), []);
-  const handleSearchChange = useCallback((value: string) => setFilterState(p => ({ ...p, searchQuery: value })), [setFilterState]);
-
-  const toggleFilterItem = (
-    item: string, 
-    selectedList: string[], 
-    excludedList: string[], 
-    keySelected: keyof ExtendedFilterState, 
-    keyExcluded: keyof ExtendedFilterState
-  ) => {
+  // Обработчики фильтров
+  const handleTagToggle = (tag: string) => {
     setFilterState(prev => {
-      const prevSelected = (prev[keySelected] as string[]) || [];
-      const prevExcluded = (prev[keyExcluded] as string[]) || [];
+      const isSelected = prev.selectedTags.includes(tag);
+      const isExcluded = prev.excludedTags.includes(tag);
 
-      const isSelected = prevSelected.includes(item);
-      const isExcluded = prevExcluded.includes(item);
-
-      let newSelected = [...prevSelected];
-      let newExcluded = [...prevExcluded];
+      let newSelected = [...prev.selectedTags];
+      let newExcluded = [...prev.excludedTags];
 
       if (isSelected) {
-        newSelected = newSelected.filter(t => t !== item);
-        newExcluded.push(item);
+        newSelected = newSelected.filter(t => t !== tag);
+        newExcluded.push(tag);
       } else if (isExcluded) {
-        newExcluded = newExcluded.filter(t => t !== item);
+        newExcluded = newExcluded.filter(t => t !== tag);
       } else {
-        newSelected.push(item);
+        newSelected.push(tag);
       }
 
-      return {
-        ...prev,
-        [keySelected]: newSelected,
-        [keyExcluded]: newExcluded
-      };
+      return { ...prev, selectedTags: newSelected, excludedTags: newExcluded };
     });
   };
 
-  const handleTagToggle = useCallback((tag: string) => {
-    toggleFilterItem(tag, filterState.selectedTags, filterState.excludedTags || [], 'selectedTags', 'excludedTags');
-  }, [filterState]);
+  const handleGenreToggle = (genre: string) => {
+    setFilterState(prev => {
+      const isSelected = prev.selectedGenres.includes(genre);
+      const isExcluded = prev.excludedGenres.includes(genre);
 
-  const handleGenreToggle = useCallback((genre: string) => {
-    toggleFilterItem(genre, filterState.selectedGenres || [], filterState.excludedGenres || [], 'selectedGenres', 'excludedGenres');
-  }, [filterState]);
+      let newSelected = [...prev.selectedGenres];
+      let newExcluded = [...prev.excludedGenres];
 
-  const handleCoopChange = useCallback((coop: string) => setFilterState(p => ({ ...p, selectedCoop: coop })), [setFilterState]);
-  const handleSortChange = useCallback((sortBy: any) => setFilterState(p => ({ ...p, sortBy })), [setFilterState]);
-  const handleFavoritesToggle = useCallback(() => setFilterState(p => ({ ...p, showFavorites: !p.showFavorites })), [setFilterState]);
-  
-  const handleResetFilters = useCallback(() => {
-    setFilterState({
+      if (isSelected) {
+        newSelected = newSelected.filter(g => g !== genre);
+        newExcluded.push(genre);
+      } else if (isExcluded) {
+        newExcluded = newExcluded.filter(g => g !== genre);
+      } else {
+        newSelected.push(genre);
+      }
+
+      return { ...prev, selectedGenres: newSelected, excludedGenres: newExcluded };
+    });
+  };
+
+  const handleClearFilters = () => {
+    setFilterState(prev => ({
+      ...prev,
       searchQuery: '',
       selectedTags: [],
       excludedTags: [],
       selectedGenres: [],
       excludedGenres: [],
-      selectedCoop: 'All',
-      sortBy: 'name',
-      showFavorites: false,
-    });
-  }, [setFilterState]);
+      selectedCoop: 'All'
+    }));
+  };
 
-  useEffect(() => {
-    const controller = new AbortController();
-    return () => { controller.abort(); };
-  }, []);
+  // НОВОЕ: Обработка клика по игре (меняет URL)
+  const handleGameClick = (game: ProcessedGame) => {
+    setSelectedGame(game);
+    // Добавляем хэш в историю
+    window.location.hash = `game=${encodeURIComponent(game.name)}`;
+  };
+
+  // НОВОЕ: Закрытие модалки (очистка URL)
+  const handleCloseModal = () => {
+    setSelectedGame(null);
+    // Убираем хэш, не перезагружая страницу
+    history.pushState("", document.title, window.location.pathname + window.location.search);
+  };
 
   return (
-    <div className="app-container">
-      <Header
-        totalGames={games.length}
-        visibleGames={filteredGames.length}
-        onSearch={handleSearchChange}
-        searchTerm={filterState.searchQuery}
-        onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
-        isSidebarOpen={isSidebarOpen}
+    <div className="app">
+      <Header 
+        isSidebarOpen={isSidebarOpen} 
+        onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} 
+        searchValue={filterState.searchQuery}
+        onSearchChange={(val) => setFilterState(prev => ({ ...prev, searchQuery: val }))}
       />
-
+      
       <main className="main-content">
-        <aside className={`filters-sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
-          <div className="filters-sticky">
-            
-            {/* КНОПКА ФИЛЬТРА ИЗБРАННОГО */}
-            <button 
-              className={`favorite-filter-btn ${filterState.showFavorites ? 'active' : ''}`}
-              onClick={handleFavoritesToggle}
-            >
-              <Heart 
-                size={18} 
-                fill={filterState.showFavorites ? "currentColor" : "none"} 
-                style={{marginRight: 8}}
-              />
-              {filterState.showFavorites ? 'Showing Favorites' : 'Show Favorites Only'}
-            </button>
+        <aside className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
+          <div className="sidebar-content">
+             {/* Блок управления сортировкой и избранным */}
+             <div className="filter-group">
+                <h3>Sort & View</h3>
+                <div className="controls-row">
+                  <select 
+                    value={filterState.sortBy}
+                    onChange={(e) => setFilterState(prev => ({ ...prev, sortBy: e.target.value as any }))}
+                    className="sort-select"
+                  >
+                    <option value="name">Name (A-Z)</option>
+                    <option value="rating">Rating</option>
+                    <option value="year">Year</option>
+                  </select>
+                  
+                  <button 
+                    className={`fav-filter-btn ${filterState.showFavorites ? 'active' : ''}`}
+                    onClick={() => setFilterState(prev => ({ ...prev, showFavorites: !prev.showFavorites }))}
+                    title="Show Favorites Only"
+                  >
+                    <Heart size={18} fill={filterState.showFavorites ? "currentColor" : "none"} />
+                  </button>
+                </div>
 
-            <div className="filter-group">
-              <label>Game Mode:</label>
-              <select
-                value={filterState.selectedCoop}
-                onChange={(e) => handleCoopChange(e.target.value)}
-                className="filter-select"
-              >
-                {allCoopModes.map(mode => (
-                  <option key={mode} value={mode}>{mode}</option>
-                ))}
-              </select>
-            </div>
+                <div className="coop-filter">
+                  <label>Co-op Mode:</label>
+                  <select 
+                    value={filterState.selectedCoop}
+                    onChange={(e) => setFilterState(prev => ({ ...prev, selectedCoop: e.target.value }))}
+                  >
+                    {allCoopModes.map(mode => (
+                      <option key={mode} value={mode}>{mode}</option>
+                    ))}
+                  </select>
+                </div>
+             </div>
 
-            <div className="filter-group">
-              <label>Sort by:</label>
-              <select
-                value={filterState.sortBy}
-                onChange={(e) => handleSortChange(e.target.value as any)}
-                className="filter-select"
-              >
-                <option value="name">By name</option>
-                <option value="genre">By genre</option>
-                <option value="coop">By game mode</option>
-              </select>
-            </div>
-
-            <TagFilter
+            <TagFilter 
               allGenres={allGenres}
-              selectedGenres={filterState.selectedGenres || []}
-              excludedGenres={filterState.excludedGenres || []}
+              selectedGenres={filterState.selectedGenres}
+              excludedGenres={filterState.excludedGenres}
               onGenreToggle={handleGenreToggle}
-
+              
               allTags={allTags}
               allSubgenres={allSubgenres}
               selectedTags={filterState.selectedTags}
-              excludedTags={filterState.excludedTags || []}
+              excludedTags={filterState.excludedTags}
               onTagToggle={handleTagToggle}
+              
+              // НОВЫЕ ПРОПСЫ
+              filterMode={filterState.filterMode}
+              onToggleMode={() => setFilterState(prev => ({ ...prev, filterMode: prev.filterMode === 'AND' ? 'OR' : 'AND' }))}
             />
-
-            <button className="reset-btn" onClick={handleResetFilters}>
-              Reset Filters
+            
+            <button className="clear-filters-btn" onClick={handleClearFilters}>
+              Clear All Filters
             </button>
+            
+            <div className="sidebar-footer">
+               games: {filteredGames.length} / {games.length}
+            </div>
           </div>
         </aside>
 
-        <section className="games-grid-section">
-          <Suspense fallback={<LoadingSkeleton />}>
-            {filteredGames.length > 0 ? (
-              <GameGrid 
-                games={filteredGames} 
-                onOpenModal={handleOpenModal}
-                /* ВАЖНО: Вы должны прокинуть эти пропсы в GameGrid -> GameCard */
-                favorites={favorites} 
-                onToggleFavorite={handleToggleFavorite}
-              />
-            ) : (
-              <div className="no-results">
-                <h3>No games found</h3>
-                <p>Try adjusting your search or filters</p>
-              </div>
-            )}
-          </Suspense>
+        <section className="content">
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingSkeleton />}>
+               <GameGrid 
+                 games={filteredGames} 
+                 onGameClick={handleGameClick}
+                 favorites={favorites}
+                 onToggleFavorite={handleToggleFavorite}
+               />
+            </Suspense>
+          </ErrorBoundary>
         </section>
       </main>
 
