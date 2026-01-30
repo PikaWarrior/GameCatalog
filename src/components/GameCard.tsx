@@ -59,8 +59,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
 
   return (
     <div className="game-card" onClick={() => onOpenModal(game)} style={style}>
-      {/* Картинка */}
-      <div className="card-image-container">
+      <div className="card-top-section">
         <img 
           src={game.image} 
           alt={game.name} 
@@ -68,8 +67,8 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
           loading="lazy" 
         />
         
-        {/* Иконки действий на полосе под картинкой (судя по фото) или поверх в углах */}
-        <div className="card-actions-bar">
+        {/* Кнопки действий прямо под картинкой (полоской) */}
+        <div className="card-actions-strip">
            {onToggleFavorite && (
             <button 
               className={`action-btn fav-btn ${isFavorite ? 'active' : ''}`} 
@@ -100,13 +99,13 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
       <div className="card-content">
         <h3 className="card-title" title={game.name}>{game.name}</h3>
         
-        <div className="badges-stack">
+        <div className="badges-column">
           <div 
-            className="badge-row" 
+            className="badge-row genre-badge" 
             style={{ 
-              backgroundColor: `${genreInfo.color}15`, 
+              backgroundColor: `${genreInfo.color}10`, // Очень прозрачный фон
               color: genreInfo.color,
-              borderColor: `${genreInfo.color}30`
+              borderLeft: `3px solid ${genreInfo.color}` // Цветная полоска слева
             }}
           >
             <span className="badge-icon">{genreInfo.icon}</span>
@@ -114,11 +113,11 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
           </div>
 
           <div 
-            className="badge-row"
+            className="badge-row coop-badge"
             style={{ 
-              backgroundColor: `${coopInfo.color}15`, 
+              backgroundColor: `${coopInfo.color}10`,
               color: coopInfo.color,
-              borderColor: `${coopInfo.color}30`
+              borderLeft: `3px solid ${coopInfo.color}`
             }}
           >
             <span className="badge-icon">{coopInfo.icon}</span>
