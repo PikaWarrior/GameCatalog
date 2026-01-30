@@ -3,7 +3,7 @@ import { ProcessedGame } from '../types';
 import { 
   User, Users, Monitor, Globe, Sword, Crosshair, Map, Scroll, 
   Skull, Dna, Brain, Hammer, Ghost, Trophy, Car, Rocket, 
-  Puzzle, Music, Coffee, Gamepad2, Heart
+  Puzzle, Music, Coffee, Gamepad2, Heart, ExternalLink
 } from 'lucide-react';
 import '../styles/GameCard.css';
 
@@ -15,7 +15,7 @@ interface GameCardProps {
   style?: React.CSSProperties;
 }
 
-const ICON_SIZE = 14;
+const ICON_SIZE = 12;
 const ICON_STROKE = 2.5;
 
 const getCoopDetails = (coop: string) => {
@@ -58,72 +58,77 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
   };
 
   return (
-    <div className="game-card" onClick={() => onOpenModal(game)} style={style}>
-      <div className="card-top-section">
-        <img 
-          src={game.image} 
-          alt={game.name} 
-          className="card-image"
-          loading="lazy" 
-        />
+    <div className="game-card-wrapper" style={style}>
+      <div className="game-card-inner" onClick={() => onOpenModal(game)}>
         
-        {/* Кнопки действий прямо под картинкой (полоской) */}
-        <div className="card-actions-strip">
-           {onToggleFavorite && (
+        {/* КАРТИНКА + БЕЙДЖИ + СЕРДЕЧКО */}
+        <div className="game-card-image">
+          <img 
+            src={game.image} 
+            alt={game.name} 
+            loading="lazy" 
+          />
+
+          <div className="card-badges">
+            <div className="badge" style={{ borderColor: genreInfo.color }}>
+               <span className="badge-icon" style={{ color: genreInfo.color }}>{genreInfo.icon}</span>
+               {game.genre}
+            </div>
+            <div className="badge" style={{ borderColor: coopInfo.color }}>
+               <span className="badge-icon" style={{ color: coopInfo.color }}>{coopInfo.icon}</span>
+               {coopInfo.label}
+            </div>
+          </div>
+
+          {onToggleFavorite && (
             <button 
-              className={`action-btn fav-btn ${isFavorite ? 'active' : ''}`} 
+              className={`card-favorite-btn ${isFavorite ? 'active' : ''}`}
               onClick={handleFavoriteClick}
-              title={isFavorite ? "Remove from favorites" : "Add to favorites"}
             >
-              <Heart size={14} fill={isFavorite ? "currentColor" : "none"} />
+              <Heart size={16} fill={isFavorite ? "#ef4444" : "currentColor"} color={isFavorite ? "#ef4444" : "white"} />
             </button>
           )}
-
-          {game.steamurl && (
-             <a 
-               href={game.steamurl} 
-               target="_blank" 
-               rel="noreferrer" 
-               className="action-btn steam-btn"
-               onClick={(e) => e.stopPropagation()}
-               title="Open Steam Store"
-             >
-               <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                 <path d="M11.979 0C5.666 0 .502 4.909 0 11.127l3.626 5.292c.074.07.21.128.283.056l.088-.088c2.269-2.222 5.923-2.247 8.217-.06 2.378 2.268 2.35 6.07-.064 8.29l5.066 3.73C21.464 25.12 24 20.8 24 15.174 23.977 6.645 18.736 0 11.979 0zM8.36 17.58c-1.122 1.107-2.91 1.077-3.996-.067-1.084-1.144-1.054-2.964.067-4.07 1.121-1.108 2.91-1.078 3.995.066 1.085 1.144 1.055 2.964-.066 4.071zm8.385 1.556c-.66.652-1.713.634-2.352-.04-.64-.672-.62-1.744.04-2.395.66-.652 1.713-.634 2.352.04.64.672.62 1.745-.04 2.395z" />
-               </svg>
-             </a>
-          )}
         </div>
-      </div>
 
-      <div className="card-content">
-        <h3 className="card-title" title={game.name}>{game.name}</h3>
-        
-        <div className="badges-column">
-          <div 
-            className="badge-row genre-badge" 
-            style={{ 
-              backgroundColor: `${genreInfo.color}10`, // Очень прозрачный фон
-              color: genreInfo.color,
-              borderLeft: `3px solid ${genreInfo.color}` // Цветная полоска слева
-            }}
-          >
-            <span className="badge-icon">{genreInfo.icon}</span>
-            <span className="badge-text">{game.genre}</span>
+        {/* КОНТЕНТ */}
+        <div className="card-content">
+          <div className="card-header-row">
+            <h3 className="card-title" title={game.name}>{game.name}</h3>
+            {game.steamurl && (
+              <a 
+                href={game.steamurl} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="steam-icon-link"
+                onClick={(e) => e.stopPropagation()}
+                title="Open in Steam"
+              >
+                <ExternalLink size={16} />
+              </a>
+            )}
           </div>
 
-          <div 
-            className="badge-row coop-badge"
-            style={{ 
-              backgroundColor: `${coopInfo.color}10`,
-              color: coopInfo.color,
-              borderLeft: `3px solid ${coopInfo.color}`
-            }}
-          >
-            <span className="badge-icon">{coopInfo.icon}</span>
-            <span className="badge-text">{coopInfo.label}</span>
+          {/* ОПИСАНИЕ (Оверлей, как в CSS) */}
+          <div className="card-description-overlay">
+             {game.description}
+          </div>
+
+          {/* ПОХОЖИЕ ИГРЫ */}
+          <div className="card-similar-section">
+            <div className="similar-label">Similar Games</div>
+            <div className="card-similar-grid">
+               {game.similargames && game.similargames.slice(0, 3).map((sim: any, i: number) => (
+                 <div key={i} className="card-similar-item">
+                   <img src={sim.image} alt={sim.name} loading="lazy" />
+                 </div>
+               ))}
+               {(!game.similargames || game.similargames.length === 0) && (
+                 <span className="no-similar">No suggestions</span>
+               )}
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   );
