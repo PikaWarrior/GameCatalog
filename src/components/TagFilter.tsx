@@ -3,40 +3,40 @@ import { ChevronDown, ChevronUp, Search, Check, Ban, ListFilter, Hash, Gamepad }
 import '../styles/TagFilter.css';
 
 interface TagFilterProps {
-  // Пропсы для Жанров
   allGenres: string[];
   selectedGenres: string[];
   excludedGenres: string[];
   onGenreToggle: (genre: string) => void;
-
-  // Пропсы для Тегов и Поджанров
   allTags: string[];
   allSubgenres: string[];
   selectedTags: string[];
   excludedTags: string[];
   onTagToggle: (tag: string) => void;
-
-  // НОВЫЕ ПРОПСЫ для режима фильтрации
-  filterMode: 'AND' | 'OR';
-  onFilterModeToggle: () => void;
+  filterMode: 'AND' | 'OR'; // 🆕
+  onFilterModeChange: (mode: 'AND' | 'OR') => void; // 🆕
 }
 
 const TagFilter: React.FC<TagFilterProps> = ({
-  allGenres, selectedGenres, excludedGenres, onGenreToggle,
-  allTags, allSubgenres, selectedTags, excludedTags, onTagToggle,
-  filterMode, onFilterModeToggle
+  allGenres,
+  selectedGenres,
+  excludedGenres,
+  onGenreToggle,
+  allTags,
+  allSubgenres,
+  selectedTags,
+  excludedTags,
+  onTagToggle,
+  filterMode, // 🆕
+  onFilterModeChange, // 🆕
 }) => {
-  // Состояния открытия секций
   const [isGenresOpen, setGenresOpen] = useState(true);
   const [isSubgenresOpen, setSubgenresOpen] = useState(true);
   const [isTagsOpen, setTagsOpen] = useState(false);
 
-  // Состояния поиска
   const [genreSearch, setGenreSearch] = useState('');
   const [subgenreSearch, setSubgenreSearch] = useState('');
   const [tagSearch, setTagSearch] = useState('');
 
-  // Универсальная функция рендера секции
   const renderSection = (
     title: string,
     items: string[],
@@ -55,52 +55,53 @@ const TagFilter: React.FC<TagFilterProps> = ({
 
     return (
       <div className="filter-section">
-        <div className="filter-header" onClick={toggleOpen}>
-          {icon}
-          <span className="filter-title">{title}</span>
-          <span className="filter-count">{items.length}</span>
-          {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-        </div>
+        <button className="filter-header" onClick={toggleOpen}>
+          <div className="filter-title-wrapper">
+            {icon}
+            <span className="filter-title">{title}</span>
+            <span className="count-badge">{items.length}</span>
+          </div>
+          {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </button>
 
         {isOpen && (
           <div className="filter-content">
-            {/* Поле поиска */}
-            <div className="search-wrapper">
+            <div className="search-input-wrapper">
               <Search size={14} className="search-icon" />
               <input
                 type="text"
                 placeholder={`Search ${title.toLowerCase()}...`}
+                className="tag-search-input"
                 value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                onClick={(e) => e.stopPropagation()}
-                className="search-input"
+                onChange={e => setSearchValue(e.target.value)}
+                onClick={e => e.stopPropagation()}
               />
               {searchValue && (
                 <button
                   className="clear-search"
-                  onClick={(e) => { e.stopPropagation(); setSearchValue(''); }}
-                  title="Clear search"
+                  onClick={e => {
+                    e.stopPropagation();
+                    setSearchValue('');
+                  }}
                 >
                   ×
                 </button>
               )}
             </div>
 
-            {/* Облако кнопок */}
-            <div className="filter-tags">
+            <div className="tags-cloud">
               {filteredItems.length > 0 ? (
                 filteredItems.map(item => {
                   const isSelected = selectedList.includes(item);
                   const isExcluded = excludedList.includes(item);
 
-                  let btnClass = "filter-tag";
-                  if (isSelected) btnClass += " active";
-                  else if (isExcluded) btnClass += " excluded";
+                  let btnClass = 'filter-tag';
+                  if (isSelected) btnClass += ' active';
+                  else if (isExcluded) btnClass += ' excluded';
 
-                  // Текст подсказки
-                  let titleText = "Click to include (Green)";
-                  if (isSelected) titleText = "Click to exclude (Red)";
-                  if (isExcluded) titleText = "Click to reset";
+                  let titleText = 'Click to include (Green)';
+                  if (isSelected) titleText = 'Click to exclude (Red)';
+                  if (isExcluded) titleText = 'Click to reset';
 
                   return (
                     <button
@@ -109,15 +110,14 @@ const TagFilter: React.FC<TagFilterProps> = ({
                       onClick={() => onToggle(item)}
                       title={titleText}
                     >
-                      {/* Иконки статуса */}
-                      {isSelected && <Check size={12} strokeWidth={3} />}
-                      {isExcluded && <Ban size={12} strokeWidth={2.5} />}
-                      {item}
+                      {isSelected && <Check size={12} className="tag-icon check" />}
+                      {isExcluded && <Ban size={12} className="tag-icon ban" />}
+                      <span>{item}</span>
                     </button>
                   );
                 })
               ) : (
-                <div className="no-results">No matches found</div>
+                <div className="no-tags">No matches found</div>
               )}
             </div>
           </div>
@@ -127,27 +127,27 @@ const TagFilter: React.FC<TagFilterProps> = ({
   };
 
   return (
-    <div className="tag-filter">
-      {/* НОВЫЙ БЛОК: Переключатель режима фильтрации */}
+    <div className="tag-filter-container">
+      {/* 🆕 Переключатель режимов AND/OR */}
       <div className="filter-mode-toggle">
         <button
           className={`mode-btn ${filterMode === 'AND' ? 'active' : ''}`}
-          onClick={onFilterModeToggle}
-          title={filterMode === 'AND' ? 'Current: Show games with ALL selected tags' : 'Current: Show games with ANY selected tag'}
+          onClick={() => onFilterModeChange('AND')}
+          title="Показывать только игры с ВСЕМИ выбранными тегами/жанрами"
         >
-          <ListFilter size={16} />
-          <span>Mode: {filterMode}</span>
+          Все
         </button>
-        <div className="mode-description">
-          {filterMode === 'AND' 
-            ? 'Games must have ALL selected tags' 
-            : 'Games must have AT LEAST ONE selected tag'}
-        </div>
+        <button
+          className={`mode-btn ${filterMode === 'OR' ? 'active' : ''}`}
+          onClick={() => onFilterModeChange('OR')}
+          title="Показывать игры с ЛЮБЫМ из выбранных тегов/жанров"
+        >
+          Любой
+        </button>
       </div>
 
-      {/* 1. Секция Жанров */}
       {renderSection(
-        "Genres",
+        'Genres',
         allGenres,
         isGenresOpen,
         () => setGenresOpen(!isGenresOpen),
@@ -156,12 +156,11 @@ const TagFilter: React.FC<TagFilterProps> = ({
         selectedGenres,
         excludedGenres,
         onGenreToggle,
-        <Gamepad size={18} />
+        <Gamepad size={18} className="section-icon" />
       )}
 
-      {/* 2. Секция Поджанров */}
       {renderSection(
-        "Subgenres",
+        'Subgenres',
         allSubgenres,
         isSubgenresOpen,
         () => setSubgenresOpen(!isSubgenresOpen),
@@ -170,12 +169,11 @@ const TagFilter: React.FC<TagFilterProps> = ({
         selectedTags,
         excludedTags,
         onTagToggle,
-        <ListFilter size={18} />
+        <ListFilter size={18} className="section-icon" />
       )}
 
-      {/* 3. Секция Тегов */}
       {renderSection(
-        "Tags",
+        'Tags',
         allTags,
         isTagsOpen,
         () => setTagsOpen(!isTagsOpen),
@@ -184,7 +182,7 @@ const TagFilter: React.FC<TagFilterProps> = ({
         selectedTags,
         excludedTags,
         onTagToggle,
-        <Hash size={18} />
+        <Hash size={18} className="section-icon" />
       )}
     </div>
   );
