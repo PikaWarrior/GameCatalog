@@ -4,7 +4,7 @@ import {
   User, Users, Monitor, Globe, Sword, Crosshair, Map, Scroll, 
   Skull, Dna, Brain, Hammer, Ghost, Trophy, Car, Rocket, 
   Puzzle, Music, Coffee, Gamepad2, Heart, ExternalLink,
-  Flame, Book // 🆕 Добавил иконки для Survival и Visual Novel
+  Flame, Book
 } from 'lucide-react';
 import '../styles/GameCard.css';
 
@@ -30,10 +30,7 @@ const getCoopDetails = (coop: string) => {
 const getGenreDetails = (genre: string) => {
   const g = genre.toLowerCase();
   
-  // 🆕 Survival (Выживание) - Оранжевый + Огонь
   if (g.includes('survival')) return { color: '#f97316', icon: <Flame size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-  
-  // 🆕 Visual Novel (Визуальные новеллы) - Розовый/Фиолетовый + Книга
   if (g.includes('visual') || g.includes('novel')) return { color: '#d946ef', icon: <Book size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
 
   if (g.includes('action') || g.includes('hack') || g.includes('fighting')) return { color: '#dc2626', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
@@ -43,7 +40,7 @@ const getGenreDetails = (genre: string) => {
   if (g.includes('rogue') || g.includes('dungeon')) return { color: '#d97706', icon: <Skull size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('metroidvania') || g.includes('platformer')) return { color: '#db2777', icon: <Dna size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('strategy') || g.includes('card')) return { color: '#2563eb', icon: <Brain size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-  if (g.includes('sim') || g.includes('craft') || g.includes('building')) return { color: '#d97706', icon: <Hammer size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+  if (g.includes('sim') || g.includes('craft')) return { color: '#d97706', icon: <Hammer size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('horror')) return { color: '#9f1239', icon: <Ghost size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('sport')) return { color: '#7c3aed', icon: <Trophy size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('racing')) return { color: '#ea580c', icon: <Car size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
@@ -51,7 +48,6 @@ const getGenreDetails = (genre: string) => {
   if (g.includes('puzzle')) return { color: '#c026d3', icon: <Puzzle size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('music')) return { color: '#65a30d', icon: <Music size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('casual') || g.includes('indie')) return { color: '#0891b2', icon: <Coffee size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-  
   return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
 };
 
@@ -70,7 +66,6 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
     <div className="game-card-wrapper" style={style}>
       <div className="game-card-inner" onClick={() => onOpenModal(game)}>
         
-        {/* КАРТИНКА + БЕЙДЖИ + СЕРДЕЧКО */}
         <div className="game-card-image">
           <img 
             src={game.image} 
@@ -99,7 +94,6 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
           )}
         </div>
 
-        {/* КОНТЕНТ */}
         <div className="card-content">
           <div className="card-header-row">
             <h3 className="card-title" title={game.name}>{game.name}</h3>
@@ -117,21 +111,35 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
             )}
           </div>
 
-          {/* ОПИСАНИЕ */}
           <div className="card-description-overlay">
              {game.description}
           </div>
 
-          {/* ПОХОЖИЕ ИГРЫ */}
           <div className="card-similar-section">
             <div className="similar-label">Similar Games</div>
             <div className="card-similar-grid">
                {game.similargames && game.similargames.length > 0 ? (
-                 game.similargames.slice(0, 3).map((sim: any, i: number) => (
-                   <div key={i} className="card-similar-item" title={sim.name}>
-                     <img src={sim.image} alt={sim.name} loading="lazy" />
-                   </div>
-                 ))
+                 game.similargames.slice(0, 3).map((sim: any, i: number) => {
+                   // 🆕 Если есть ссылка, делаем ссылку. Если нет, просто div
+                   const TagName = sim.url ? 'a' : 'div';
+                   const props = sim.url ? {
+                     href: sim.url,
+                     target: '_blank',
+                     rel: 'noreferrer',
+                     onClick: (e: React.MouseEvent) => e.stopPropagation() // Чтобы не открывать модалку
+                   } : {};
+
+                   return (
+                     <TagName 
+                       key={i} 
+                       className="card-similar-item" 
+                       title={`Go to ${sim.name}`}
+                       {...props}
+                     >
+                       <img src={sim.image} alt={sim.name} loading="lazy" />
+                     </TagName>
+                   );
+                 })
                ) : (
                  <span className="no-similar">No suggestions</span>
                )}
