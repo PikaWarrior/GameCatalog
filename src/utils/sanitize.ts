@@ -1,76 +1,43 @@
-// src/utils/sanitize.ts
-import sanitizeHtml from 'sanitize-html';
-import { Game, RawGame } from '../types';
+import { RawGame, Game } from '../types';
 
-const cleanDescription = (html: string) => {
-  if (!html) return 'No description available.';
-  
-  return sanitizeHtml(html, {
-    allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'li', 'h1', 'h2', 'h3', 'div', 'span'],
-    allowedAttributes: {
-      '*': ['style', 'class']
-    }
-  });
-};
+export function sanitizeGameData(rawGame: RawGame): Game {
+  // Унификация описания
+  let description = rawGame.description || 
+                   rawGame.shortdescription || 
+                   rawGame.aboutthegame || 
+                   'No description available';
 
-const cleanList = (input: any): string[] => {
-  if (!Array.isArray(input)) return [];
-  return input
-    .map(item => {
-      if (typeof item === 'string') return item.trim();
-      if (item && typeof item === 'object') {
-        return item.name || item.value || item.description || '';
-      }
-      return String(item);
-    })
-    .filter(str => str.length > 0);
-};
+  // Обрезка до 300 символов (если нужно, можно раскомментировать, но лучше оставить полное)
+  /* if (description.length > 300) {
+    description = description.slice(0, 300) + '...';
+  } */
 
-const deriveCoopStatus = (existingCoop: string | undefined, tags: string[]): string => {
-  if (existingCoop && existingCoop !== 'Unknown') return existingCoop;
+  // Унификация изображений
+  const image = rawGame.headerimage || rawGame.image || '/placeholder.jpg';
 
-  const lowerTags = tags.map(t => String(t).toLowerCase());
-  const modes: string[] = [];
+  // Унификация Steam URL
+  const steamurl = rawGame.steamurl || rawGame.url || '#';
 
-  if (lowerTags.some(t => t === 'single-player' || t === 'single')) modes.push('Single');
-  if (lowerTags.some(t => t.includes('multi') || t.includes('mmo') || t.includes('online'))) modes.push('Multiplayer');
-  if (lowerTags.some(t => t.includes('co-op') || t.includes('cooperative'))) modes.push('Co-op');
-  if (lowerTags.some(t => t.includes('split') || t.includes('local'))) modes.push('Split Screen');
+  // Унификация рейтинга
+  const rating = rawGame.rating || rawGame.reviewscore || '';
 
-  return modes.length > 0 ? modes.join(' / ') : 'Single';
-};
-
-export const sanitizeGameData = (raw: RawGame): Game => {
-  const genre = raw.genre || 'Unknown';
-  const subgenres = Array.isArray(raw.subgenres) ? raw.subgenres : [];
-  const tags = Array.isArray(raw.tags) ? raw.tags : [];
-  
-  const similarSummary = cleanList(raw.similar_games_summary);
-  const coop = deriveCoopStatus(raw.coop, tags);
-
-  // Теперь TypeScript не будет ругаться, так как about_the_game есть в интерфейсе
-  const rawDesc = raw.description || raw.about_the_game || raw.short_description || '';
-  const description = cleanDescription(rawDesc);
-
-  const similar = (Array.isArray(raw.similar_games) ? raw.similar_games : []).map((sim: any) => ({
-    name: sim.name || 'Unknown',
-    image: sim.image || sim.header_image || '/fallback-game.jpg',
-    url: sim.url || sim.steam_url || '#',
-    id: sim.id || sim.url || `sim-${Math.random()}`
-  }));
+  // Унификация similar games
+  // Приводим к lowercase camelCase, как в types.ts
+  const similargames = rawGame.similargames || [];
+  const similargamessummary = rawGame.similargamessummary || '';
 
   return {
-    id: raw.id ? String(raw.id) : `gen-${Math.random().toString(36).substr(2, 9)}`,
-    name: raw.name || 'Unknown Game',
-    image: raw.image || raw.header_image || '/fallback-game.jpg',
-    steam_url: raw.steam_url || raw.url || '#',
-    genre: genre,
-    subgenres: subgenres,
-    tags: tags,
-    coop: coop,
-    description: description,
-    rating: raw.review_score || raw.rating,
-    similar_games: similar,
-    similar_games_summary: similarSummary
+    id: rawGame.id ? String(rawGame.id) : `game-${Math.random().toString(36).substr(2, 9)}`,
+    name: rawGame.name || 'Unknown Game',
+    image,
+    steamurl,
+    coop: rawGame.coop || 'Single',
+    genre: rawGame.genre || 'Unknown',
+    subgenres: Array.isArray(rawGame.subgenres) ? rawGame.subgenres : [],
+    tags: Array.isArray(rawGame.tags) ? rawGame.tags : [],
+    description,
+    rating,
+    similargames,
+    similargamessummary,
   };
-};
+}
