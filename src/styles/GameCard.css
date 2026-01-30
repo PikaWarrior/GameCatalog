@@ -32,11 +32,11 @@
   outline-offset: 2px;
 }
 
-/* --- КАРТИНКА (ФИКС ПРОПОРЦИЙ) --- */
+/* --- КАРТИНКА --- */
 .game-card-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 460 / 215; 
+  aspect-ratio: 460 / 215;
   overflow: hidden;
   background: #0f172a;
   flex-shrink: 0;
@@ -45,7 +45,7 @@
 .game-card-image img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover; 
+  object-fit: cover;
   object-position: center;
   display: block;
   transition: transform 0.3s ease;
@@ -62,24 +62,38 @@
 /* --- БЕЙДЖИ --- */
 .card-badges {
   position: absolute;
-  top: 8px; left: 8px; right: 40px; /* Отступ справа под сердечко */
-  display: flex; justify-content: flex-start; gap: 6px;
-  pointer-events: none; z-index: 5;
+  top: 8px;
+  left: 8px;
+  right: 40px; /* Отступ справа под сердечко */
+  display: flex;
+  justify-content: flex-start;
+  gap: 6px;
+  pointer-events: none;
+  z-index: 5;
   flex-wrap: wrap;
 }
 
 .badge {
-  padding: 4px 8px; border-radius: 4px;
-  font-size: 0.75rem; font-weight: 700; color: white;
-  background: rgba(0, 0, 0, 0.7); 
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-  display: flex; align-items: center;
+  display: flex;
+  align-items: center;
 }
-.badge-icon { margin-right: 5px; display: flex; align-items: center; }
 
-/* --- КНОПКА ИЗБРАННОГО НА КАРТОЧКЕ --- */
+.badge-icon {
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
+}
+
+/* --- КНОПКА ИЗБРАННОГО --- */
 .card-favorite-btn {
   position: absolute;
   top: 8px;
@@ -149,14 +163,15 @@
   margin-top: 2px;
   flex-shrink: 0;
 }
+
 .steam-icon-link:hover {
   color: #3b82f6;
 }
 
 .card-description-overlay {
   position: relative;
-  font-size: 0.85rem; 
-  line-height: 1.4; 
+  font-size: 0.85rem;
+  line-height: 1.4;
   color: #94a3b8;
   margin-bottom: 12px;
   padding: 12px;
@@ -164,50 +179,67 @@
   border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.05);
   backdrop-filter: blur(4px);
-  display: -webkit-box; 
-  -webkit-line-clamp: 4; 
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
-  overflow: hidden; 
+  overflow: hidden;
   flex-grow: 1;
   box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .card-similar-section {
-  margin-top: auto; 
+  margin-top: auto;
   padding-top: 10px;
   flex-shrink: 0;
 }
+
 .similar-label {
-  font-size: 0.7rem; text-transform: uppercase;
-  color: #64748b; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.5px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
 }
 
 .card-similar-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
 }
 
 .card-similar-item {
   width: 100%;
-  aspect-ratio: 460 / 215; 
-  border-radius: 4px; overflow: hidden; position: relative;
+  aspect-ratio: 460 / 215;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
   border: 1px solid rgba(255, 255, 255, 0.15);
   transition: transform 0.2s, border-color 0.2s;
-  background: #0f172a; display: block;
+  background: #0f172a;
+  display: block;
 }
 
 .card-similar-item:hover {
-  transform: scale(1.05); 
+  transform: scale(1.05);
   border-color: #3b82f6;
   z-index: 10;
   box-shadow: 0 4px 12px rgba(0,0,0,0.8);
 }
 
 .card-similar-item img {
-  width: 100%; height: 100%; 
-  object-fit: cover; 
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
 .card-similar-item img:not([src*="steamstatic"]) {
   object-fit: fill !important;
 }
 
-.no-similar { font-size: 0.75rem; color: #475569; font-style: italic; }
+.no-similar {
+  font-size: 0.75rem;
+  color: #475569;
+  font-style: italic;
+}
