@@ -55,7 +55,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
   const getGenreDetails = (genre: string) => {
     const g = genre.toLowerCase();
     
-    // 🆕 Survival & Visual Novel Colors
+    // Survival & Visual Novel Colors
     if (g.includes('survival')) return { color: '#f97316', icon: <Flame size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     if (g.includes('visual') || g.includes('novel')) return { color: '#d946ef', icon: <Book size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
 
@@ -89,7 +89,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
         </button>
 
         {/* HERO SECTION */}
-        {/* 🆕 Добавил inline-стили для ограничения высоты фона */}
         <div className="modal-hero" style={{ maxHeight: '400px', overflow: 'hidden', position: 'relative' }}>
           <img 
             src={image} 
@@ -198,7 +197,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
 
             {/* RIGHT COLUMN: Similar Games */}
             <div className="side-column">
-              {/* 🆕 Визуальный список похожих игр */}
               {similargames && similargames.length > 0 && (
                 <div className="modal-section">
                   <h3>
@@ -222,12 +220,11 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
                 </div>
               )}
 
-              {/* Текстовое описание похожих (если есть) */}
               {similargamessummary && (
                 <div className="modal-section">
                   <h3>
                     <FileText size={16} style={{ marginRight: 8 }} />
-                    Why Similar?
+                    Схожие игры {/* 🆕 Переименовано */}
                   </h3>
                   <div className="summary-list">
                     {Array.isArray(similargamessummary) ? (
