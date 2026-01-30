@@ -27,10 +27,10 @@ import '../styles/GameCard.css';
 
 interface GameCardProps {
   game: ProcessedGame;
-  onClick: (game: ProcessedGame) => void;
+  onOpenModal: (game: ProcessedGame) => void; // 🔄 Было onClick, стало onOpenModal
   isFavorite?: boolean;
   onToggleFavorite?: (id: string) => void;
-  style?: React.CSSProperties; // 🆕 Добавлено свойство style
+  style?: React.CSSProperties;
 }
 
 const ICON_SIZE = 14;
@@ -64,7 +64,7 @@ const getGenreDetails = (genre: string) => {
   return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
 };
 
-const GameCard: React.FC<GameCardProps> = memo(({ game, onClick, isFavorite, onToggleFavorite, style }) => {
+const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite, onToggleFavorite, style }) => {
   const coopInfo = getCoopDetails(game.normalizedCoop);
   const genreInfo = getGenreDetails(game.normalizedGenre);
 
@@ -76,7 +76,8 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onClick, isFavorite, onT
   };
 
   return (
-    <div className="game-card" onClick={() => onClick(game)} style={style}>
+    // 🔄 Используем onOpenModal вместо onClick
+    <div className="game-card" onClick={() => onOpenModal(game)} style={style}>
       <div className="card-image-wrapper">
         <img 
           src={game.image} 
