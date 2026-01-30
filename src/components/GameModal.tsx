@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { 
   X, Star, Play, FileText, Tag, Gamepad2, Users, Globe, Monitor, User,
   Sword, Scroll, Brain, Hammer, Ghost, Trophy, Car, Rocket, Puzzle, Coffee, 
-  Skull, Crosshair, Map, Dna, Music, Heart
+  Skull, Crosshair, Map, Dna, Music, Heart, Flame, Book, ExternalLink
 } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameModal.css';
@@ -43,7 +43,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
   }, [game.id]);
 
 
-  // --- Helper Functions for Icons/Colors ---
+  // --- Helper Functions for Icons/Colors (Synced with GameCard) ---
   const getCoopDetails = (coop: string) => {
     const lower = coop.toLowerCase();
     if (lower.includes('single')) return { color: '#64748b', icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Single' };
@@ -54,6 +54,11 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
 
   const getGenreDetails = (genre: string) => {
     const g = genre.toLowerCase();
+    
+    // 🆕 Survival & Visual Novel Colors
+    if (g.includes('survival')) return { color: '#f97316', icon: <Flame size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+    if (g.includes('visual') || g.includes('novel')) return { color: '#d946ef', icon: <Book size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+
     if (g.includes('action') || g.includes('hack') || g.includes('fighting')) return { color: '#dc2626', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     if (g.includes('shooter') || g.includes('fps')) return { color: '#b91c1c', icon: <Crosshair size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     if (g.includes('adventure')) return { color: '#059669', icon: <Map size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
@@ -72,7 +77,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
     return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   };
 
-  const { name, image, genre, rating, subgenres, tags, similargamessummary } = game;
+  const { name, image, genre, rating, subgenres, tags, similargames, similargamessummary } = game;
   const genreInfo = getGenreDetails(genre);
   const coopInfo = getCoopDetails(game.normalizedCoop);
 
@@ -84,9 +89,15 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
         </button>
 
         {/* HERO SECTION */}
-        <div className="modal-hero">
-          <img src={image} alt="" className="hero-backdrop-img" />
-          <div className="hero-overlay"></div>
+        {/* 🆕 Добавил inline-стили для ограничения высоты фона */}
+        <div className="modal-hero" style={{ maxHeight: '400px', overflow: 'hidden', position: 'relative' }}>
+          <img 
+            src={image} 
+            alt="" 
+            className="hero-backdrop-img" 
+            style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3 }}
+          />
+          <div className="hero-overlay" style={{ background: 'linear-gradient(to bottom, transparent 0%, #0f172a 100%)' }}></div>
           
           <div className="hero-content">
             <img src={image} alt={name} className="hero-poster" />
@@ -112,7 +123,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
                 )}
               </div>
 
-              {/* ACTION BUTTONS & SHARE */}
+              {/* ACTION BUTTONS */}
               <div className="action-buttons" style={{ display: 'flex', gap: 12 }}>
                 <a
                   href={game.steamurl}
@@ -138,7 +149,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
                   </button>
                 )}
 
-                {/* SHARE BUTTON */}
                 <button
                   className="btn-primary"
                   onClick={() => {
@@ -149,7 +159,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
                       alert('Не удалось скопировать ссылку');
                     });
                   }}
-                  title="Скопировать ссылку на игру"
                 >
                   <Globe size={16} />
                   Поделиться
@@ -187,13 +196,38 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Similar Games Summary */}
+            {/* RIGHT COLUMN: Similar Games */}
             <div className="side-column">
-              {similargamessummary && (Array.isArray(similargamessummary) ? similargamessummary.length > 0 : similargamessummary) && (
+              {/* 🆕 Визуальный список похожих игр */}
+              {similargames && similargames.length > 0 && (
+                <div className="modal-section">
+                  <h3>
+                    <Gamepad2 size={16} style={{ marginRight: 8 }} />
+                    Similar Games
+                  </h3>
+                  <div className="similar-grid-modal" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+                    {similargames.slice(0, 6).map((sim: any, i: number) => (
+                      <div key={i} className="similar-card-modal" style={{ background: '#0f172a', borderRadius: '6px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
+                        <img 
+                          src={sim.image || '/placeholder.jpg'} 
+                          alt={sim.name} 
+                          style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover' }} 
+                        />
+                        <div style={{ padding: '6px', fontSize: '11px', fontWeight: 'bold', color: '#cbd5e1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {sim.name}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Текстовое описание похожих (если есть) */}
+              {similargamessummary && (
                 <div className="modal-section">
                   <h3>
                     <FileText size={16} style={{ marginRight: 8 }} />
-                    Similar Games
+                    Why Similar?
                   </h3>
                   <div className="summary-list">
                     {Array.isArray(similargamessummary) ? (
