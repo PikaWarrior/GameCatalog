@@ -43,7 +43,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
   }, [game.id]);
 
 
-  // --- Helper Functions for Icons/Colors (Same as Card) ---
+  // --- Helper Functions for Icons/Colors ---
   const getCoopDetails = (coop: string) => {
     const lower = coop.toLowerCase();
     if (lower.includes('single')) return { color: '#64748b', icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Single' };
@@ -112,7 +112,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
                 )}
               </div>
 
-              {/* 🆕 Кнопки действий + кнопка "Поделиться" */}
+              {/* ACTION BUTTONS & SHARE */}
               <div className="action-buttons" style={{ display: 'flex', gap: 12 }}>
                 <a
                   href={game.steamurl}
@@ -138,7 +138,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
                   </button>
                 )}
 
-                {/* 🆕 Кнопка "Поделиться" */}
+                {/* SHARE BUTTON */}
                 <button
                   className="btn-primary"
                   onClick={() => {
@@ -196,7 +196,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
                     Similar Games
                   </h3>
                   <div className="summary-list">
-                    {/* Проверяем, массив это или строка (на всякий случай) */}
                     {Array.isArray(similargamessummary) ? (
                       similargamessummary.map((text: string, i: number) => (
                         <div key={i} className="summary-item">{text}</div>
