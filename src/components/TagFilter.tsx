@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, Search, Check, Ban, ListFilter, Hash, Gamepad } from 'lucide-react';
 import '../styles/TagFilter.css';
+import { useLocalStorage } from '../hooks/useLocalStorage'; // Используем твой хук
 
 interface TagFilterProps {
   allGenres: string[];
@@ -12,8 +13,8 @@ interface TagFilterProps {
   selectedTags: string[];
   excludedTags: string[];
   onTagToggle: (tag: string) => void;
-  filterMode: 'AND' | 'OR'; // 🆕
-  onFilterModeChange: (mode: 'AND' | 'OR') => void; // 🆕
+  filterMode: 'AND' | 'OR';
+  onFilterModeChange: (mode: 'AND' | 'OR') => void;
 }
 
 const TagFilter: React.FC<TagFilterProps> = ({
@@ -26,12 +27,32 @@ const TagFilter: React.FC<TagFilterProps> = ({
   selectedTags,
   excludedTags,
   onTagToggle,
-  filterMode, // 🆕
-  onFilterModeChange, // 🆕
+  filterMode,
+  onFilterModeChange,
 }) => {
-  const [isGenresOpen, setGenresOpen] = useState(true);
-  const [isSubgenresOpen, setSubgenresOpen] = useState(true);
-  const [isTagsOpen, setTagsOpen] = useState(false);
+  // 🆕 Используем useLocalStorage для сохранения состояния секций
+  // Если у тебя нет useLocalStorage экспортируемого так, замени на обычный useEffect + localStorage
+  
+  // Пример с использованием localStorage напрямую (безопаснее, если хук не доступен в этом файле)
+  const [isGenresOpen, setGenresOpen] = useState(() => {
+    const saved = localStorage.getItem('filter_genres_open');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+  
+  const [isSubgenresOpen, setSubgenresOpen] = useState(() => {
+    const saved = localStorage.getItem('filter_subgenres_open');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+  
+  const [isTagsOpen, setTagsOpen] = useState(() => {
+    const saved = localStorage.getItem('filter_tags_open');
+    return saved !== null ? JSON.parse(saved) : false; // Tags закрыты по умолчанию
+  });
+
+  // Эффекты для сохранения
+  useEffect(() => { localStorage.setItem('filter_genres_open', JSON.stringify(isGenresOpen)); }, [isGenresOpen]);
+  useEffect(() => { localStorage.setItem('filter_subgenres_open', JSON.stringify(isSubgenresOpen)); }, [isSubgenresOpen]);
+  useEffect(() => { localStorage.setItem('filter_tags_open', JSON.stringify(isTagsOpen)); }, [isTagsOpen]);
 
   const [genreSearch, setGenreSearch] = useState('');
   const [subgenreSearch, setSubgenreSearch] = useState('');
@@ -128,7 +149,7 @@ const TagFilter: React.FC<TagFilterProps> = ({
 
   return (
     <div className="tag-filter-container">
-      {/* 🆕 Переключатель режимов AND/OR */}
+      {/* Переключатель AND/OR */}
       <div className="filter-mode-toggle">
         <button
           className={`mode-btn ${filterMode === 'AND' ? 'active' : ''}`}
