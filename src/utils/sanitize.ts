@@ -7,10 +7,8 @@ export function sanitizeGameData(rawGame: RawGame): Game {
                    rawGame.aboutthegame || 
                    'No description available';
 
-  // Обрезка до 300 символов (если нужно, можно раскомментировать, но лучше оставить полное)
-  /* if (description.length > 300) {
-    description = description.slice(0, 300) + '...';
-  } */
+  // Очистка HTML тегов из описания (опционально, но полезно для превью)
+  // const cleanDesc = description.replace(/<[^>]*>?/gm, '');
 
   // Унификация изображений
   const image = rawGame.headerimage || rawGame.image || '/placeholder.jpg';
@@ -21,10 +19,13 @@ export function sanitizeGameData(rawGame: RawGame): Game {
   // Унификация рейтинга
   const rating = rawGame.rating || rawGame.reviewscore || '';
 
-  // Унификация similar games
-  // Приводим к lowercase camelCase, как в types.ts
-  const similargames = rawGame.similargames || [];
-  const similargamessummary = rawGame.similargamessummary || '';
+  // 🆕 ИСПРАВЛЕНИЕ: Проверяем оба варианта написания ключей для похожих игр
+  // Используем 'as any', чтобы обойти проверку типов и достать данные из JSON, 
+  // даже если они не совпадают с интерфейсом RawGame
+  const rawAny = rawGame as any;
+  
+  const similargames = rawGame.similargames || rawAny.similar_games || [];
+  const similargamessummary = rawGame.similargamessummary || rawAny.similar_games_summary || '';
 
   return {
     id: rawGame.id ? String(rawGame.id) : `game-${Math.random().toString(36).substr(2, 9)}`,
@@ -35,7 +36,7 @@ export function sanitizeGameData(rawGame: RawGame): Game {
     genre: rawGame.genre || 'Unknown',
     subgenres: Array.isArray(rawGame.subgenres) ? rawGame.subgenres : [],
     tags: Array.isArray(rawGame.tags) ? rawGame.tags : [],
-    description,
+    description, // Можно заменить на cleanDesc если нужно чистое текстовое превью
     rating,
     similargames,
     similargamessummary,
