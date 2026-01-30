@@ -3,7 +3,8 @@ import { ProcessedGame } from '../types';
 import { 
   User, Users, Monitor, Globe, Sword, Crosshair, Map, Scroll, 
   Skull, Dna, Brain, Hammer, Ghost, Trophy, Car, Rocket, 
-  Puzzle, Music, Coffee, Gamepad2, Heart, ExternalLink
+  Puzzle, Music, Coffee, Gamepad2, Heart, ExternalLink,
+  Flame, Book // 🆕 Добавил иконки для Survival и Visual Novel
 } from 'lucide-react';
 import '../styles/GameCard.css';
 
@@ -28,6 +29,13 @@ const getCoopDetails = (coop: string) => {
 
 const getGenreDetails = (genre: string) => {
   const g = genre.toLowerCase();
+  
+  // 🆕 Survival (Выживание) - Оранжевый + Огонь
+  if (g.includes('survival')) return { color: '#f97316', icon: <Flame size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+  
+  // 🆕 Visual Novel (Визуальные новеллы) - Розовый/Фиолетовый + Книга
+  if (g.includes('visual') || g.includes('novel')) return { color: '#d946ef', icon: <Book size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+
   if (g.includes('action') || g.includes('hack') || g.includes('fighting')) return { color: '#dc2626', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('shooter') || g.includes('fps')) return { color: '#b91c1c', icon: <Crosshair size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('adventure')) return { color: '#059669', icon: <Map size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
@@ -35,7 +43,7 @@ const getGenreDetails = (genre: string) => {
   if (g.includes('rogue') || g.includes('dungeon')) return { color: '#d97706', icon: <Skull size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('metroidvania') || g.includes('platformer')) return { color: '#db2777', icon: <Dna size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('strategy') || g.includes('card')) return { color: '#2563eb', icon: <Brain size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-  if (g.includes('sim') || g.includes('craft')) return { color: '#d97706', icon: <Hammer size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+  if (g.includes('sim') || g.includes('craft') || g.includes('building')) return { color: '#d97706', icon: <Hammer size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('horror')) return { color: '#9f1239', icon: <Ghost size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('sport')) return { color: '#7c3aed', icon: <Trophy size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('racing')) return { color: '#ea580c', icon: <Car size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
@@ -43,6 +51,7 @@ const getGenreDetails = (genre: string) => {
   if (g.includes('puzzle')) return { color: '#c026d3', icon: <Puzzle size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('music')) return { color: '#65a30d', icon: <Music size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   if (g.includes('casual') || g.includes('indie')) return { color: '#0891b2', icon: <Coffee size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
+  
   return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
 };
 
@@ -108,7 +117,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
             )}
           </div>
 
-          {/* ОПИСАНИЕ (Оверлей, как в CSS) */}
+          {/* ОПИСАНИЕ */}
           <div className="card-description-overlay">
              {game.description}
           </div>
@@ -117,12 +126,13 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
           <div className="card-similar-section">
             <div className="similar-label">Similar Games</div>
             <div className="card-similar-grid">
-               {game.similargames && game.similargames.slice(0, 3).map((sim: any, i: number) => (
-                 <div key={i} className="card-similar-item">
-                   <img src={sim.image} alt={sim.name} loading="lazy" />
-                 </div>
-               ))}
-               {(!game.similargames || game.similargames.length === 0) && (
+               {game.similargames && game.similargames.length > 0 ? (
+                 game.similargames.slice(0, 3).map((sim: any, i: number) => (
+                   <div key={i} className="card-similar-item" title={sim.name}>
+                     <img src={sim.image} alt={sim.name} loading="lazy" />
+                   </div>
+                 ))
+               ) : (
                  <span className="no-similar">No suggestions</span>
                )}
             </div>
