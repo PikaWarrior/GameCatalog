@@ -1,30 +1,21 @@
 import React, { useEffect, useRef } from 'react';
 import { 
-  X, Star, Play, FileText, Tag, 
-  Gamepad2, Users, Globe, Monitor, User,
-  Sword, Scroll, Brain, Hammer, Ghost,
-  Trophy, Car, Rocket, Puzzle, Coffee,
-  Skull, Crosshair, Map, Dna, Music,
-  Heart // Импорт
+  X, Star, Play, FileText, Tag, Gamepad2, Users, Globe, Monitor, User,
+  Sword, Scroll, Brain, Hammer, Ghost, Trophy, Car, Rocket, Puzzle, Coffee, 
+  Skull, Crosshair, Map, Dna, Music, Heart
 } from 'lucide-react';
 import { ProcessedGame } from '../types';
 import '../styles/GameModal.css';
 
 interface GameModalProps {
-  game: ProcessedGame | null; 
+  game: ProcessedGame | null;
   onClose: () => void;
-  isFavorite?: boolean; // Новый пропс
-  onToggleFavorite?: () => void; // Новый пропс
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
 }
 
-const GameModal: React.FC<GameModalProps> = ({ 
-  game, 
-  onClose,
-  isFavorite = false,
-  onToggleFavorite
-}) => {
+const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false, onToggleFavorite }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  
   const ICON_SIZE = 16;
   const ICON_STROKE = 2.5;
 
@@ -45,24 +36,24 @@ const GameModal: React.FC<GameModalProps> = ({
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
+  // Reset scroll on open
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (modalRef.current) modalRef.current.scrollTop = 0;
   }, [game.id]);
 
-  // --- КООП ЛОГИКА ---
+
+  // --- Helper Functions for Icons/Colors (Same as Card) ---
   const getCoopDetails = (coop: string) => {
-    const lower = (coop || '').toLowerCase();
-    if (lower.includes('single')) return { color: '#64748b', icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Single' };
-    if (lower.includes('split') || lower.includes('shared')) return { color: '#ea580c', icon: <Monitor size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Split Screen' };
-    if (lower.includes('online') || lower.includes('multi')) return { color: '#7c3aed', icon: <Globe size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Multiplayer' };
-    return { color: '#059669', icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE}/>, label: 'Co-op' };
+    const lower = coop.toLowerCase();
+    if (lower.includes('single')) return { color: '#64748b', icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Single' };
+    if (lower.includes('split') || lower.includes('shared')) return { color: '#ea580c', icon: <Monitor size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Split Screen' };
+    if (lower.includes('online') || lower.includes('multi')) return { color: '#7c3aed', icon: <Globe size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Multiplayer' };
+    return { color: '#059669', icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Co-op' };
   };
 
-  // --- ЖАНР ЛОГИКА ---
   const getGenreDetails = (genre: string) => {
-    const g = (genre || '').toLowerCase();
-    
+    const g = genre.toLowerCase();
     if (g.includes('action') || g.includes('hack') || g.includes('fighting')) return { color: '#dc2626', icon: <Sword size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     if (g.includes('shooter') || g.includes('fps')) return { color: '#b91c1c', icon: <Crosshair size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     if (g.includes('adventure')) return { color: '#059669', icon: <Map size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
@@ -78,18 +69,16 @@ const GameModal: React.FC<GameModalProps> = ({
     if (g.includes('puzzle')) return { color: '#c026d3', icon: <Puzzle size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     if (g.includes('music')) return { color: '#65a30d', icon: <Music size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
     if (g.includes('casual') || g.includes('indie')) return { color: '#0891b2', icon: <Coffee size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
-    
     return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   };
 
-  const { name, image, genre, rating, subgenres, tags, similar_games_summary } = game;
+  const { name, image, genre, rating, subgenres, tags, similargamessummary } = game;
   const genreInfo = getGenreDetails(genre);
   const coopInfo = getCoopDetails(game.normalizedCoop);
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        
+      <div className="modal-container" onClick={e => e.stopPropagation()}>
         <button className="close-btn" onClick={onClose} aria-label="Close">
           <X size={20} />
         </button>
@@ -97,50 +86,46 @@ const GameModal: React.FC<GameModalProps> = ({
         {/* HERO SECTION */}
         <div className="modal-hero">
           <img src={image} alt="" className="hero-backdrop-img" />
-          
           <div className="hero-overlay"></div>
           
           <div className="hero-content">
             <img src={image} alt={name} className="hero-poster" />
-            
             <div className="hero-info">
               <h2 className="game-title">{name}</h2>
               
               <div className="meta-row">
-                <span 
-                  className="meta-badge" 
-                  style={{ backgroundColor: `${genreInfo.color}40`, color: '#f1f5f9', borderColor: genreInfo.color }}
-                >
-                  <span style={{marginRight:6, display:'flex'}}>{genreInfo.icon}</span> {genre}
+                <span className="meta-badge" style={{ backgroundColor: `${genreInfo.color}40`, color: '#f1f5f9', borderColor: genreInfo.color }}>
+                  <span style={{marginRight:6, display:'flex'}}>{genreInfo.icon}</span>
+                  {genre}
                 </span>
-
-                <span 
-                  className="meta-badge"
-                  style={{ backgroundColor: `${coopInfo.color}40`, color: '#f1f5f9', borderColor: coopInfo.color }}
-                >
-                   <span style={{marginRight:6, display:'flex'}}>{coopInfo.icon}</span> {coopInfo.label}
+                
+                <span className="meta-badge" style={{ backgroundColor: `${coopInfo.color}40`, color: '#f1f5f9', borderColor: coopInfo.color }}>
+                  <span style={{marginRight:6, display:'flex'}}>{coopInfo.icon}</span>
+                  {coopInfo.label}
                 </span>
 
                 {rating && (
                   <span className="meta-badge rating-badge">
-                    <Star size={16} fill="currentColor" /> {rating}
+                    <Star size={16} fill="currentColor" />
+                    {rating}
                   </span>
                 )}
               </div>
 
-              <div className="action-buttons" style={{display: 'flex', gap: 12}}>
-                <a 
-                  href={game.steam_url} 
-                  target="_blank" 
+              {/* 🆕 Кнопки действий + кнопка "Поделиться" */}
+              <div className="action-buttons" style={{ display: 'flex', gap: 12 }}>
+                <a
+                  href={game.steamurl}
+                  target="_blank"
                   rel="noreferrer"
                   className="btn-primary"
                 >
-                  <Play size={16} fill="currentColor" /> Open Steam
+                  <Play size={16} fill="currentColor" />
+                  Open Steam
                 </a>
 
-                {/* КНОПКА ИЗБРАННОГО В МОДАЛКЕ */}
                 {onToggleFavorite && (
-                  <button 
+                  <button
                     className={`btn-primary ${isFavorite ? 'is-fav' : ''}`}
                     onClick={onToggleFavorite}
                     style={{
@@ -148,10 +133,27 @@ const GameModal: React.FC<GameModalProps> = ({
                       borderColor: isFavorite ? '#ef4444' : 'rgba(255,255,255,0.2)',
                     }}
                   >
-                    <Heart size={16} fill={isFavorite ? "currentColor" : "none"} /> 
+                    <Heart size={16} fill={isFavorite ? 'currentColor' : 'none'} />
                     {isFavorite ? 'Favorited' : 'Favorite'}
                   </button>
                 )}
+
+                {/* 🆕 Кнопка "Поделиться" */}
+                <button
+                  className="btn-primary"
+                  onClick={() => {
+                    const url = `${window.location.origin}${window.location.pathname}#${game.slug}`;
+                    navigator.clipboard.writeText(url).then(() => {
+                      alert('Ссылка скопирована в буфер обмена!');
+                    }).catch(() => {
+                      alert('Не удалось скопировать ссылку');
+                    });
+                  }}
+                  title="Скопировать ссылку на игру"
+                >
+                  <Globe size={16} />
+                  Поделиться
+                </button>
               </div>
             </div>
           </div>
@@ -159,7 +161,6 @@ const GameModal: React.FC<GameModalProps> = ({
 
         <div className="modal-body custom-scrollbar" ref={modalRef}>
           <div className="modal-columns">
-            
             {/* LEFT COLUMN: Description & Tags */}
             <div className="main-column">
               <div className="modal-section">
@@ -173,12 +174,13 @@ const GameModal: React.FC<GameModalProps> = ({
               <div className="modal-section">
                 <h3>Tags & Subgenres</h3>
                 <div className="tags-cloud">
-                  {subgenres.map((sg, i) => (
-                    <span key={`sub-${i}`} className="tag-pill subgenre">{sg}</span>
+                  {subgenres.map((sg: string, i: number) => (
+                    <span key={`sub-${i}`} className="tag-pill">{sg}</span>
                   ))}
-                  {tags.map((tag, i) => (
+                  {tags.map((tag: string, i: number) => (
                     <span key={`tag-${i}`} className="tag-pill">
-                       <Tag size={12} style={{marginRight: 4}} /> {tag}
+                      <Tag size={12} style={{marginRight: 4}} />
+                      {tag}
                     </span>
                   ))}
                 </div>
@@ -187,26 +189,27 @@ const GameModal: React.FC<GameModalProps> = ({
 
             {/* RIGHT COLUMN: Similar Games Summary */}
             <div className="side-column">
-              {similar_games_summary && similar_games_summary.length > 0 && (
+              {similargamessummary && (Array.isArray(similargamessummary) ? similargamessummary.length > 0 : similargamessummary) && (
                 <div className="modal-section">
                   <h3>
-                    <FileText size={16} style={{ marginRight: 8 }}/>
+                    <FileText size={16} style={{ marginRight: 8 }} />
                     Similar Games
                   </h3>
                   <div className="summary-list">
-                    {similar_games_summary.map((text, i) => (
-                      <div key={i} className="summary-item">
-                        {text}
-                      </div>
-                    ))}
+                    {/* Проверяем, массив это или строка (на всякий случай) */}
+                    {Array.isArray(similargamessummary) ? (
+                      similargamessummary.map((text: string, i: number) => (
+                        <div key={i} className="summary-item">{text}</div>
+                      ))
+                    ) : (
+                      <div className="summary-item">{String(similargamessummary)}</div>
+                    )}
                   </div>
                 </div>
               )}
             </div>
-
           </div>
         </div>
-
       </div>
     </div>
   );
