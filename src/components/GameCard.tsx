@@ -13,15 +13,13 @@ interface GameCardProps {
   onOpenModal: (game: ProcessedGame) => void;
   isFavorite?: boolean;
   onToggleFavorite?: (id: string) => void;
-  isScrolling?: boolean; // 🆕 Новый проп для турбо-режима
+  isScrolling?: boolean;
   style?: React.CSSProperties;
 }
 
 const ICON_SIZE = 12;
 const ICON_STROKE = 2.5;
 
-// (Функции getCoopDetails и getGenreDetails можно оставить без изменений, 
-//  или скопируй их из предыдущего файла, они не менялись)
 const getCoopDetails = (coop: string) => {
     const lower = coop.toLowerCase();
     if (lower.includes('single')) return { color: '#64748b', icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Single' };
@@ -69,12 +67,11 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
         
         {/* КАРТИНКА */}
         <div className="game-card-image">
-          {/* При быстром скролле можно даже картинку не грузить, но мы оставим, добавив decoding */}
           <img 
             src={game.image} 
             alt={game.name} 
             loading="lazy"
-            decoding="async" 
+            decoding="async"
           />
 
           <div className="card-badges">
@@ -102,7 +99,6 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
         <div className="card-content">
           <div className="card-header-row">
             <h3 className="card-title" title={game.name}>{game.name}</h3>
-            {/* Кнопка Steam */}
             {game.steamUrl && game.steamUrl !== '#' && (
               <a 
                 href={game.steamUrl} 
@@ -117,13 +113,8 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
             )}
           </div>
 
-          {/* 🚀 ТУРБО-РЕЖИМ: Если скроллим, не рендерим тяжелый контент */}
-          {isScrolling ? (
-             <div style={{ flex: 1, opacity: 0.3, fontSize: '0.8rem', paddingTop: 10 }}>
-               Loading info...
-             </div>
-          ) : (
-            <>
+          {/* 🚀 ТУРБО-РЕЖИМ v2: Используем CSS Opacity вместо удаления DOM */}
+          <div className={`card-heavy-content ${isScrolling ? 'is-hidden' : ''}`}>
               <div className="card-description-overlay">
                 {game.description}
               </div>
@@ -163,8 +154,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
                   )}
                 </div>
               </div>
-            </>
-          )}
+          </div>
         </div>
 
       </div>
