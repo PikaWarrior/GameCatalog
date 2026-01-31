@@ -20,6 +20,7 @@ interface GameCardProps {
 const ICON_SIZE = 12;
 const ICON_STROKE = 2.5;
 
+// (Функции getCoopDetails и getGenreDetails остались без изменений)
 const getCoopDetails = (coop: string) => {
     const lower = coop.toLowerCase();
     if (lower.includes('single')) return { color: '#64748b', icon: <User size={ICON_SIZE} strokeWidth={ICON_STROKE} />, label: 'Single' };
@@ -63,9 +64,12 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
 
   return (
     <div className="game-card-wrapper" style={style}>
-      <div className="game-card-inner" onClick={() => onOpenModal(game)}>
+      {/* 
+         🚀 ТУРБО-РЕЖИМ: Если isScrolling=true, добавляем класс 'scrolling'
+         CSS отключит pointer-events и hover-эффекты. Визуально ничего не пропадет.
+      */}
+      <div className={`game-card-inner ${isScrolling ? 'scrolling' : ''}`} onClick={() => onOpenModal(game)}>
         
-        {/* КАРТИНКА */}
         <div className="game-card-image">
           <img 
             src={game.image} 
@@ -95,7 +99,6 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
           )}
         </div>
 
-        {/* КОНТЕНТ */}
         <div className="card-content">
           <div className="card-header-row">
             <h3 className="card-title" title={game.name}>{game.name}</h3>
@@ -113,47 +116,44 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
             )}
           </div>
 
-          {/* 🚀 ТУРБО-РЕЖИМ v2: Используем CSS Opacity вместо удаления DOM */}
-          <div className={`card-heavy-content ${isScrolling ? 'is-hidden' : ''}`}>
-              <div className="card-description-overlay">
-                {game.description}
-              </div>
+          <div className="card-description-overlay">
+            {game.description}
+          </div>
 
-              <div className="card-similar-section">
-                <div className="similar-label">Similar Games</div>
-                <div className="card-similar-grid">
-                  {game.similarGames && game.similarGames.length > 0 ? (
-                    game.similarGames.slice(0, 3).map((sim: any, i: number) => {
-                      const url = sim.url && sim.url !== '#' ? sim.url : null;
-                      const TagName = url ? 'a' : 'div';
-                      const props = url ? {
-                        href: url,
-                        target: '_blank',
-                        rel: 'noreferrer',
-                        onClick: (e: React.MouseEvent) => e.stopPropagation()
-                      } : {};
+          <div className="card-similar-section">
+            <div className="similar-label">Similar Games</div>
+            <div className="card-similar-grid">
+              {game.similarGames && game.similarGames.length > 0 ? (
+                game.similarGames.slice(0, 3).map((sim: any, i: number) => {
+                  const url = sim.url && sim.url !== '#' ? sim.url : null;
+                  const TagName = url ? 'a' : 'div';
+                  const props = url ? {
+                    href: url,
+                    target: '_blank',
+                    rel: 'noreferrer',
+                    onClick: (e: React.MouseEvent) => e.stopPropagation()
+                  } : {};
 
-                      return (
-                        <TagName 
-                          key={i} 
-                          className="card-similar-item" 
-                          title={url ? `Go to ${sim.name}` : sim.name}
-                          {...props}
-                        >
-                          <img 
-                            src={sim.image} 
-                            alt={sim.name} 
-                            loading="lazy" 
-                            decoding="async"
-                          />
-                        </TagName>
-                      );
-                    })
-                  ) : (
-                    <span className="no-similar">No suggestions</span>
-                  )}
-                </div>
-              </div>
+                  return (
+                    <TagName 
+                      key={i} 
+                      className="card-similar-item" 
+                      title={url ? `Go to ${sim.name}` : sim.name}
+                      {...props}
+                    >
+                      <img 
+                        src={sim.image} 
+                        alt={sim.name} 
+                        loading="lazy" 
+                        decoding="async"
+                      />
+                    </TagName>
+                  );
+                })
+              ) : (
+                <span className="no-similar">No suggestions</span>
+              )}
+            </div>
           </div>
         </div>
 
