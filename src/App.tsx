@@ -1,28 +1,28 @@
 import React, { useMemo, useCallback, lazy, Suspense, useEffect, useState } from 'react';
-import { ErrorBoundary } from '@components/ErrorBoundary';
-import Header from '@components/Header';
-import TagFilter from '@components/TagFilter';
-import LoadingSkeleton from '@components/LoadingSkeleton';
-import GameModal from '@components/GameModal';
-import { useDebounce } from '@hooks/useDebounce';
-import { useLocalStorage } from '@hooks/useLocalStorage';
-import { sanitizeGameData } from '@utils/sanitize';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import Header from './components/Header';
+import TagFilter from './components/TagFilter';
+import LoadingSkeleton from './components/LoadingSkeleton';
+import GameModal from './components/GameModal';
+import { useDebounce } from './hooks/useDebounce';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { sanitizeGameData } from './utils/sanitize';
 import { Game, ProcessedGame, FilterState, RawGame } from './types';
 import { Heart } from 'lucide-react';
-import '@styles/App.css';
-import '@styles/improvements.css';
+import './styles/App.css';
+// import './styles/improvements.css'; // Если он есть, раскомментируй
 
 // @ts-ignore
 import rawGamesData from './data/FinalGameLib_WithSimilar.json';
 
-const GameGrid = lazy(() => import('@components/GameGrid'));
+const GameGrid = lazy(() => import('./components/GameGrid'));
 
 interface ExtendedFilterState extends Omit<FilterState, 'selectedGenre'> {
   excludedTags: string[];
   selectedGenres: string[];
   excludedGenres: string[];
   showFavorites: boolean;
-  filterMode: 'AND' | 'OR'; // 🆕
+  filterMode: 'AND' | 'OR'; // 🆕 Новое поле состояния
 }
 
 function App() {
@@ -70,7 +70,7 @@ function App() {
         else if (coopLower.includes('online')) displayCoop = 'Online';
       }
 
-      // 🆕 Генерация slug для ссылок
+      // Генерация slug для ссылок
       const slug = game.name
         .toLowerCase()
         .replace(/[^a-z0-9\s-]/g, '')
@@ -81,7 +81,7 @@ function App() {
       return {
         ...game,
         id: `game-${index}-${slug}`,
-        slug, // 🆕
+        slug,
         searchableText: `${game.name} ${game.description} ${game.tags.join(' ')} ${game.subgenres.join(' ')}`.toLowerCase(),
         normalizedCoop: displayCoop,
         normalizedGenre: game.genre,
@@ -142,38 +142,51 @@ function App() {
         // Фильтр избранного
         if (showFavorites && !favorites.includes(game.id)) return false;
 
+        // Поиск по тексту
         if (searchLower && !game.searchableText.includes(searchLower)) return false;
 
+        // 🆕 НОВАЯ ЛОГИКА ФИЛЬТРАЦИИ
+        // 1. Исключения (работают всегда строго: если есть запрещенный тег - скрыть)
         const gameTags = new Set([...game.tags, ...game.subgenres]);
-
-        // 🆕 Логика AND/OR для тегов
-        if (selectedTags.length > 0) {
-          if (filterMode === 'AND') {
-            if (!selectedTags.every(tag => gameTags.has(tag))) return false;
-          } else {
-            if (!selectedTags.some(tag => gameTags.has(tag))) return false;
-          }
-        }
-
         if (excludedTags && excludedTags.length > 0) {
-          if (excludedTags.some(tag => gameTags.has(tag))) return false;
+           if (excludedTags.some(tag => gameTags.has(tag))) return false;
         }
-
         if (excludedGenres && excludedGenres.length > 0) {
-          if (excludedGenres.includes(game.genre)) return false;
+           if (excludedGenres.includes(game.genre)) return false;
         }
 
-        // 🆕 Логика AND/OR для жанров
-        if (selectedGenres && selectedGenres.length > 0) {
-          if (filterMode === 'AND') {
-            // AND для жанров (обычно игра имеет 1 основной жанр, но если массив расширится - пригодится)
-            if (!selectedGenres.includes(game.genre)) return false;
+        // 2. Основная фильтрация (Жанры + Теги)
+        const hasSelectedGenres = selectedGenres && selectedGenres.length > 0;
+        const hasSelectedTags = selectedTags && selectedTags.length > 0;
+
+        // Если ничего не выбрано, пропускаем дальше (к коопу)
+        if (hasSelectedGenres || hasSelectedTags) {
+          if (filterMode === 'OR') {
+            // Режим "ЛЮБОЙ": Игре достаточно иметь ХОТЯ БЫ ОДНО совпадение (жанр ИЛИ тег)
+            const matchesGenre = hasSelectedGenres && selectedGenres.includes(game.genre);
+            const matchesTags = hasSelectedTags && selectedTags.some(tag => gameTags.has(tag));
+            
+            if (!matchesGenre && !matchesTags) return false;
+
           } else {
-            // OR - хотя бы один из выбранных
-            if (!selectedGenres.includes(game.genre)) return false;
+            // Режим "ВСЕ" (AND): Игра должна соответствовать ВСЕМ выбранным условиям
+            
+            // Если выбраны жанры, игра должна совпадать со ВСЕМИ (обычно жанр один, но если выбрано 2, то это строгий фильтр)
+            if (hasSelectedGenres) {
+               // Для жанров: если выбрано ["RPG", "Action"], а игра только "RPG", то она НЕ подходит в режиме AND.
+               // (В большинстве каталогов это логично, но если у игры только 1 поле genre, то выбор >1 жанра вернет пустоту.
+               //  Здесь мы проверяем просто вхождение, т.к. game.genre - строка, а не массив).
+               if (!selectedGenres.includes(game.genre)) return false;
+            }
+
+            // Если выбраны теги, игра должна иметь ВСЕ выбранные теги
+            if (hasSelectedTags) {
+               if (!selectedTags.every(tag => gameTags.has(tag))) return false;
+            }
           }
         }
 
+        // 3. Фильтр Коопа
         if (selectedCoop !== 'All') {
           const gameModes = game.coop.toLowerCase();
           const targetMode = selectedCoop.toLowerCase();
@@ -222,7 +235,6 @@ function App() {
   const handleOpenModal = useCallback((game: ProcessedGame) => setSelectedGame(game), []);
   const handleCloseModal = useCallback(() => {
     setSelectedGame(null);
-    // 🆕 Очистка хеша при закрытии
     window.history.pushState(null, '', window.location.pathname + window.location.search);
   }, []);
 
@@ -293,7 +305,6 @@ function App() {
     });
   }, [setFilterState]);
 
-  // 🆕 Эффект для обработки ссылок при загрузке
   useEffect(() => {
     const hash = window.location.hash.slice(1);
     if (hash) {
