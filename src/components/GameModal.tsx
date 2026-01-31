@@ -77,7 +77,8 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
     return { color: '#475569', icon: <Gamepad2 size={ICON_SIZE} strokeWidth={ICON_STROKE} /> };
   };
 
-  const { name, image, genre, rating, subgenres, tags, similargames, similargamessummary } = game;
+  // 🔄 ИСПОЛЬЗУЕМ НОВЫЕ ИМЕНА (steamUrl, similarGames, similarGamesSummary)
+  const { name, image, genre, rating, subgenres, tags, similarGames, similarGamesSummary } = game;
   const genreInfo = getGenreDetails(genre);
   const coopInfo = getCoopDetails(game.normalizedCoop);
 
@@ -124,15 +125,18 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
 
               {/* ACTION BUTTONS */}
               <div className="action-buttons" style={{ display: 'flex', gap: 12 }}>
-                <a
-                  href={game.steamurl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn-primary"
-                >
-                  <Play size={16} fill="currentColor" />
-                  Open Steam
-                </a>
+                {/* 🆕 Проверяем steamUrl вместо steamurl и исключаем '#' */}
+                {game.steamUrl && game.steamUrl !== '#' && (
+                  <a
+                    href={game.steamUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-primary"
+                  >
+                    <Play size={16} fill="currentColor" />
+                    Open Steam
+                  </a>
+                )}
 
                 {onToggleFavorite && (
                   <button
@@ -197,42 +201,67 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, isFavorite = false
 
             {/* RIGHT COLUMN: Similar Games */}
             <div className="side-column">
-              {similargames && similargames.length > 0 && (
+              {similarGames && similarGames.length > 0 && (
                 <div className="modal-section">
                   <h3>
                     <Gamepad2 size={16} style={{ marginRight: 8 }} />
                     Similar Games
                   </h3>
                   <div className="similar-grid-modal" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
-                    {similargames.slice(0, 6).map((sim: any, i: number) => (
-                      <div key={i} className="similar-card-modal" style={{ background: '#0f172a', borderRadius: '6px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
-                        <img 
-                          src={sim.image || '/placeholder.jpg'} 
-                          alt={sim.name} 
-                          style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover' }} 
-                        />
-                        <div style={{ padding: '6px', fontSize: '11px', fontWeight: 'bold', color: '#cbd5e1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {sim.name}
-                        </div>
-                      </div>
-                    ))}
+                    {similarGames.slice(0, 6).map((sim: any, i: number) => {
+                       // 🆕 Добавил логику ссылок и для модалки
+                       const url = sim.url && sim.url !== '#' ? sim.url : null;
+                       const TagName = url ? 'a' : 'div';
+                       const props = url ? {
+                         href: url,
+                         target: '_blank',
+                         rel: 'noreferrer'
+                       } : {};
+
+                       return (
+                        <TagName 
+                          key={i} 
+                          className="similar-card-modal" 
+                          style={{ 
+                            background: '#0f172a', 
+                            borderRadius: '6px', 
+                            overflow: 'hidden', 
+                            border: '1px solid rgba(255,255,255,0.1)', 
+                            display: 'block',
+                            cursor: url ? 'pointer' : 'default',
+                            textDecoration: 'none'
+                          }}
+                          {...props}
+                          title={url ? `Go to ${sim.name}` : sim.name}
+                        >
+                          <img 
+                            src={sim.image || '/placeholder.jpg'} 
+                            alt={sim.name} 
+                            style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', display: 'block' }} 
+                          />
+                          <div style={{ padding: '6px', fontSize: '11px', fontWeight: 'bold', color: '#cbd5e1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {sim.name}
+                          </div>
+                        </TagName>
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
-              {similargamessummary && (
+              {similarGamesSummary && (
                 <div className="modal-section">
                   <h3>
                     <FileText size={16} style={{ marginRight: 8 }} />
-                    Схожие игры {/* 🆕 Переименовано */}
+                    Схожие игры
                   </h3>
                   <div className="summary-list">
-                    {Array.isArray(similargamessummary) ? (
-                      similargamessummary.map((text: string, i: number) => (
+                    {Array.isArray(similarGamesSummary) ? (
+                      similarGamesSummary.map((text: string, i: number) => (
                         <div key={i} className="summary-item">{text}</div>
                       ))
                     ) : (
-                      <div className="summary-item">{String(similargamessummary)}</div>
+                      <div className="summary-item">{String(similarGamesSummary)}</div>
                     )}
                   </div>
                 </div>
