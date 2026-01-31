@@ -1424,7 +1424,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2380320/header.jpg?t=1767449935",
         "steam_url": "https://store.steampowered.com/app/2380320",
         "coop": "Single",
-        "genre": "Visual Novel",
+        "genre": "Simulation",
         "tags": [
             "2D",
             "Casual",
@@ -1438,7 +1438,7 @@
             "Card Game",
             "Strategy",
             "RPG",
-            "Simulation",
+            "Visual Novel",
             "Survival",
             "Adventure",
             "Story Rich",
@@ -4609,6 +4609,7 @@
         "subgenres": [
             "Team-Based",
             "Fast-Paced",
+			"Party Game",
             "Hack and Slash",
             "RPG",
             "Strategy",
@@ -13267,7 +13268,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2286780/1d52425b6de6f041333b75db6a8d636a57b45841/header.jpg?t=1764818037",
         "steam_url": "https://store.steampowered.com/app/2286780",
         "coop": "Single",
-        "genre": "Action",
+        "genre": "RPG",
         "tags": [
             "2D",
             "Anime",
@@ -13281,7 +13282,6 @@
         "description": "Aeruta — это гибридный проект, объединяющий динамичный экшен в стиле side-scroller с системой управления пекарней. Основной геймплейный цикл разделён на две фазы. Первая — исследование локаций и сражения с монстрами в классическом 2D-формате, где игрок добывает разнообразные ресурсы и материалы. Вторая фаза — менеджмент: собранные ингредиенты используются для приготовления и продажи хлеба в собственной лавке. Прибыль и репутация от бизнеса напрямую влияют на развитие заброшенного городка Бейкерсфилд, постепенно возвращая ему жизнь и популярность. Атмосфера строится на контрасте между напряжёнными битвами и уютным, методичным процессом крафта и торговли, где каждый успешный рецепт становится шагом к восстановлению мира.",
         "subgenres": [
             "Shop Keeper",
-            "RPG",
             "Simulation",
             "Adventure",
             "Platformer",
@@ -14905,6 +14905,7 @@
             "Hack and Slash",
             "RPG",
             "Action",
+			"Party Game",
             "Beat 'em up",
             "Adventure",
             "Roguelike",
@@ -15737,6 +15738,7 @@
             "RPG",
             "Action",
             "Beat 'em up",
+			"Party Game",
             "Adventure",
             "Roguelike",
             "Fighting"
@@ -17166,7 +17168,6 @@
             "Building",
             "Adventure",
             "Open World",
-            "Party Game",
             "Crafting",
             "Naval"
         ],
@@ -18365,7 +18366,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2707930/b083c84354a491693c46203f64e25eaaf7b78356/header.jpg?t=1747075758",
         "steam_url": "https://store.steampowered.com/app/2707930",
         "coop": "CO-OP",
-        "genre": "RPG",
+        "genre": "Simulation",
         "tags": [
             "Atmospheric",
             "Casual",
@@ -18379,7 +18380,7 @@
         "subgenres": [
             "Exploration",
             "Dating Sim",
-            "Simulation",
+            "RPG",
             "Life Sim",
             "Building",
             "Farming Sim",
@@ -26420,6 +26421,7 @@
         "tags": [
             "2D",
             "Competitive",
+			"Funny",
             "Pixel Graphics",
             "Retro"
         ],
@@ -26427,6 +26429,7 @@
         "subgenres": [
             "Arcade",
             "Action",
+			"Party Game",
             "Beat 'em up",
             "Platformer"
         ],
@@ -26822,6 +26825,7 @@
         "subgenres": [
             "Arcade",
             "Adventure",
+			"Party Game",
             "Precision Platformer",
             "Puzzle"
         ],
@@ -26999,10 +27003,11 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1557740/header.jpg?t=1759328419",
         "steam_url": "https://store.steampowered.com/app/1557740",
         "coop": "Multiplayer",
-        "genre": "Roguelite",
+        "genre": "Figthing",
         "tags": [
             "2D",
             "Physics",
+			"Funny",
             "PvP",
             "Side Scroller"
         ],
@@ -27015,7 +27020,7 @@
             "Party Game",
             "Platformer",
             "Roguelike",
-            "Fighting"
+            "Roguelite"
         ],
         "similar_games": [
             {
@@ -27352,6 +27357,7 @@
         "description": "Duck Game — это хаотичный аркадный платформер, действие которого происходит в футуристическом 1984 году. Основной геймплейный цикл строится на молниеносных раундах, где игроки, управляя утками, появляются на компактных аренах, хватают случайно разбросанное оружие — от дробовиков и сеточных пушек до саксофонов и лучей контроля разума — и немедленно вступают в схватку. Механика игры основана на точном платформинге, использовании непредсказуемой физики взаимодействия с окружением и оружием, а также на импровизации в условиях постоянно меняющейся ситуации на поле боя. Атмосфера создаётся за счёт визуального стиля, отсылающего к аркадным играм 80-х, и абсурдного юмора, возникающего из взаимодействия игроков с разнообразным, часто нелепым арсеналом. Цель каждого раунда — быть последней выжившей уткой, что требует не столько долгосрочного планирования, сколько мгновенной реакции, освоения механик каждого предмета и умения обращать хаос в свою пользу.",
         "subgenres": [
             "Shooter",
+			"Party Game",
             "Action",
             "Fast-Paced"
         ],
@@ -27876,6 +27882,7 @@
         "subgenres": [
             "Roguelike",
             "Arcade",
+			"Party Game",
             "Platformer",
             "Arena Shooter"
         ],
@@ -28213,6 +28220,7 @@
             "Arcade",
             "Fast-Paced",
             "Action",
+			"Party Game",
             "Arena Shooter",
             "Top-Down Shooter"
         ],
@@ -28343,7 +28351,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/629820/header.jpg?t=1744396107",
         "steam_url": "https://store.steampowered.com/app/629820",
         "coop": "Single",
-        "genre": "Action",
+        "genre": "Simulation",
         "tags": [
             "Atmospheric",
             "Dark Humor",
@@ -28355,7 +28363,7 @@
             "Exploration",
             "Hack and Slash",
             "RPG",
-            "Simulation",
+            "Action",
             "Adventure",
             "Open World",
             "Narration",
@@ -28587,7 +28595,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2328760/95a4add587fac74ba92f63151591ab6a1e2da5f6/header.jpg?t=1762521923",
         "steam_url": "https://store.steampowered.com/app/2328760",
         "coop": "Multiplayer",
-        "genre": "Action",
+        "genre": "Simulation",
         "tags": [
             "3D",
             "Atmospheric",
@@ -28601,8 +28609,7 @@
         ],
         "description": "Pinball FX — это высокоточный цифровой симулятор пинбола, где ядро геймплея завязано на аркадном цикле управления флипперами и предсказания траекторий. Каждый стол представляет собой автономную игровую систему с уникальной механикой, многоуровневыми режимами и скрытыми комбинациями. Основной цикл сводится к непрерывному удержанию шарика в игре, активации цепочек целей и накоплению множителей для достижения максимального счета. Атмосфера создаётся не через нарратив, а через тематическое оформление столов — световые шоу, звуковое сопровождение и визуальные эффекты погружают в миры популярных франшиз или классических аркадных автоматов. Игровой процесс — это постоянный анализ физики отскоков, тайминга и пространственного позиционирования, где мастерство определяется способностью контролировать хаос и последовательно выполнять сложные миссии стола.",
         "subgenres": [
-            "Arcade",
-            "Simulation"
+            "Arcade"
         ],
         "similar_games": [
             {
@@ -36257,7 +36264,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3314790/8ba81356b84aa937573fa29fdd708dbd96b01537/header.jpg?t=1767963404",
         "steam_url": "https://store.steampowered.com/app/3314790",
         "coop": "Single",
-        "genre": "Roguelite",
+        "genre": "Simulation",
         "tags": [
             "3D",
             "Dark",
@@ -36273,7 +36280,7 @@
         "subgenres": [
             "Horror",
             "Strategy",
-            "Simulation",
+            "Roguelite",
             "Action",
             "Adventure",
             "Roguelike"
@@ -41281,7 +41288,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1594940/cdaec3842335106c3d5dfe91997e2465b239f2f4/header.jpg?t=1760421411",
         "steam_url": "https://store.steampowered.com/app/1594940",
         "coop": "Single",
-        "genre": "Adventure",
+        "genre": "Simulation",
         "tags": [
             "Casual",
             "Cute",
@@ -41296,7 +41303,7 @@
         "subgenres": [
             "Exploration",
             "RPG",
-            "Simulation",
+            "Adventure",
             "Life Sim",
             "Open World",
             "Story Rich",
@@ -41585,7 +41592,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3862670/e967f8f5201f55f7b098bf3b9a54c8c8f38012b3/header.jpg?t=1765820223",
         "steam_url": "https://store.steampowered.com/app/3862670",
         "coop": "Single",
-        "genre": "Adventure",
+        "genre": "Simulation",
         "tags": [
             "2D",
             "Casual",
@@ -41602,7 +41609,7 @@
             "Strategy",
             "Idler",
             "Action",
-            "Simulation",
+            "Adventure",
             "Platformer",
             "Collectathon"
         ],
@@ -41840,7 +41847,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1115690/header.jpg?t=1746714206",
         "steam_url": "https://store.steampowered.com/app/1115690",
         "coop": "Single",
-        "genre": "Strategy",
+        "genre": "Simulation",
         "tags": [
             "Casual",
             "Fantasy",
@@ -41854,7 +41861,7 @@
         "description": "«Yes, Your Grace» — это нарративно-стратегический симулятор правления, где основной цикл геймплея завязан на управлении ресурсами и принятии решений в условиях кризиса. Игрок, в роли короля Эрика, проводит недели в тронном зале, выслушивая просителей, чьи личные драмы и просьбы конкурируют с государственными нуждами — подготовкой к войне и сбором податей. Каждый сеанс аудиенции превращается в тактическую головоломку: ограниченные запасы золота, войск и припасов нужно распределить между просьбами подданных, требованиями семьи и военными приготовлениями. Последствия решений проявляются не мгновенно, а спустя недели, создавая ощущение хрупкого баланса и непредсказуемости. Атмосфера мрачного средневековья, вдохновленного славянским фольклором, передаётся через статичные, детализированные иллюстрации и диалоги, где за простыми просьбами часто скрываются сложные моральные дилеммы. Игра исследует тему власти как бремени, где каждое «да» или «нет» формирует не только судьбу королевства, но и личность самого правителя.",
         "subgenres": [
             "RPG",
-            "Simulation",
+            "Strategy",
             "Life Sim",
             "Story Rich",
             "Turn-Based",
@@ -44762,7 +44769,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1669980/header.jpg?t=1746063344",
         "steam_url": "https://store.steampowered.com/app/1669980",
         "coop": "Single",
-        "genre": "RPG",
+        "genre": "Simulation",
         "tags": [
             "Anime",
             "Cute",
@@ -44776,7 +44783,7 @@
         "subgenres": [
             "Dating Sim",
             "Strategy",
-            "Simulation",
+            "RPG",
             "Life Sim",
             "Story Rich",
             "JRPG",
@@ -44974,6 +44981,7 @@
         "subgenres": [
             "Puzzle",
             "Action",
+			"Party Game",
             "Narration"
         ],
         "similar_games": [
@@ -46845,7 +46853,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1657630/e0ebd5982e69895132d4ffdf80a1a6048ab53d25/header.jpg?t=1765374630",
         "steam_url": "https://store.steampowered.com/app/1657630",
         "coop": "Single",
-        "genre": "Adventure",
+        "genre": "Simulation",
         "tags": [
             "3D",
             "Atmospheric",
@@ -46857,7 +46865,7 @@
         ],
         "description": "Slime Rancher 2 — это симулятор ранчо с сильным акцентом на исследовании, где основной цикл строится на трёх взаимосвязанных фазах. Игрок покидает свою базу, чтобы исследовать открытый мир Радужного острова, используя вакуумный пистолет для сбора ресурсов, поимки разнообразных слаймов и решения простых экологических головоломок. Вторая фаза — управление хозяйством: возвращение на ранчо, размещение пойманных существ, их кормление и сбор производимых ими плуртов — ценных кристаллических ресурсов. Третья фаза — прогрессия и автоматизация: полученные ресурсы тратятся на улучшение оборудования, расширение ранчо и постройку автоматических систем, что, в свою очередь, открывает доступ к новым, более отдалённым и опасным областям для исследования.\n\nАтмосфера игры создаётся через контраст между безмятежной, яркой и ностальгической эстетикой мира и скрытым в его глубинах повествованием, которое раскрывается фрагментарно через аудиодневники и древние руины. Этот цикл «исследование — управление — расширение» формирует медитативный и увлекательный геймплей, где конечная цель игрока — не выживание, а созидание и открытие тайн этого живописного мира.",
         "subgenres": [
-            "Simulation",
+            "Adventure",
             "Action",
             "Building",
             "FPS",
