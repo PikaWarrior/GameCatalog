@@ -6,7 +6,7 @@
 .game-card-wrapper {
   padding: 0;
   box-sizing: border-box;
-  contain: strict; /* Изоляция лейаута */
+  contain: strict; /* Максимальная изоляция для производительности */
 }
 
 .game-card-inner {
@@ -20,17 +20,14 @@
   cursor: pointer;
   position: relative;
   
-  /* Аппаратное ускорение */
   transform: translateZ(0); 
   will-change: transform;
 }
 
-/* Эффекты только для устройств с мышью */
 @media (hover: hover) {
   .game-card-inner:hover {
     transform: translateY(-4px);
-    /* Упрощенная тень без сложного размытия */
-    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.5); 
+    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.5);
     border-color: rgba(255, 255, 255, 0.2);
     z-index: 2;
   }
@@ -40,7 +37,7 @@
 .game-card-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9; /* Стандарт 16:9 */
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #0f172a;
   flex-shrink: 0;
@@ -51,13 +48,21 @@
   height: 100% !important;
   object-fit: cover;
   display: block;
+  /* 🔥 ВЕРНУЛ TRANSITION ДЛЯ ПЛАВНОГО ЗУМА */
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
 }
 
 .game-card-image img:not([src*="steamstatic"]) {
   object-fit: fill !important;
 }
 
-/* --- БЕЙДЖИ (ОПТИМИЗАЦИЯ) --- */
+/* Зум при наведении на КАРТОЧКУ (родителя) */
+.game-card-inner:hover .game-card-image img {
+  transform: scale(1.05);
+}
+
+/* --- БЕЙДЖИ --- */
 .card-badges {
   position: absolute;
   top: 8px;
@@ -77,9 +82,7 @@
   font-size: 0.7rem;
   font-weight: 700;
   color: white;
-  
-  /* ⚡ УБРАЛ backdrop-filter */
-  background: rgba(15, 23, 42, 0.9); 
+  background: rgba(15, 23, 42, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
@@ -101,8 +104,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  /* ⚡ УБРАЛ backdrop-filter */
-  background: rgba(15, 23, 42, 0.9); 
+  background: rgba(15, 23, 42, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
@@ -141,7 +143,7 @@
   align-items: flex-start;
   margin-bottom: 6px;
   flex-shrink: 0;
-  height: 24px; /* Фикс прыжков высоты */
+  height: 24px;
 }
 
 .card-title {
@@ -168,7 +170,27 @@
   color: #3b82f6;
 }
 
-/* ⚡ ОПТИМИЗИРОВАННЫЙ ОВЕРЛЕЙ */
+/* 
+   🚀 ГЛАВНЫЙ FIX ПРОИЗВОДИТЕЛЬНОСТИ
+   Вместо удаления элементов мы их просто прячем через opacity.
+   transition-delay: 0.2s означает: "Начни прятать контент только если скролл длится дольше 0.2сек"
+*/
+.card-heavy-content {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  transition-delay: 0s; /* При появлении (остановка скролла) показываем сразу (или можно добавить delay) */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Класс, который вешается при скролле */
+.card-heavy-content.is-hidden {
+  opacity: 0.3; /* Или 0, если хочешь полностью скрыть */
+  pointer-events: none; /* Отключаем ховеры пока скроллим */
+  transition-delay: 0.2s; /* 🔥 Ждем 0.2с перед тем как скрыть. Короткие скроллы не вызовут мигания! */
+}
+
 .card-description-overlay {
   position: relative;
   font-size: 0.8rem;
@@ -176,8 +198,7 @@
   color: #94a3b8;
   margin-bottom: 8px;
   padding: 8px;
-  /* Простой фон вместо градиента и блюра */
-  background: #0f172a; 
+  background: #0f172a;
   border-radius: 6px;
   border: 1px solid rgba(255,255,255,0.05);
   display: -webkit-box;
@@ -191,7 +212,7 @@
   margin-top: auto;
   padding-top: 8px;
   flex-shrink: 0;
-  min-height: 70px; /* Чтобы блок занимал место даже если пуст (при скролле) */
+  min-height: 70px;
 }
 
 .similar-label {
