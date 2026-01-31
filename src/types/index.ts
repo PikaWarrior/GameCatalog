@@ -2,42 +2,46 @@ export interface SimilarGameRef {
   id?: string | number;
   name: string;
   image: string;
-  url?: string;
+  url?: string;      // Ссылка на игру
+  steamUrl?: string; // Иногда приходит как steam_url
 }
 
+// Сырые данные из JSON
 export interface RawGame {
   id?: string | number;
   name: string;
-  headerimage?: string;
+  header_image?: string;
   image?: string;
-  steamurl?: string;
+  steam_url?: string; // В JSON это steam_url
   url?: string;
   genre: string;
   subgenres: string[];
   tags: string[];
   coop?: string;
   description?: string;
-  shortdescription?: string;
-  aboutthegame?: string;
+  short_description?: string;
+  about_the_game?: string;
   rating?: string | number;
-  reviewscore?: string | number;
-  similargames?: SimilarGameRef[];
-  similargamessummary?: string;
+  review_score?: string | number;
+  similar_games?: SimilarGameRef[]; // В JSON это similar_games
+  similar_games_summary?: string[];
 }
 
+// Внутренний формат приложения (camelCase)
 export interface Game {
   id: string;
   name: string;
   image: string;
-  steamurl: string;
+  steamUrl: string; // 🔄 Переименовал в steamUrl
   coop: string;
   genre: string;
   subgenres: string[];
   tags: string[];
   description: string;
   rating?: string | number;
-  similargames: SimilarGameRef[];
-  similargamessummary: string;
+  similarGames: SimilarGameRef[]; // 🔄 Переименовал
+  similarGamesSummary: string[];  // 🔄 Переименовал
+  slug?: string;
 }
 
 export interface ProcessedGame extends Game {
@@ -45,7 +49,6 @@ export interface ProcessedGame extends Game {
   normalizedCoop: string;
   normalizedGenre: string;
   sanitizedDescription: string;
-  slug: string; // 🆕 Добавлено для ссылок
 }
 
 export interface FilterState {
@@ -57,5 +60,5 @@ export interface FilterState {
   selectedCoop: string;
   sortBy: 'name' | 'genre' | 'coop';
   currentPage?: number;
-  filterMode: 'AND' | 'OR'; // 🆕 Режим фильтрации
+  filterMode: 'AND' | 'OR';
 }
