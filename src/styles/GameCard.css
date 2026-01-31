@@ -24,8 +24,7 @@
   will-change: transform;
 }
 
-/* --- ВАЖНО: ХОВЕРЫ РАБОТАЮТ ТОЛЬКО КОГДА НЕТ СКРОЛЛА --- */
-/* Класс .scrolling вешается на карточку, когда список движется */
+/* Ховер только если не скроллим */
 .game-card-inner:not(.scrolling):hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.5);
@@ -33,16 +32,16 @@
   z-index: 2;
 }
 
-/* Когда скроллим - отключаем все события мыши для производительности */
 .game-card-inner.scrolling {
-  pointer-events: none; /* 🔥 ГЛАВНЫЙ БУСТ FPS */
+  pointer-events: none;
 }
 
-/* --- КАРТИНКА --- */
+/* --- КАРТИНКА (ФИКС МАСШТАБА) --- */
 .game-card-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  /* 🔥 ВЕРНУЛ ОРИГИНАЛЬНОЕ СООТНОШЕНИЕ СТОРОН */
+  aspect-ratio: 460 / 215; 
   overflow: hidden;
   background: #0f172a;
   flex-shrink: 0;
@@ -61,7 +60,7 @@
   object-fit: fill !important;
 }
 
-/* Зум только если не скроллим */
+/* Зум при наведении на КАРТОЧКУ */
 .game-card-inner:not(.scrolling):hover .game-card-image img {
   transform: scale(1.05);
 }
@@ -117,10 +116,9 @@
   padding: 0;
   color: white;
   transition: transform 0.1s, background-color 0.2s;
-  pointer-events: auto; /* Возвращаем клики кнопке даже если остальное отключено (опционально) */
+  pointer-events: auto;
 }
 
-/* В режиме скролла кнопку тоже лучше "заморозить" */
 .game-card-inner.scrolling .card-favorite-btn {
   pointer-events: none;
 }
@@ -222,7 +220,8 @@
 
 .card-similar-item {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  /* 🔥 И ЗДЕСЬ ВЕРНУЛ ОРИГИНАЛЬНОЕ СООТНОШЕНИЕ */
+  aspect-ratio: 460 / 215;
   border-radius: 3px;
   overflow: hidden;
   position: relative;
