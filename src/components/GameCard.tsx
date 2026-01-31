@@ -70,7 +70,8 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
           <img 
             src={game.image} 
             alt={game.name} 
-            loading="lazy" 
+            loading="lazy"
+            decoding="async" // 🚀 ОПТИМИЗАЦИЯ: Асинхронное декодирование картинки
           />
 
           <div className="card-badges">
@@ -97,7 +98,7 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
         <div className="card-content">
           <div className="card-header-row">
             <h3 className="card-title" title={game.name}>{game.name}</h3>
-            {game.steamurl && (
+            {game.steamurl && game.steamurl !== '#' && (
               <a 
                 href={game.steamurl} 
                 target="_blank" 
@@ -120,13 +121,13 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
             <div className="card-similar-grid">
                {game.similargames && game.similargames.length > 0 ? (
                  game.similargames.slice(0, 3).map((sim: any, i: number) => {
-                   // 🆕 Если есть ссылка, делаем ссылку. Если нет, просто div
-                   const TagName = sim.url ? 'a' : 'div';
-                   const props = sim.url ? {
-                     href: sim.url,
+                   const url = sim.url || sim.steam_url || sim.steamurl;
+                   const TagName = (url && url !== '#') ? 'a' : 'div';
+                   const props = (url && url !== '#') ? {
+                     href: url,
                      target: '_blank',
                      rel: 'noreferrer',
-                     onClick: (e: React.MouseEvent) => e.stopPropagation() // Чтобы не открывать модалку
+                     onClick: (e: React.MouseEvent) => e.stopPropagation()
                    } : {};
 
                    return (
@@ -136,7 +137,12 @@ const GameCard: React.FC<GameCardProps> = memo(({ game, onOpenModal, isFavorite,
                        title={`Go to ${sim.name}`}
                        {...props}
                      >
-                       <img src={sim.image} alt={sim.name} loading="lazy" />
+                       <img 
+                         src={sim.image} 
+                         alt={sim.name} 
+                         loading="lazy" 
+                         decoding="async" // 🚀 Оптимизация мелких картинок
+                       />
                      </TagName>
                    );
                  })
