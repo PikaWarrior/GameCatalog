@@ -3117,6 +3117,7 @@
             "Exploration",
             "Survival",
             "Building",
+			"MMORPG",
             "FPS",
             "Open World",
             "Shooter"
@@ -6671,6 +6672,7 @@
             "Adventure",
             "Story Rich",
             "JRPG",
+			"MMORPG",
             "Turn-Based",
             "Collectathon"
         ],
@@ -6949,7 +6951,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3270580/13a8be41c66d31ab4ed284e3795be476c5aea648/header.jpg?t=1765600978",
         "steam_url": "https://store.steampowered.com/app/3270580",
         "coop": "CO-OP",
-        "genre": "Roguelike (Remove Survival)",
+        "genre": "Roguelike",
         "tags": [
             "2D",
             "Casual",
@@ -6962,7 +6964,6 @@
             "Bullet Hell",
             "Roguelite",
             "Action",
-            "Survival",
             "Platformer",
             "Roguelike"
         ],
@@ -6997,7 +6998,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2788310/header.jpg?t=1733211779",
         "steam_url": "https://store.steampowered.com/app/2788310",
         "coop": "Single",
-        "genre": "Roguelike (Remove Survival)",
+        "genre": "Roguelike",
         "tags": [
             "3D",
             "Cartoony",
@@ -7013,7 +7014,6 @@
             "Bullet Hell",
             "Roguelite",
             "Action",
-            "Survival",
             "Adventure",
             "Roguelike"
         ],
@@ -7201,7 +7201,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2218750/header.jpg?t=1761660851",
         "steam_url": "https://store.steampowered.com/app/2218750",
         "coop": "Single",
-        "genre": "Roguelike (Remove Survival)",
+        "genre": "Roguelike",
         "tags": [
             "2D",
             "Atmospheric",
@@ -7220,7 +7220,6 @@
             "Bullet Hell",
             "Roguelite",
             "Action",
-            "Survival",
             "Roguelike"
         ],
         "similar_games": [
@@ -7350,7 +7349,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2939640/header.jpg?t=1765976429",
         "steam_url": "https://store.steampowered.com/app/2939640",
         "coop": "CO-OP",
-        "genre": "Roguelike (Remove Survival)",
+        "genre": "Roguelike",
         "tags": [
             "2D",
             "Procedural Generation",
@@ -7362,7 +7361,6 @@
             "Bullet Hell",
             "Roguelite",
             "Action",
-            "Survival",
             "Arena Shooter",
             "Adventure",
             "Roguelike"
@@ -7497,7 +7495,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2482190/46ee442b67086f22480e09c34f1f4d82a809b88c/header_alt_assets_0.jpg?t=1765280948",
         "steam_url": "https://store.steampowered.com/app/2482190",
         "coop": "Single",
-        "genre": "Roguelike (Remove Survival)",
+        "genre": "Roguelike",
         "tags": [
             "2D",
             "Dark",
@@ -7513,7 +7511,6 @@
             "RPG",
             "Bullet Hell",
             "Action",
-            "Survival",
             "Twin Stick Shooter",
             "Roguelike"
         ],
@@ -9982,6 +9979,7 @@
             "Exploration",
             "Hack and Slash",
             "Action",
+			"MMORPG",
             "Story Rich",
             "Dungeon Crawler"
         ],
@@ -13476,7 +13474,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2769780/97a200ffb7e9d7ec65b1492ad85daecd7071f97c/header_alt_assets_0.jpg?t=1766108178",
         "steam_url": "https://store.steampowered.com/app/2769780",
         "coop": "Single",
-        "genre": "Roguelike (Remove Survival)",
+        "genre": "Roguelike",
         "tags": [
             "Mining",
             "Perma Death",
@@ -13489,7 +13487,6 @@
             "Strategy",
             "Roguelite",
             "Action",
-            "Survival",
             "Building",
             "Adventure",
             "Open World",
@@ -18890,6 +18887,7 @@
             "Hack and Slash",
             "Action",
             "Souls-like",
+			"MMORPG",
             "Adventure",
             "Dungeon Crawler",
             "Crafting"
@@ -18939,6 +18937,7 @@
             "RPG",
             "Action",
             "Open World",
+			"MMORPG",
             "Shooter"
         ],
         "similar_games": [
@@ -19040,6 +19039,7 @@
             "Exploration",
             "Strategy",
             "Action",
+			"MMORPG",
             "Class-Based",
             "Adventure",
             "Open World",
@@ -19088,6 +19088,7 @@
             "Party-Based RPG",
             "Team-Based",
             "Action",
+			"MMORPG",
             "Adventure",
             "Dungeon Crawler"
         ],
@@ -19536,6 +19537,7 @@
             "Action",
             "Tactical",
             "Adventure",
+			"MMORPG",
             "Open World",
             "Sandbox",
             "Turn-Based"
@@ -38426,6 +38428,7 @@
             "Souls-like",
             "Adventure",
             "Story Rich",
+			"MMORPG",
             "Open World"
         ],
         "similar_games": [
@@ -41192,6 +41195,7 @@
             "Shooter",
             "FPS",
             "Adventure",
+			"MMORPG",
             "Open World"
         ],
         "similar_games": [
@@ -44413,7 +44417,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/518790/a444f68c73ce903da950ab3351cffe6710cee6d7/header_alt_assets_24.jpg?t=1765292276",
         "steam_url": "https://store.steampowered.com/app/518790",
         "coop": "CO-OP",
-        "genre": "Simulator",
+        "genre": "Simulation",
         "tags": [
             "First-Person",
             "Immersive",
@@ -45822,6 +45826,7 @@
             "Building",
             "Adventure",
             "Open World",
+			"MMORPG",
             "Sandbox",
             "Crafting"
         ],
@@ -46564,6 +46569,7 @@
             "Action",
             "Adventure",
             "Open World",
+			"MMORPG",
             "Story Rich",
             "JRPG",
             "Crafting"
@@ -46659,6 +46665,7 @@
             "Exploration",
             "Action",
             "Adventure",
+			"MMORPG",
             "Open World",
             "Point & Click",
             "Story Rich"
@@ -46707,6 +46714,7 @@
             "Exploration",
             "Strategy",
             "Class-Based",
+			"MMORPG",
             "Adventure",
             "Story Rich",
             "Crafting"
@@ -46802,6 +46810,7 @@
         "subgenres": [
             "Story Rich",
             "Adventure",
+			"MMORPG",
             "Open World",
             "Exploration"
         ],
@@ -47422,7 +47431,7 @@
         "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/582010/header.jpg?t=1758246558",
         "steam_url": "https://store.steampowered.com/app/582010",
         "coop": "CO-OP",
-        "genre": "Action",
+        "genre": "RPG",
         "tags": [
             "Atmospheric",
             "Difficult",
@@ -47434,7 +47443,8 @@
         "subgenres": [
             "Exploration",
             "Hack and Slash",
-            "RPG",
+            "Action",
+			"MMORPG",
             "Souls-like",
             "Adventure",
             "Open World",
