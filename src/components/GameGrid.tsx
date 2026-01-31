@@ -1,4 +1,4 @@
-import React, { CSSProperties, memo, useMemo } from 'react'; // 🆕 useMemo
+import React, { CSSProperties, memo } from 'react';
 import { FixedSizeGrid as Grid, GridChildComponentProps, areEqual } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import GameCard from './GameCard';
@@ -18,9 +18,11 @@ interface GridItemData {
   onOpenModal: (game: ProcessedGame) => void;
   favorites: string[];
   onToggleFavorite: (id: string) => void;
+  isScrolling?: boolean; // 🆕 Добавил флаг скролла в данные
 }
 
-const Cell = memo(({ columnIndex, rowIndex, style, data }: GridChildComponentProps<GridItemData>) => {
+// 🆕 Получаем isScrolling прямо из пропсов Cell, которые дает react-window
+const Cell = memo(({ columnIndex, rowIndex, style, data, isScrolling }: GridChildComponentProps<GridItemData> & { isScrolling?: boolean }) => {
   const { games, columnCount, onOpenModal, favorites, onToggleFavorite } = data;
   const index = rowIndex * columnCount + columnIndex;
 
@@ -29,15 +31,9 @@ const Cell = memo(({ columnIndex, rowIndex, style, data }: GridChildComponentPro
   }
 
   const game = games[index];
-  
-  // ⚡ ОПТИМИЗАЦИЯ: favorites.includes может быть медленным на больших массивах,
-  // но на 900 играх это ок. Главное, что сам Cell мемоизирован.
   const isFavorite = favorites.includes(game.id);
   
   const gutter = 16;
-  
-  // ⚡ ОПТИМИЗАЦИЯ СТИЛЕЙ: Мемоизировать сам стиль нельзя (react-window его меняет),
-  // но можно упростить объект
   const cardStyle: CSSProperties = {
     ...style,
     left: Number(style.left) + gutter / 2,
@@ -53,6 +49,7 @@ const Cell = memo(({ columnIndex, rowIndex, style, data }: GridChildComponentPro
       onOpenModal={onOpenModal}
       isFavorite={isFavorite}
       onToggleFavorite={onToggleFavorite}
+      isScrolling={isScrolling} // 🚀 Передаем флаг в карточку
     />
   );
 }, areEqual);
@@ -64,16 +61,8 @@ const GameGrid: React.FC<GameGridProps> = ({
   onToggleFavorite
 }) => {
   const MIN_COLUMN_WIDTH = 320; 
-  const ROW_HEIGHT = 420;
+  const ROW_HEIGHT = 400; // Подбираем высоту под новый CSS
 
-  // ⚡ ОПТИМИЗАЦИЯ: Мемоизируем itemData
-  // Однако, itemData зависит от columnCount, который внутри AutoSizer...
-  // Поэтому мы не можем вынести itemData наружу полностью.
-  // Но мы можем сделать helper компонент для Grid.
-  
-  // Чтобы не усложнять, оставим как есть, но убедимся, что Cell перерисовывается только когда надо.
-  // areEqual из react-window делает поверхностное сравнение props.data.
-  
   return (
     <div className="game-grid-wrapper" style={{ flex: 1, height: '100%' }}>
       {games.length === 0 ? (
@@ -88,7 +77,6 @@ const GameGrid: React.FC<GameGridProps> = ({
             const columnWidth = width / columnCount;
             const rowCount = Math.ceil(games.length / columnCount);
 
-            // Создаем объект данных для ячеек
             const itemData: GridItemData = {
               games,
               columnCount,
@@ -108,10 +96,12 @@ const GameGrid: React.FC<GameGridProps> = ({
                 width={width}
                 itemData={itemData}
                 overscanRowCount={2}
-                // ⚡ Добавим useIsScrolling, чтобы react-window мог отключать 
-                // тяжелые эффекты при быстром скролле (если поддерживается версией)
-                useIsScrolling
+                useIsScrolling // ⚡ ВКЛЮЧАЕМ ТУРБО-РЕЖИМ (react-window будет передавать isScrolling в Cell)
               >
+                {/* 
+                   ⚠️ ВАЖНО: react-window передает isScrolling в компонент, если useIsScrolling=true.
+                   Но типы TS могут ругаться. В Cell мы это обработали.
+                */}
                 {Cell}
               </Grid>
             );
