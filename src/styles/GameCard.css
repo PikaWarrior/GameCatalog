@@ -6,8 +6,7 @@
 .game-card-wrapper {
   padding: 0;
   box-sizing: border-box;
-  /* Изолируем карточку: браузер не пересчитывает layout страницы при изменении карточки */
-  contain: strict; 
+  contain: strict; /* Изоляция лейаута */
 }
 
 .game-card-inner {
@@ -15,24 +14,25 @@
   flex-direction: column;
   height: 100%;
   background: #1e293b;
-  border-radius: 8px; /* Уменьшил радиус, проще рисовать */
+  border-radius: 8px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
   position: relative;
   
-  /* Аппаратное ускорение для композитного слоя */
+  /* Аппаратное ускорение */
   transform: translateZ(0); 
   will-change: transform;
 }
 
-/* Ховер эффекты только для мыши, чтобы не тормозило на тач-устройствах или при скролле */
+/* Эффекты только для устройств с мышью */
 @media (hover: hover) {
   .game-card-inner:hover {
     transform: translateY(-4px);
-    /* Упрощенная тень без сложного спреда */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); 
+    /* Упрощенная тень без сложного размытия */
+    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.5); 
     border-color: rgba(255, 255, 255, 0.2);
+    z-index: 2;
   }
 }
 
@@ -40,7 +40,7 @@
 .game-card-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 460 / 215;
+  aspect-ratio: 16 / 9; /* Стандарт 16:9 */
   overflow: hidden;
   background: #0f172a;
   flex-shrink: 0;
@@ -51,14 +51,13 @@
   height: 100% !important;
   object-fit: cover;
   display: block;
-  /* Убрал transition на картинке, это может вызывать перерисовку при скролле */
 }
 
 .game-card-image img:not([src*="steamstatic"]) {
   object-fit: fill !important;
 }
 
-/* --- БЕЙДЖИ (ГЛАВНЫЙ FIX) --- */
+/* --- БЕЙДЖИ (ОПТИМИЗАЦИЯ) --- */
 .card-badges {
   position: absolute;
   top: 8px;
@@ -75,22 +74,20 @@
 .badge {
   padding: 4px 8px;
   border-radius: 4px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: white;
   
-  /* ⚡ УБРАЛ backdrop-filter - это убийца FPS */
-  /* backdrop-filter: blur(4px); */ 
-  
-  /* Заменил на более темный непрозрачный фон, выглядит так же, работает мгновенно */
-  background: rgba(15, 23, 42, 0.85); 
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* ⚡ УБРАЛ backdrop-filter */
+  background: rgba(15, 23, 42, 0.9); 
+  border: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .badge-icon {
-  margin-right: 5px;
+  margin-right: 4px;
   display: flex;
   align-items: center;
 }
@@ -104,8 +101,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  /* Убрал блюр, сделал просто темный круг */
-  background: rgba(15, 23, 42, 0.85); 
+  /* ⚡ УБРАЛ backdrop-filter */
+  background: rgba(15, 23, 42, 0.9); 
   border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
@@ -113,17 +110,18 @@
   cursor: pointer;
   padding: 0;
   color: white;
+  transition: transform 0.1s, background-color 0.2s;
 }
 
 .card-favorite-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
   transform: scale(1.1);
 }
 
 .card-favorite-btn.active {
   background: white;
   color: #ef4444;
-  border-color: #ef4444;
+  border-color: white;
 }
 
 /* --- КОНТЕНТ --- */
@@ -143,6 +141,7 @@
   align-items: flex-start;
   margin-bottom: 6px;
   flex-shrink: 0;
+  height: 24px; /* Фикс прыжков высоты */
 }
 
 .card-title {
@@ -150,11 +149,10 @@
   font-size: 0.95rem;
   font-weight: 600;
   color: #f1f5f9;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  line-height: 1.2;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
   flex: 1;
   padding-right: 8px;
 }
@@ -162,22 +160,24 @@
 .steam-icon-link {
   color: #64748b;
   transition: color 0.2s;
-  margin-top: 2px;
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
 
 .steam-icon-link:hover {
   color: #3b82f6;
 }
 
+/* ⚡ ОПТИМИЗИРОВАННЫЙ ОВЕРЛЕЙ */
 .card-description-overlay {
   position: relative;
   font-size: 0.8rem;
   line-height: 1.4;
   color: #94a3b8;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   padding: 8px;
-  background: #0f172a; /* Убрал градиент для скорости */
+  /* Простой фон вместо градиента и блюра */
+  background: #0f172a; 
   border-radius: 6px;
   border: 1px solid rgba(255,255,255,0.05);
   display: -webkit-box;
@@ -191,6 +191,7 @@
   margin-top: auto;
   padding-top: 8px;
   flex-shrink: 0;
+  min-height: 70px; /* Чтобы блок занимал место даже если пуст (при скролле) */
 }
 
 .similar-label {
@@ -198,7 +199,7 @@
   text-transform: uppercase;
   color: #64748b;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   letter-spacing: 0.5px;
 }
 
@@ -211,19 +212,17 @@
 
 .card-similar-item {
   width: 100%;
-  aspect-ratio: 460 / 215;
+  aspect-ratio: 16 / 9;
   border-radius: 3px;
   overflow: hidden;
   position: relative;
   background: #0f172a;
   display: block;
-  /* Убираем бордеры и тени у мелких картинок в списке, рисуем только при ховере */
-  border: 1px solid transparent; 
+  border: 1px solid transparent;
 }
 
 .card-similar-item:hover {
   border-color: #3b82f6;
-  z-index: 10;
 }
 
 .card-similar-item img {
@@ -232,12 +231,10 @@
   object-fit: cover;
 }
 
-.card-similar-item img:not([src*="steamstatic"]) {
-  object-fit: fill !important;
-}
-
 .no-similar {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: #475569;
   font-style: italic;
+  display: block;
+  padding: 4px 0;
 }
