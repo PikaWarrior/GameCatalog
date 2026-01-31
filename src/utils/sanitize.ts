@@ -3,42 +3,62 @@ import { RawGame, Game } from '../types';
 export function sanitizeGameData(rawGame: RawGame): Game {
   // Унификация описания
   let description = rawGame.description || 
-                   rawGame.shortdescription || 
-                   rawGame.aboutthegame || 
+                   rawGame.short_description || 
+                   rawGame.about_the_game || 
                    'No description available';
 
-  // Очистка HTML тегов из описания (опционально, но полезно для превью)
+  // Очистка HTML тегов для превью (опционально)
   // const cleanDesc = description.replace(/<[^>]*>?/gm, '');
 
   // Унификация изображений
-  const image = rawGame.headerimage || rawGame.image || '/placeholder.jpg';
+  const image = rawGame.header_image || rawGame.image || '/placeholder.jpg';
 
   // Унификация Steam URL
-  const steamurl = rawGame.steamurl || rawGame.url || '#';
+  // Проверяем все возможные поля и ставим '#' если ничего нет
+  let steamUrl = rawGame.steam_url || rawGame.url || '#';
+  if (steamUrl !== '#' && !steamUrl.startsWith('http')) {
+     // Фикс для ссылок без протокола (редкий кейс, но бывает)
+     if (steamUrl.startsWith('store.steampowered')) {
+        steamUrl = 'https://' + steamUrl;
+     }
+  }
 
   // Унификация рейтинга
-  const rating = rawGame.rating || rawGame.reviewscore || '';
+  const rating = rawGame.rating || rawGame.review_score || '';
 
-  // 🆕 ИСПРАВЛЕНИЕ: Проверяем оба варианта написания ключей для похожих игр
-  // Используем 'as any', чтобы обойти проверку типов и достать данные из JSON, 
-  // даже если они не совпадают с интерфейсом RawGame
+  // Унификация похожих игр (snake_case -> camelCase)
+  // Используем 'as any' для доступа к сырым полям, если TS ругается
   const rawAny = rawGame as any;
+  const similarGames = rawGame.similar_games || rawAny.similargames || [];
   
-  const similargames = rawGame.similargames || rawAny.similar_games || [];
-  const similargamessummary = rawGame.similargamessummary || rawAny.similar_games_summary || '';
+  // Нормализуем ссылки внутри похожих игр
+  const cleanSimilarGames = Array.isArray(similarGames) ? similarGames.map((sim: any) => ({
+    ...sim,
+    url: sim.url || sim.steam_url || sim.steamUrl || '#'
+  })) : [];
+
+  const similarGamesSummary = rawGame.similar_games_summary || rawAny.similargamessummary || [];
+
+  const id = rawGame.id ? String(rawGame.id) : `game-${Math.random().toString(36).substr(2, 9)}`;
+
+  // Создаем slug для ссылок
+  const slug = rawGame.name 
+    ? rawGame.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    : id;
 
   return {
-    id: rawGame.id ? String(rawGame.id) : `game-${Math.random().toString(36).substr(2, 9)}`,
+    id,
     name: rawGame.name || 'Unknown Game',
     image,
-    steamurl,
+    steamUrl, // Используем новое имя поля
     coop: rawGame.coop || 'Single',
     genre: rawGame.genre || 'Unknown',
     subgenres: Array.isArray(rawGame.subgenres) ? rawGame.subgenres : [],
     tags: Array.isArray(rawGame.tags) ? rawGame.tags : [],
-    description, // Можно заменить на cleanDesc если нужно чистое текстовое превью
+    description, 
     rating,
-    similargames,
-    similargamessummary,
+    similarGames: cleanSimilarGames, // Используем новое имя поля
+    similarGamesSummary,            // Используем новое имя поля
+    slug
   };
 }
